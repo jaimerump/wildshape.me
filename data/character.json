@@ -1,0 +1,28 @@
+{
+  "race": "Elf",
+  "subrace": "Drow",
+  "class": "Druid",
+  "level": 10,
+  "ability_scores": {
+    "STR": 10,
+    "DEX": 16,
+    "CON": 14,
+    "INT": 12,
+    "WIS": 18,
+    "CHA": 9
+  },
+  "saving_throws": [
+    "INT",
+    "WIS"
+  ],
+  "skills": {
+    "Medicine": true,
+    "Perception": true
+  },
+  "features": [
+    {
+      "name": "Primal Strike",
+      "description": "Starting at 6th level, your attacks in beast form count as magical for the purpose of overcoming resistance and immunity to nonmagical attacks and damage."
+    }
+  ]
+}

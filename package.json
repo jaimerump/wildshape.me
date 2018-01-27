@@ -1,0 +1,23 @@
+{
+  "name": "wildshape.me",
+  "version": "1.0.0",
+  "description": "This project calculates stats and abilities for wildshaped 5e characters",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "8.0.0"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "debug": "^2.2.0",
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "bdd-lazy-var": "^2.1.2",
+    "mocha": "^4.0.1"
+  }
+}

@@ -1,0 +1,54 @@
+[
+  {
+    "name": "Deinonychus",
+    "source": "Volo's",
+    "challenge_rating": 1,
+    "size": "medium",
+    "armor_class": 13,
+    "hp": {
+      "average": 26,
+      "roll": "4d8+8",
+      "hit_dice": "4d8"
+    },
+    "speed": {
+      "land": 40
+    },
+    "ability_scores": {
+      "STR": 15,
+      "DEX": 15,
+      "CON": 14,
+      "INT": 4,
+      "WIS": 12,
+      "CHA": 6
+    },
+    "senses": {
+      "passive_perception": 13
+    },
+    "skill_proficiencies": {
+      "Perception": true
+    },
+    "skill_overrides": {
+      "Perception": 3
+    },
+    "features": [
+      {
+        "name": "Pounce",
+        "description": "If the deinonychus moves at least 20 feet straight toward a creature and then hits it with a claw attack on the same turn, that target must succeed on a DC 12 Strength saving throw or be knocked prone. If the target is prone, the deinonychus can make one bite attack against it as a bonus action."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "description": "The deinonychus makes three attacks: one with its bite and two with its claws."
+      },
+      {
+        "name": "Bite",
+        "description": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (ld8 + 2) piercing damage."
+      },
+      {
+        "name": "Claw",
+        "description": "Melee Weapon Attack: +4 to hit, reach 5 ft. one target. Hit: 6 (ld8_+·2) slashing damage."
+      }
+    ]
+  }
+]
