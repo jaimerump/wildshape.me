@@ -1,6 +1,8 @@
 const {
   modifierFromAbilityScore,
   proficiencyByChallengeRating,
+  proficiencyByCharacterLevel,
+  creatureProficiency,
   computeSavingThrows
 } = require('../lib/derived_stats');
 const _ = require('lodash');
@@ -69,6 +71,75 @@ describe('DerivedStats', () => {
 
   }); // describe('.proficiencyByChallengeRating')
 
+  describe('.proficiencyByCharacterLevel', () => {
+
+    it("calculates the correct bonus", () => {
+
+      let examples = {
+        1: 2,
+        4: 2,
+        5: 3,
+        8: 3,
+        9: 4,
+        12: 4,
+        13: 5,
+        16: 5,
+        17: 6
+      };
+
+      // Lodash reverses value and key
+      _.each( examples, (expected_modifier, level) => {
+        let calced_modifier = proficiencyByCharacterLevel(level);
+        assert.equal( calced_modifier, expected_modifier, `Expected: ${expected_modifier}, Got: ${calced_modifier}` );
+      });
+
+    }); // it("calculates the correct bonus")
+
+  }); // describe('.proficiencyByCharacterLevel')
+
+  describe('.creatureProficiency', () => {
+
+    it("checks the challenge rating", () => {
+
+      let creature = {
+        challenge_rating: 13
+      };
+
+      assert.equal(creatureProficiency(creature), 5);
+
+    }); // it("checks the challenge rating")
+
+    it("checks the character level", () => {
+
+      let creature = {
+        level: 9
+      };
+
+      assert.equal(creatureProficiency(creature), 4);
+
+    }); // it("checks the character level")
+
+    it("checks for a proficiency attribute", () => {
+
+      let creature = {
+        proficiency: 2
+      };
+
+      assert.equal(creatureProficiency(creature), 2);
+
+    }); // it("checks for a proficiency attribute")
+
+    it("defaults to 2", () => {
+
+      let creature = {
+      };
+
+      assert.equal(creatureProficiency(creature), 2);
+
+    }); // it("defaults to 2")
+
+  }); // describe('.creatureProficiency')
+
   describe('.computeSavingThrows', () => {
 
     const createTestCreature = () => {
@@ -96,7 +167,6 @@ describe('DerivedStats', () => {
       };
 
       return {
-        proficiency: 2,
         ability_scores,
         save_proficiencies: proficiencies,
         save_overrides: overrides
@@ -111,12 +181,15 @@ describe('DerivedStats', () => {
 
     }); // it("uses ability modifier if no proficiency")
 
-    it("calculates proficiency correctly", () => {
+    it("applies proficiency", () => {
 
-      let calced_saves = computeSavingThrows(createTestCreature());
+      let test_creature = createTestCreature();
+      test_creature.proficiency = 2;
+
+      let calced_saves = computeSavingThrows(test_creature);
       assert.equal( calced_saves.STR, 4 );
 
-    }); // it("calculates proficiency correctly")
+    }); // it("applies proficiency")
 
     it("uses override if present", () => {
 
