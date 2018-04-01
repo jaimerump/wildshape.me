@@ -3,7 +3,8 @@ const {
   proficiencyByChallengeRating,
   proficiencyByCharacterLevel,
   creatureProficiency,
-  computeSavingThrows
+  computeSavingThrows,
+  computeSkills
 } = require('../lib/derived_stats');
 const _ = require('lodash');
 const assert = require('assert');
@@ -199,5 +200,97 @@ describe('DerivedStats', () => {
     }); // it("uses override if present")
 
   }); // describe('.computeSavingThrows')
+
+  describe('.computeSkills', () => {
+
+    const createTestCreature = () => {
+
+      let ability_scores = {
+        "STR": 15,
+        "DEX": 14,
+        "CON": 13,
+        "INT": 12,
+        "WIS": 10,
+        "CHA": 8
+      };
+
+      let proficiencies = {
+        "Acrobatics": false,
+        "Animal Handling": false,
+        "Arcana": false,
+        "Athletics": true,
+        "Deception": false,
+        "History": false,
+        "Insight": false,
+        "Intimidation": false,
+        "Investigation": false,
+        "Medicine": false,
+        "Nature": false,
+        "Perception": false,
+        "Performance": false,
+        "Persuasion": false,
+        "Religion": false,
+        "Sleight of Hand": false,
+        "Stealth": false,
+        "Survival": false
+      };
+
+      let overrides = {
+        "Insight": 4
+      };
+
+      return {
+        ability_scores,
+        skill_proficiencies: proficiencies,
+        skill_overrides: overrides
+      };
+
+    };
+
+    it("uses ability modifier if no proficiency", () => {
+
+      let calced_skills = computeSkills(createTestCreature());
+      assert.equal( calced_skills['Stealth'], 2 );
+
+    }); // it("uses ability modifier if no proficiency")
+
+    it("applies proficiency", () => {
+
+      let test_creature = createTestCreature();
+      test_creature.proficiency = 2;
+
+      let calced_skills = computeSkills(test_creature);
+      assert.equal( calced_skills['Athletics'], 4 );
+
+    }); // it("applies proficiency")
+
+    it("uses override if present", () => {
+
+      let calced_skills = computeSkills(createTestCreature());
+      assert.equal( calced_skills['Insight'], 4 );
+
+    }); // it("uses override if present")
+
+  }); // describe('.computeSkills')
+
+  describe('.wildshapedStats', () => {
+
+    it("uses the creature's physical ability scores"); // it("uses the creature's physical ability scores")
+
+    it("uses the character's mental ability scores"); // it("uses the character's mental ability scores")
+
+    it("keeps all of the character's skills"); // it("keeps all of the character's skills")
+
+    it("uses the creature's skills if higher"); // it("uses the creature's skills if higher")
+
+    it("keeps all of the character's saves"); // it("keeps all of the character's saves")
+
+    it("uses the creature's saves if higher"); // it("uses the creature's saves if higher")
+
+    it("uses the creature's senses"); // it("uses the creature's senses")
+
+    it("has the creature's HP as temporary HP"); // it("has the creature's HP as temporary HP");
+
+  }); // describe('.wildshapedStats')
 
 }); // describe('DerivedStats')

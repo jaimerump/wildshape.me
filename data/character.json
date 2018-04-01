@@ -1,8 +1,13 @@
 {
   "race": "Elf",
   "subrace": "Drow",
-  "class": "Druid",
-  "level": 10,
+  "classes": [
+    {
+      "class": "Druid",
+      "subclass": "Moon",
+      "level": 10
+    }
+  ],
   "ability_scores": {
     "STR": 10,
     "DEX": 16,
