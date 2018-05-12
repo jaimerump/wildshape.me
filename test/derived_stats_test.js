@@ -9,6 +9,9 @@ const {
 const _ = require('lodash');
 const assert = require('assert');
 
+const PHYSICAL_ABILITIES = ["STR", "DEX", "CON"];
+const MENTAL_ABILITIES = ["INT", "WIS", "CHA"];
+
 describe('DerivedStats', () => {
 
   describe('.modifierFromAbilityScore', () => {
@@ -272,25 +275,5 @@ describe('DerivedStats', () => {
     }); // it("uses override if present")
 
   }); // describe('.computeSkills')
-
-  describe('.wildshapedStats', () => {
-
-    it("uses the creature's physical ability scores"); // it("uses the creature's physical ability scores")
-
-    it("uses the character's mental ability scores"); // it("uses the character's mental ability scores")
-
-    it("keeps all of the character's skills"); // it("keeps all of the character's skills")
-
-    it("uses the creature's skills if higher"); // it("uses the creature's skills if higher")
-
-    it("keeps all of the character's saves"); // it("keeps all of the character's saves")
-
-    it("uses the creature's saves if higher"); // it("uses the creature's saves if higher")
-
-    it("uses the creature's senses"); // it("uses the creature's senses")
-
-    it("has the creature's HP as temporary HP"); // it("has the creature's HP as temporary HP");
-
-  }); // describe('.wildshapedStats')
 
 }); // describe('DerivedStats')
