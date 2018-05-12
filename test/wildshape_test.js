@@ -217,7 +217,7 @@ describe('Wildshape', () => {
 
     }); // it("uses the character's HP");
 
-    it("has the creature's HP as temporary HP", () => {
+    it("uses the creature's HP as temporary HP", () => {
 
       let character = createTestCharacter();
       let beast = createTestBeast();
@@ -228,7 +228,7 @@ describe('Wildshape', () => {
         beast.HP
       );      
 
-    }); // it("has the creature's HP as temporary HP"); 
+    }); // it("uses the creature's HP as temporary HP"); 
 
     it("doesn't grant lair actions", () => {
 
