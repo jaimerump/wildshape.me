@@ -1,33 +1,62 @@
-{
-  "race": "Elf",
-  "subrace": "Drow",
-  "classes": [
-    {
-      "class": "Druid",
-      "subclass": "Moon",
-      "level": 10
-    }
-  ],
-  "ability_scores": {
-    "STR": 10,
-    "DEX": 16,
-    "CON": 14,
-    "INT": 12,
-    "WIS": 18,
-    "CHA": 9
+[
+  {
+    "name": "Kikea",
+    "race": "Aaracokra",
+    "subrace": null,
+    "classes": [
+      {
+        "class": "Druid",
+        "subclass": "Moon", 
+        "level": 10
+      },
+
+    ],
+    "ability_scores": {
+      "STR": 8,
+      "DEX": 16,
+      "CON": 12,
+      "INT": 10,
+      "WIS": 16,
+      "CHA": 13
+    },
+    "saving_throws": [
+      "INT",
+      "WIS"
+    ],
+    "skills": {},
+    "features": []
   },
-  "saving_throws": [
-    "INT",
-    "WIS"
-  ],
-  "skills": {
-    "Medicine": true,
-    "Perception": true
-  },
-  "features": [
-    {
-      "name": "Primal Strike",
-      "description": "Starting at 6th level, your attacks in beast form count as magical for the purpose of overcoming resistance and immunity to nonmagical attacks and damage."
-    }
-  ]
-}
+  {
+    "race": "Elf",
+    "subrace": "Drow",
+    "classes": [
+      {
+        "class": "Druid",
+        "subclass": "Moon",
+        "level": 10
+      }
+    ],
+    "ability_scores": {
+      "STR": 10,
+      "DEX": 16,
+      "CON": 14,
+      "INT": 12,
+      "WIS": 18,
+      "CHA": 9
+    },
+    "saving_throws": [
+      "INT",
+      "WIS"
+    ],
+    "skills": {
+      "Medicine": true,
+      "Perception": true
+    },
+    "features": [
+      {
+        "name": "Primal Strike",
+        "description": "Starting at 6th level, your attacks in beast form count as magical for the purpose of overcoming resistance and immunity to nonmagical attacks and damage."
+      }
+    ]
+  }
+]
