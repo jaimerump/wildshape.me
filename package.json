@@ -13,8 +13,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "async": "^2.6.1",
     "debug": "^2.2.0",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "request": "^2.88.0"
   },
   "devDependencies": {
     "bdd-lazy-var": "^2.1.2",
