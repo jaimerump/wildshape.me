@@ -2,7 +2,7 @@ const {
   computeWildshapeSavingThrows,
   computeWildshapeSkills,
   wildshapedStats
-} = require('../lib/wildshape');
+} = require('../src/lib/wildshape');
 const _ = require('lodash');
 const assert = require('assert');
 
@@ -72,7 +72,11 @@ describe('Wildshape', () => {
       senses,
       size: 'Large',
       skill_proficiencies,
-      speed: 40
+      speed: 40,
+      HP: {
+        average: 9,
+        roll: "1d10+3"
+      }
     };
 
   };
@@ -127,15 +131,19 @@ describe('Wildshape', () => {
 
     return {
       ability_scores,
-      alignment: 'chaotic stupid',
+      alignment: "chaotic stupid",
       armor_class: 10,
       proficiency_bonus: 2,
       save_proficiencies,
       save_overrides,
       senses,
-      size: 'Medium',
+      size: "Medium",
       skill_proficiencies,
-      speed: 30
+      speed: 30,
+      HP: {
+        average: 7,
+        roll: "1d6+3"
+      }
     };
 
   };

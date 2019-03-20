@@ -3,13 +3,14 @@
     "name": "Kikea",
     "race": "Aaracokra",
     "subrace": null,
+    "proficiency_bonus": 2,
+    "level": 2,
     "classes": [
       {
         "class": "Druid",
-        "subclass": "Moon", 
+        "subclass": "Moon",
         "level": 10
-      },
-
+      }
     ],
     "ability_scores": {
       "STR": 8,
@@ -19,11 +20,22 @@
       "WIS": 16,
       "CHA": 13
     },
-    "saving_throws": [
-      "INT",
-      "WIS"
-    ],
-    "skills": {},
+    "save_proficiencies": {
+      "STR": false,
+      "DEX": false,
+      "CON": false,
+      "INT": true,
+      "WIS": true,
+      "CHA": false
+    },
+    "skill_proficiencies": {
+      "Medicine": true,
+      "Perception": true
+    },
+    "HP": {
+      "average": 15,
+      "hit_dice": "2d8"
+    },
     "features": []
   },
   {
@@ -44,11 +56,15 @@
       "WIS": 18,
       "CHA": 9
     },
-    "saving_throws": [
-      "INT",
-      "WIS"
-    ],
-    "skills": {
+    "save_proficiencies": {
+      "STR": false,
+      "DEX": false,
+      "CON": false,
+      "INT": true,
+      "WIS": true,
+      "CHA": false
+    },
+    "skill_proficiencies": {
       "Medicine": true,
       "Perception": true
     },

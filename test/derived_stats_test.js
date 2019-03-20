@@ -5,7 +5,7 @@ const {
   creatureProficiency,
   computeSavingThrows,
   computeSkills
-} = require('../lib/derived_stats');
+} = require('../src/lib/derived_stats');
 const _ = require('lodash');
 const assert = require('assert');
 

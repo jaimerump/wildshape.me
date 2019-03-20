@@ -7,13 +7,14 @@ const ABILITY_SCORES = PHYSICAL_ABILITIES.concat(MENTAL_ABILITIES);
 // A mapping of skill name => ability score
 const SKILLS_ATTRIBUTES = require('./../data/skills.json');
 // Attributes to take from each source
-const BEAST_ATTRIBUTES = ['actions', 'armor_class', 'challenge_rating', 'senses', 'size', 'speed'];
+const BEAST_ATTRIBUTES = ['name', 'actions', 'armor_class', 'challenge_rating', 'senses', 'sense_str', 'size', 'speed', 'speed_str'];
 const CHARACTER_ATTRIBUTES = ['alignment', 'features'];
 
 const {
   computeSavingThrows,
   computeSkills,
-  modifierFromAbilityScore
+  modifierFromAbilityScore,
+  proficiencyByCharacterLevel
 } = require('./derived_stats');
 
 /**
@@ -63,12 +64,13 @@ function computeWildshapeSavingThrows(character, beast, new_form) {
     // Add character proficiency if either has it
     let proficiency_bonus = 0;
     if( character.save_proficiencies[attribute] || beast.save_proficiencies[attribute] ){
-      proficiency_bonus = character.proficiency_bonus;
+      proficiency_bonus = character.proficiency_bonus || proficiencyByCharacterLevel(character.level);
     }
     saves[attribute] = modifierFromAbilityScore( new_form.ability_scores[attribute] ) + proficiency_bonus;
 
     // If both are proficient, take higher score
     if( character.save_proficiencies[attribute] && beast.save_proficiencies[attribute] ) {
+      console.log(`Both proficient in ${attribute} saves`)
       saves[attribute] = _.max([ beast_saves[attribute], saves[attribute] ]);
     }
     
@@ -96,12 +98,13 @@ function computeWildshapeSkills(character, beast, new_form) {
     // Add character proficiency if either has it
     let proficiency_bonus = 0;
     if( character.skill_proficiencies[skill] || beast.skill_proficiencies[skill] ){
-      proficiency_bonus = character.proficiency_bonus;
+      proficiency_bonus = character.proficiency_bonus || proficiencyByCharacterLevel(character.level);
     }
     skills[skill] = modifierFromAbilityScore( new_form.ability_scores[attribute] ) + proficiency_bonus;
 
     // If both are proficient, take higher score
     if( character.skill_proficiencies[skill] && beast.skill_proficiencies[skill] ) {
+      console.log(`Both proficient in ${skill} checks`);
       skills[skill] = _.max([ beast_skills[skill], skills[skill] ]);
     }
     
