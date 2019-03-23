@@ -6,11 +6,11 @@ import {
   Navbar,
   NavItem
 } from 'react-materialize';
-import Materialize from 'materialize-css';
+import 'materialize-css';
 
 import Characters from "./data/characters";
 import Creatures from './data/beasts';
-import CreatureCard from './components/CreatureCard';
+import CreatureCard from './containers/CreatureCard/';
 
 class App extends Component {
   render() {
