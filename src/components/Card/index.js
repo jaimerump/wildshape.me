@@ -5,7 +5,8 @@ import cssVars from '../../cssVariables';
 export const Card = styled.article.attrs({ className: 'card' })`
   /* background-color: pink; */
   max-width: 30rem;
-  max-height: calc(100% - 6em);
+  height: 100%;
+  
   padding: 1em 2em;
 
   border-radius: ${cssVars.BORDER_RADIUS};

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const PageContainer = styled.main.attrs({ className: 'page-container' })`
   height: 100vh;
   width: 100vw;
-  padding-top: 6em;
+  padding-top: 4em;
   
   display: flex;
   flex-direction: column;

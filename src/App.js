@@ -12,7 +12,7 @@ import Characters from "./data/characters";
 import Creatures from './data/beasts';
 
 //  containers
-import CreatureCard from './containers/CreatureCard/';
+import CreatureCards from './containers/CreatureCards/';
 import Nav from './containers/Nav/';
 
 //  components
@@ -26,7 +26,7 @@ class App extends Component {
           <NavItem>Wildshape.me</NavItem>
         </Nav>
         <PageContainer>
-          <CreatureCard creature={ Creatures[0] } character={ Characters[0] } />
+          <CreatureCards creature={ Creatures[0] } character={ Characters[0] } />
         </PageContainer>
       </div>
     );
