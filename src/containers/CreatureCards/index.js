@@ -35,8 +35,8 @@ class CreatureCards extends Component {
           <hr />
           <table>
             <tbody>
-              <tr>{Object.keys(creature.ability_scores).map(key => <th>{key}</th>)}</tr>
-              <tr>{Object.values(creature.ability_scores).map(value => <td>{value}</td>)}</tr>
+              <tr>{Object.keys(creature.ability_scores).map((key, i) => <th key={`${key}-${i}`}>{key}</th>)}</tr>
+              <tr>{Object.values(creature.ability_scores).map((value, i) => <td key={`${value}-${i}`}>{value}</td>)}</tr>
             </tbody>
           </table>
           <hr />
