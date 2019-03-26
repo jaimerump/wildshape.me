@@ -13,3 +13,20 @@ This project calculates stats and abilities for wildshaped 5e characters
 * Host tool
 * ???
 * Profit! 
+
+## Metrics
+### First Tier
+- Everything Else
+
+### Second Tier
+- Challenge
+- Size
+- Stats Table
+- Saving Throws
+- Skills
+- Senses
+
+## John's Todo
+* Deck Building View (saving favorites)
+* Mobile View - Swipe Left and Right
+* Save to Local Storage
