@@ -9,6 +9,10 @@ export const Nav = styled.nav.attrs({ className: 'nav' })`
   padding: 1em 2em;
 
   background-color: salmon;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 export default Nav;
