@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { Switch, BrowserRouter as Router, Route, Link } from "react-router-dom";
+// import { BrowserRouter as Switch, Router, Route, Link } from "react-router-dom";
 // import logo from './logo.svg';
 // import './App.css';
 
@@ -33,9 +34,11 @@ class App extends Component {
             <Link to="/decks">Decks</Link>
           </Nav>
 
-          <Route exact path="/" component={CardPage} />
-          <Route path="/decks" component={DeckPage} />
-          <Route component={NotFoundPage} />
+          <Switch>
+            <Route exact path="/" component={CardPage} />
+            <Route exact path="/decks" component={DeckPage} />
+            <Route component={NotFoundPage} />
+          </Switch>
         </Router>
       </div>
     );
