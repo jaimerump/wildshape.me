@@ -103,9 +103,9 @@ class DeckPage extends Component {
 
   renderDeck = () => {
     const { deck } = this.state;
-    return deck.map(card => {
+    return deck.map((card, i) => {
       return (
-        <GridItem>
+        <GridItem key={i}>
           <CreatureCards creature={card.beast} character={card.character} />
         </GridItem>
       )
