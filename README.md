@@ -30,3 +30,11 @@ This project calculates stats and abilities for wildshaped 5e characters
 * Deck Building View (saving favorites)
 * Mobile View - Swipe Left and Right
 * Save to Local Storage
+
+# Version1
+- local storage
+- styling
+
+# Version2
+- character builder
+- import/export character json file
