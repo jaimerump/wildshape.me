@@ -242,6 +242,141 @@ Expo allows building standalone apps for:
 - Support keyboard navigation on web
 - Test with screen readers
 
+## Deployment
+
+### Web Deployment to AWS S3
+
+The web version of the app is hosted as a static site on AWS S3 and served via the wildshape.me domain.
+
+#### Build Process
+
+1. **Build the web app**:
+   ```bash
+   npx expo export --platform web
+   ```
+   This compiles TypeScript to JavaScript and outputs static files to the `dist/` directory.
+
+2. **Verify build output**:
+   - Check that `dist/` contains `index.html`, JavaScript bundles, and assets
+   - Test locally by serving the `dist/` directory
+
+#### AWS S3 Setup
+
+1. **Create S3 Bucket**:
+   - Bucket name: `wildshape.me` (should match domain name)
+   - Region: Choose closest to target audience
+   - Disable "Block all public access"
+
+2. **Configure Bucket for Static Website Hosting**:
+   - Enable static website hosting in bucket properties
+   - Set index document: `index.html`
+   - Set error document: `index.html` (for client-side routing)
+
+3. **Set Bucket Policy** (allow public read access):
+   ```json
+   {
+     "Version": "2012-10-17",
+     "Statement": [
+       {
+         "Sid": "PublicReadGetObject",
+         "Effect": "Allow",
+         "Principal": "*",
+         "Action": "s3:GetObject",
+         "Resource": "arn:aws:s3:::wildshape.me/*"
+       }
+     ]
+   }
+   ```
+
+4. **Upload Build Files**:
+   ```bash
+   aws s3 sync dist/ s3://wildshape.me --delete
+   ```
+   - The `--delete` flag removes files from S3 that are no longer in the build
+   - Ensure AWS CLI is configured with appropriate credentials
+
+#### Domain Configuration
+
+1. **DNS Setup**:
+   - Point `wildshape.me` domain to S3 bucket endpoint
+   - Create CNAME or A record depending on DNS provider
+
+2. **SSL/HTTPS (Optional but Recommended)**:
+   - Use AWS CloudFront as CDN in front of S3 bucket
+   - CloudFront provides free SSL certificates via AWS Certificate Manager
+   - Configure CloudFront distribution to use S3 bucket as origin
+   - Point domain to CloudFront distribution instead of S3 directly
+
+#### Deployment Checklist
+
+- [ ] Run `npx expo export --platform web`
+- [ ] Test build locally
+- [ ] Upload to S3: `aws s3 sync dist/ s3://wildshape.me --delete`
+- [ ] Verify website is accessible via S3 endpoint
+- [ ] Confirm domain points to S3 bucket (or CloudFront)
+- [ ] Test website at wildshape.me
+- [ ] Verify mobile responsiveness
+- [ ] Check browser console for errors
+
+#### CI/CD (Future)
+
+Consider setting up automated deployments:
+- GitHub Actions workflow triggered on push to `main` branch
+- Automatically build and deploy to S3
+- Invalidate CloudFront cache if using CDN
+
+### Mobile App Deployment
+
+Mobile apps are built and distributed using Expo Application Services (EAS).
+
+#### iOS Deployment
+
+1. **Prerequisites**:
+   - Apple Developer account
+   - App Store Connect app created
+
+2. **Build**:
+   ```bash
+   eas build --platform ios
+   ```
+
+3. **Submit to App Store**:
+   ```bash
+   eas submit --platform ios
+   ```
+
+#### Android Deployment
+
+1. **Prerequisites**:
+   - Google Play Console account
+   - App created in Play Console
+
+2. **Build**:
+   ```bash
+   eas build --platform android
+   ```
+
+3. **Submit to Play Store**:
+   ```bash
+   eas submit --platform android
+   ```
+
+#### EAS Configuration
+
+Create `eas.json` in project root:
+```json
+{
+  "build": {
+    "production": {
+      "node": "18.x.x"
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
+```
+
 ## Future Enhancements
 
 Potential features to consider:
