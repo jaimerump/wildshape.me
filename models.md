@@ -111,11 +111,24 @@ All properties from the Creature base model.
 - **Total Character Level**: number (1-20) - Used to calculate proficiency bonus
   - Proficiency bonus formula: floor((level - 1) / 4) + 2
 - **Druid Level**: number (1-20) - Determines Wild Shape capabilities
+- **Druid Circle**: string | null - The druid's subclass (e.g., "Circle of the Moon", "Circle of the Land")
+  - Affects Wild Shape CR limits and other abilities
+  - null for druids who haven't chosen a circle yet (level 1)
 - **Species**: string - The character's species (e.g., "Human", "Elf")
 - **Subspecies**: string | null - The character's subspecies (e.g., "High Elf", "Wood Elf")
 - **Background**: string - The character's background (e.g., "Sage", "Outlander")
 - **Feats**: array of strings - List of feat names the character has taken
 
 ### Notes
-- Wild Shape restrictions (max CR, flying speed, swimming speed) are determined by Druid Level and subclass
+- Wild Shape restrictions (max CR, flying speed, swimming speed) are determined by Druid Level and Druid Circle
+- **Base Druid Wild Shape CR Limits (2024 rules)**:
+  - Level 2-3: CR ≤ 1/4, no flying or swimming speed
+  - Level 4-7: CR ≤ 1/2, no flying speed
+  - Level 8+: CR ≤ 1, any movement types allowed
+- **Circle of the Moon Wild Shape CR Limits (2024 rules)**:
+  - Max CR = floor(druid level / 3), with same level-based movement restrictions as base druid
+  - Examples:
+    - Level 6 Moon Druid: CR 2 (6/3 = 2), no flying
+    - Level 9 Moon Druid: CR 3 (9/3 = 3), flying allowed
+    - Level 15 Moon Druid: CR 5 (15/3 = 5), any movement
 - Multiclassing considerations are not currently implemented

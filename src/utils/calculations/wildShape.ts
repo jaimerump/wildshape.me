@@ -3,7 +3,7 @@
  * Based on D&D 5e 2024 edition rules
  */
 
-import type { Beast, WildShapeEligibility } from '../../models';
+import type { Beast, WildShapeEligibility, DruidCircle } from '../../models';
 
 /**
  * Gets the maximum CR a druid can Wild Shape into at their level.
@@ -13,22 +13,37 @@ import type { Beast, WildShapeEligibility } from '../../models';
  * - Level 4-7: CR ≤ 1/2
  * - Level 8+: CR ≤ 1
  *
+ * Circle of the Moon druids (2024):
+ * - Max CR = max(base druid CR, floor(druid level / 3))
+ * - Moon druids never get worse than base druids, but can exceed base limits
+ * - Examples: Level 3 Moon = CR 1, Level 6 Moon = CR 2, Level 9 Moon = CR 3
+ *
  * @param druidLevel - The druid's level (1-20)
+ * @param druidCircle - Optional druid circle (affects CR for Circle of the Moon)
  * @returns The maximum CR
  *
  * @example
  * getMaxWildShapeCR(2)  // returns 0.25 (CR 1/4)
  * getMaxWildShapeCR(5)  // returns 0.5 (CR 1/2)
  * getMaxWildShapeCR(10) // returns 1 (CR 1)
+ * getMaxWildShapeCR(6, 'Circle of the Moon')  // returns 2 (CR 2)
+ * getMaxWildShapeCR(9, 'Circle of the Moon')  // returns 3 (CR 3)
  */
-export function getMaxWildShapeCR(druidLevel: number): number {
-  if (druidLevel >= 8) {
-    return 1;
-  } else if (druidLevel >= 4) {
-    return 0.5;
-  } else {
-    return 0.25;
+export function getMaxWildShapeCR(
+  druidLevel: number,
+  druidCircle?: DruidCircle | null
+): number {
+  // Calculate base druid CR
+  const baseCR = druidLevel >= 8 ? 1 : druidLevel >= 4 ? 0.5 : 0.25;
+
+  // If Circle of the Moon, use max of base CR or Moon formula
+  if (druidCircle === 'Circle of the Moon') {
+    const moonCR = Math.floor(druidLevel / 3);
+    return Math.max(baseCR, moonCR);
   }
+
+  // Otherwise use base druid rules
+  return baseCR;
 }
 
 /**
@@ -71,8 +86,12 @@ export function canWildShapeSwimming(druidLevel: number): boolean {
  * - Level 4-7: CR ≤ 1/2, no fly speed
  * - Level 8+: CR ≤ 1, any movement
  *
+ * Circle of the Moon druids have higher CR limits (see getMaxWildShapeCR),
+ * but still respect the same level-based movement restrictions.
+ *
  * @param druidLevel - The druid's level (1-20)
  * @param beast - The beast to check eligibility for
+ * @param druidCircle - Optional druid circle (affects CR for Circle of the Moon)
  * @returns Object with { canTransform: boolean, reason?: string }
  *
  * @example
@@ -83,13 +102,18 @@ export function canWildShapeSwimming(druidLevel: number): boolean {
  * const eagle = { challengeRating: 0, movement: { walking: 10, flying: 60 } };
  * canWildShapeInto(2, eagle)
  * // returns { canTransform: false, reason: "Cannot fly until level 8" }
+ *
+ * const direWolf = { challengeRating: 1, movement: { walking: 50 } };
+ * canWildShapeInto(3, direWolf, 'Circle of the Moon')
+ * // returns { canTransform: true } - Moon druid can transform into CR 1 at level 3
  */
 export function canWildShapeInto(
   druidLevel: number,
-  beast: Pick<Beast, 'challengeRating' | 'movement'>
+  beast: Pick<Beast, 'challengeRating' | 'movement'>,
+  druidCircle?: DruidCircle | null
 ): WildShapeEligibility {
   // Check CR restriction
-  const maxCR = getMaxWildShapeCR(druidLevel);
+  const maxCR = getMaxWildShapeCR(druidLevel, druidCircle);
   if (beast.challengeRating > maxCR) {
     return {
       canTransform: false,

@@ -135,11 +135,17 @@ export interface Beast extends Creature {
 }
 
 /**
+ * Druid circle (subclass)
+ */
+export type DruidCircle = 'Circle of the Moon' | 'Circle of the Land' | 'Circle of the Sea' | 'Circle of the Stars' | null;
+
+/**
  * Druid character
  */
 export interface Druid extends Creature {
   totalCharacterLevel: number;
   druidLevel: number;
+  druidCircle: DruidCircle;
   otherClassLevels?: Record<string, number>;
 }
 
