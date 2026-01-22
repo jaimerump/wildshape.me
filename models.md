@@ -120,15 +120,29 @@ All properties from the Creature base model.
 - **Feats**: array of strings - List of feat names the character has taken
 
 ### Notes
-- Wild Shape restrictions (max CR, flying speed, swimming speed) are determined by Druid Level and Druid Circle
-- **Base Druid Wild Shape CR Limits (2024 rules)**:
-  - Level 2-3: CR ≤ 1/4, no flying or swimming speed
-  - Level 4-7: CR ≤ 1/2, no flying speed
-  - Level 8+: CR ≤ 1, any movement types allowed
-- **Circle of the Moon Wild Shape CR Limits (2024 rules)**:
-  - Max CR = floor(druid level / 3), with same level-based movement restrictions as base druid
-  - Examples:
-    - Level 6 Moon Druid: CR 2 (6/3 = 2), no flying
-    - Level 9 Moon Druid: CR 3 (9/3 = 3), flying allowed
-    - Level 15 Moon Druid: CR 5 (15/3 = 5), any movement
+- Wild Shape restrictions (max CR, flying speed, swimming speed) are determined by Druid Level, Druid Circle, and Edition
+- **2024 Edition Rules**:
+  - **Base Druid Wild Shape CR Limits**:
+    - Level 2-3: CR ≤ 1/4, no flying speed
+    - Level 4-7: CR ≤ 1/2, no flying speed
+    - Level 8+: CR ≤ 1, any movement types allowed
+    - **Swimming**: No restriction (can swim at any Wild Shape level)
+  - **Circle of the Moon Wild Shape CR Limits**:
+    - Max CR = floor(druid level / 3), with same level-based movement restrictions as base druid
+    - Examples:
+      - Level 3 Moon Druid: CR 1 (3/3 = 1), no flying or swimming
+      - Level 6 Moon Druid: CR 2 (6/3 = 2), no flying
+      - Level 9 Moon Druid: CR 3 (9/3 = 3), flying allowed
+- **2014 Edition Rules**:
+  - **Base Druid Wild Shape CR Limits**:
+    - Level 2-3: CR ≤ 1/4, no flying or swimming speed
+    - Level 4-7: CR ≤ 1/2, no flying speed
+    - Level 8+: CR ≤ 1, any movement types allowed
+  - **Circle of the Moon Wild Shape CR Limits**:
+    - Level 2: CR ≤ 1 (special case for Moon druids)
+    - Level 3+: Max CR = floor(druid level / 3), with same level-based movement restrictions as base druid
+    - Examples:
+      - Level 2 Moon Druid: CR 1 (special rule), no flying or swimming
+      - Level 6 Moon Druid: CR 2 (6/3 = 2), no flying, swimming allowed
+      - Level 9 Moon Druid: CR 3 (9/3 = 3), flying and swimming allowed
 - Multiclassing considerations are not currently implemented
