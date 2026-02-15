@@ -3,30 +3,34 @@
  */
 
 import { getAbilityModifier } from './abilityScores';
-import type { AbilityName, ProficiencyLevel, SkillProficiency } from '../../models';
+import type {
+  AbilityName,
+  ProficiencyLevel,
+  SkillProficiency,
+} from '../../models';
 
 /**
  * Skill-to-Ability mapping for D&D 5e (2024 edition)
  */
 const SKILL_ABILITY_MAP: Record<string, AbilityName> = {
-  'Acrobatics': 'dexterity',
+  Acrobatics: 'dexterity',
   'Animal Handling': 'wisdom',
-  'Arcana': 'intelligence',
-  'Athletics': 'strength',
-  'Deception': 'charisma',
-  'History': 'intelligence',
-  'Insight': 'wisdom',
-  'Intimidation': 'charisma',
-  'Investigation': 'intelligence',
-  'Medicine': 'wisdom',
-  'Nature': 'intelligence',
-  'Perception': 'wisdom',
-  'Performance': 'charisma',
-  'Persuasion': 'charisma',
-  'Religion': 'intelligence',
+  Arcana: 'intelligence',
+  Athletics: 'strength',
+  Deception: 'charisma',
+  History: 'intelligence',
+  Insight: 'wisdom',
+  Intimidation: 'charisma',
+  Investigation: 'intelligence',
+  Medicine: 'wisdom',
+  Nature: 'intelligence',
+  Perception: 'wisdom',
+  Performance: 'charisma',
+  Persuasion: 'charisma',
+  Religion: 'intelligence',
   'Sleight of Hand': 'dexterity',
-  'Stealth': 'dexterity',
-  'Survival': 'wisdom'
+  Stealth: 'dexterity',
+  Survival: 'wisdom',
 };
 
 /**
@@ -82,7 +86,7 @@ export function getSkillBonus(
   const modifier = getAbilityModifier(abilityScore);
 
   if (proficiencyLevel === 'expertise') {
-    return modifier + (2 * proficiencyBonus);
+    return modifier + 2 * proficiencyBonus;
   } else if (proficiencyLevel === 'proficient') {
     return modifier + proficiencyBonus;
   }
@@ -123,7 +127,12 @@ export function getAllSkillBonuses(
   // Calculate bonus for each skill
   for (const skill of ALL_SKILLS) {
     const proficiencyLevel = proficiencyMap.get(skill) || null;
-    skillBonuses[skill] = getSkillBonus(skill, abilityScores, proficiencyBonus, proficiencyLevel);
+    skillBonuses[skill] = getSkillBonus(
+      skill,
+      abilityScores,
+      proficiencyBonus,
+      proficiencyLevel
+    );
   }
 
   return skillBonuses;

@@ -41,22 +41,26 @@ describe('getAllSavingThrows', () => {
     constitution: 12,
     intelligence: 8,
     wisdom: 16,
-    charisma: 13
+    charisma: 13,
   };
 
   it('should calculate all saving throws with no proficiencies', () => {
     const proficiencyBonus = 2;
     const proficientSaves: AbilityName[] = [];
 
-    const result = getAllSavingThrows(abilityScores, proficiencyBonus, proficientSaves);
+    const result = getAllSavingThrows(
+      abilityScores,
+      proficiencyBonus,
+      proficientSaves
+    );
 
     expect(result).toEqual({
-      strength: 0,      // 10 = +0
-      dexterity: 2,     // 14 = +2
-      constitution: 1,  // 12 = +1
+      strength: 0, // 10 = +0
+      dexterity: 2, // 14 = +2
+      constitution: 1, // 12 = +1
       intelligence: -1, // 8 = -1
-      wisdom: 3,        // 16 = +3
-      charisma: 1       // 13 = +1
+      wisdom: 3, // 16 = +3
+      charisma: 1, // 13 = +1
     });
   });
 
@@ -64,15 +68,19 @@ describe('getAllSavingThrows', () => {
     const proficiencyBonus = 2;
     const proficientSaves: AbilityName[] = ['dexterity', 'wisdom'];
 
-    const result = getAllSavingThrows(abilityScores, proficiencyBonus, proficientSaves);
+    const result = getAllSavingThrows(
+      abilityScores,
+      proficiencyBonus,
+      proficientSaves
+    );
 
     expect(result).toEqual({
-      strength: 0,      // 10 = +0 (not proficient)
-      dexterity: 4,     // 14 = +2, +2 PB = +4 (proficient)
-      constitution: 1,  // 12 = +1 (not proficient)
+      strength: 0, // 10 = +0 (not proficient)
+      dexterity: 4, // 14 = +2, +2 PB = +4 (proficient)
+      constitution: 1, // 12 = +1 (not proficient)
       intelligence: -1, // 8 = -1 (not proficient)
-      wisdom: 5,        // 16 = +3, +2 PB = +5 (proficient)
-      charisma: 1       // 13 = +1 (not proficient)
+      wisdom: 5, // 16 = +3, +2 PB = +5 (proficient)
+      charisma: 1, // 13 = +1 (not proficient)
     });
   });
 
@@ -84,18 +92,22 @@ describe('getAllSavingThrows', () => {
       'constitution',
       'intelligence',
       'wisdom',
-      'charisma'
+      'charisma',
     ];
 
-    const result = getAllSavingThrows(abilityScores, proficiencyBonus, proficientSaves);
+    const result = getAllSavingThrows(
+      abilityScores,
+      proficiencyBonus,
+      proficientSaves
+    );
 
     expect(result).toEqual({
-      strength: 3,      // 10 = +0, +3 PB = +3
-      dexterity: 5,     // 14 = +2, +3 PB = +5
-      constitution: 4,  // 12 = +1, +3 PB = +4
-      intelligence: 2,  // 8 = -1, +3 PB = +2
-      wisdom: 6,        // 16 = +3, +3 PB = +6
-      charisma: 4       // 13 = +1, +3 PB = +4
+      strength: 3, // 10 = +0, +3 PB = +3
+      dexterity: 5, // 14 = +2, +3 PB = +5
+      constitution: 4, // 12 = +1, +3 PB = +4
+      intelligence: 2, // 8 = -1, +3 PB = +2
+      wisdom: 6, // 16 = +3, +3 PB = +6
+      charisma: 4, // 13 = +1, +3 PB = +4
     });
   });
 
@@ -108,20 +120,24 @@ describe('getAllSavingThrows', () => {
       constitution: 12,
       intelligence: 3,
       wisdom: 12,
-      charisma: 6
+      charisma: 6,
     };
     const proficiencyBonus = 2;
     const proficientSaves: AbilityName[] = ['strength', 'dexterity'];
 
-    const result = getAllSavingThrows(beastAbilities, proficiencyBonus, proficientSaves);
+    const result = getAllSavingThrows(
+      beastAbilities,
+      proficiencyBonus,
+      proficientSaves
+    );
 
     expect(result).toEqual({
-      strength: 3,      // 12 = +1, +2 PB = +3 (proficient)
-      dexterity: 4,     // 15 = +2, +2 PB = +4 (proficient)
-      constitution: 1,  // 12 = +1 (not proficient)
+      strength: 3, // 12 = +1, +2 PB = +3 (proficient)
+      dexterity: 4, // 15 = +2, +2 PB = +4 (proficient)
+      constitution: 1, // 12 = +1 (not proficient)
       intelligence: -4, // 3 = -4 (not proficient)
-      wisdom: 1,        // 12 = +1 (not proficient)
-      charisma: -2      // 6 = -2 (not proficient)
+      wisdom: 1, // 12 = +1 (not proficient)
+      charisma: -2, // 6 = -2 (not proficient)
     });
   });
 });

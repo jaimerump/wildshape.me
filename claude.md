@@ -5,31 +5,36 @@ This document contains technical details, architecture decisions, and setup inst
 ## Technology Stack
 
 ### Core Technologies
+
 - **Language**: TypeScript
 - **Framework**: React Native (via Expo)
 - **Platform Targets**: Web (responsive) and Mobile (iOS/Android)
 - **Package Manager**: npm
 
 ### Key Libraries
+
 - **UI Framework**: React Native (Expo)
 - **State Management**: Zustand
 - **Styling**: NativeWind (Tailwind CSS for React Native)
 - **Local Storage**: AsyncStorage (React Native) / localStorage (Web)
 
 ### Development Tools
+
 - **Build System**: Expo
 - **Type Checking**: TypeScript
 - **Linting**: ESLint
-- **Formatting**: Prettier (to be configured)
+- **Formatting**: Prettier
 
 ## Project Setup
 
 ### Prerequisites
+
 - Node.js (LTS version recommended)
 - npm
 - Expo CLI (`npm install -g expo-cli`)
 
 ### Installation
+
 ```bash
 # Clone the repository
 git clone <repository-url>
@@ -43,6 +48,7 @@ npm start
 ```
 
 ### Running the App
+
 ```bash
 # Web
 npm run web
@@ -90,6 +96,7 @@ src/store/
 ```
 
 **Store Patterns**:
+
 - Keep stores focused on specific domains
 - Use computed values via selectors when possible
 - Persist relevant stores to AsyncStorage
@@ -98,6 +105,7 @@ src/store/
 ### Data Storage
 
 **Current Approach**: Local Storage
+
 - Druids: Stored in AsyncStorage/localStorage (persisted Zustand stores)
 - Beasts: Bundled as JSON files in `src/data/beasts/`
 - User preferences: Stored in AsyncStorage/localStorage
@@ -125,27 +133,28 @@ src/data/
 NativeWind allows using Tailwind CSS utility classes in React Native components.
 
 **Setup Requirements**:
+
 1. Install NativeWind: `npm install nativewind`
 2. Install Tailwind CSS: `npm install --dev tailwindcss`
 3. Configure `tailwind.config.js`
 4. Configure `babel.config.js` to include NativeWind
 
 **Usage Example**:
+
 ```tsx
 import { View, Text } from 'react-native';
 
 function MyComponent() {
   return (
     <View className="flex-1 items-center justify-center bg-gray-100">
-      <Text className="text-2xl font-bold text-blue-600">
-        Wildshape.me
-      </Text>
+      <Text className="text-2xl font-bold text-blue-600">Wildshape.me</Text>
     </View>
   );
 }
 ```
 
 **Styling Conventions**:
+
 - Use Tailwind utility classes for most styling
 - Create custom components for repeated patterns
 - Use responsive design utilities for web/tablet layouts
@@ -188,6 +197,7 @@ src/utils/calculations/
 ```
 
 **Calculation Principles**:
+
 - Pure functions (no side effects)
 - Well-tested (unit tests for all calculations)
 - Documented with JSDoc comments
@@ -196,6 +206,7 @@ src/utils/calculations/
 ## Development Guidelines
 
 ### Code Style
+
 - Use TypeScript strict mode
 - Prefer functional components and hooks
 - Use meaningful variable and function names
@@ -203,11 +214,13 @@ src/utils/calculations/
 - Extract business logic into utility functions
 
 ### Component Patterns
+
 - **Presentational Components**: Pure UI components in `src/components/`
 - **Screen Components**: Top-level views in `src/screens/`
 - **Custom Hooks**: Reusable logic in `src/hooks/`
 
 ### Testing Strategy (Future)
+
 - Unit tests for calculation utilities
 - Integration tests for state management
 - Component tests for critical UI flows
@@ -216,13 +229,17 @@ src/utils/calculations/
 ## Expo Configuration
 
 ### Web Support
+
 Expo provides built-in web support via `expo-cli`. The app should be responsive and work on:
+
 - Desktop browsers
 - Tablet browsers
 - Mobile browsers
 
 ### Mobile App
+
 Expo allows building standalone apps for:
+
 - iOS (via EAS Build or local build)
 - Android (via EAS Build or local build)
 
@@ -251,9 +268,11 @@ The web version of the app is hosted as a static site on AWS S3 and served via t
 #### Build Process
 
 1. **Build the web app**:
+
    ```bash
    npx expo export --platform web
    ```
+
    This compiles TypeScript to JavaScript and outputs static files to the `dist/` directory.
 
 2. **Verify build output**:
@@ -273,6 +292,7 @@ The web version of the app is hosted as a static site on AWS S3 and served via t
    - Set error document: `index.html` (for client-side routing)
 
 3. **Set Bucket Policy** (allow public read access):
+
    ```json
    {
      "Version": "2012-10-17",
@@ -289,9 +309,11 @@ The web version of the app is hosted as a static site on AWS S3 and served via t
    ```
 
 4. **Upload Build Files**:
+
    ```bash
    aws s3 sync dist/ s3://wildshape.me --delete
    ```
+
    - The `--delete` flag removes files from S3 that are no longer in the build
    - Ensure AWS CLI is configured with appropriate credentials
 
@@ -321,6 +343,7 @@ The web version of the app is hosted as a static site on AWS S3 and served via t
 #### CI/CD (Future)
 
 Consider setting up automated deployments:
+
 - GitHub Actions workflow triggered on push to `main` branch
 - Automatically build and deploy to S3
 - Invalidate CloudFront cache if using CDN
@@ -336,6 +359,7 @@ Mobile apps are built and distributed using Expo Application Services (EAS).
    - App Store Connect app created
 
 2. **Build**:
+
    ```bash
    eas build --platform ios
    ```
@@ -352,6 +376,7 @@ Mobile apps are built and distributed using Expo Application Services (EAS).
    - App created in Play Console
 
 2. **Build**:
+
    ```bash
    eas build --platform android
    ```
@@ -364,6 +389,7 @@ Mobile apps are built and distributed using Expo Application Services (EAS).
 #### EAS Configuration
 
 Create `eas.json` in project root:
+
 ```json
 {
   "build": {
@@ -380,6 +406,7 @@ Create `eas.json` in project root:
 ## Future Enhancements
 
 Potential features to consider:
+
 - Backend API for cloud sync
 - User authentication
 - Sharing druids/builds with other users

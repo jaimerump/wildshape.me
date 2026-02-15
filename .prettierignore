@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+.expo/
+.expo-shared/
+
+# Test coverage
+coverage/
+
+# Config files
+package-lock.json
+package.json
+
+# Generated files
+*.log
+*.tsbuildinfo
+
+# OS files
+.DS_Store
+Thumbs.db

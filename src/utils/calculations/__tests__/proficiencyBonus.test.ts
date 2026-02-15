@@ -1,5 +1,8 @@
 import { describe, it, expect } from '@jest/globals';
-import { getProficiencyBonusFromLevel, getProficiencyBonusFromCR } from '../proficiencyBonus';
+import {
+  getProficiencyBonusFromLevel,
+  getProficiencyBonusFromCR,
+} from '../proficiencyBonus';
 
 describe('getProficiencyBonusFromLevel', () => {
   describe('levels 1-4 should have +2 proficiency bonus', () => {
@@ -70,15 +73,32 @@ describe('getProficiencyBonusFromLevel', () => {
 
   it('should handle all levels from 1 to 20', () => {
     const expectedBonuses = [
-      2, 2, 2, 2,     // levels 1-4
-      3, 3, 3, 3,     // levels 5-8
-      4, 4, 4, 4,     // levels 9-12
-      5, 5, 5, 5,     // levels 13-16
-      6, 6, 6, 6      // levels 17-20
+      2,
+      2,
+      2,
+      2, // levels 1-4
+      3,
+      3,
+      3,
+      3, // levels 5-8
+      4,
+      4,
+      4,
+      4, // levels 9-12
+      5,
+      5,
+      5,
+      5, // levels 13-16
+      6,
+      6,
+      6,
+      6, // levels 17-20
     ];
 
     for (let level = 1; level <= 20; level++) {
-      expect(getProficiencyBonusFromLevel(level)).toBe(expectedBonuses[level - 1]);
+      expect(getProficiencyBonusFromLevel(level)).toBe(
+        expectedBonuses[level - 1]
+      );
     }
   });
 });
@@ -169,8 +189,8 @@ describe('getProficiencyBonusFromCR', () => {
   });
 
   it('should handle fractional CRs', () => {
-    expect(getProficiencyBonusFromCR(0.125)).toBe(2);  // CR 1/8
-    expect(getProficiencyBonusFromCR(0.25)).toBe(2);   // CR 1/4
-    expect(getProficiencyBonusFromCR(0.5)).toBe(2);    // CR 1/2
+    expect(getProficiencyBonusFromCR(0.125)).toBe(2); // CR 1/8
+    expect(getProficiencyBonusFromCR(0.25)).toBe(2); // CR 1/4
+    expect(getProficiencyBonusFromCR(0.5)).toBe(2); // CR 1/2
   });
 });

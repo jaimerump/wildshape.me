@@ -16,6 +16,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:react-native/all',
     'plugin:react-hooks/recommended',
+    'plugin:prettier/recommended', // Must be last to override other configs
   ],
   plugins: ['@typescript-eslint', 'react', 'react-native', 'react-hooks'],
   env: {

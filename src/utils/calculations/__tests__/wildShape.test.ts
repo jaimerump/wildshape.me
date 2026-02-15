@@ -3,18 +3,21 @@ import {
   canWildShapeInto,
   getMaxWildShapeCR,
   canWildShapeFlying,
-  canWildShapeSwimming
+  canWildShapeSwimming,
 } from '../wildShape';
 import type { Beast, Movement } from '../../../models';
 
 // Helper function to create mock beasts for testing
-function createMockBeast(cr: number, movement: Partial<Movement>): Pick<Beast, 'challengeRating' | 'movement'> {
+function createMockBeast(
+  cr: number,
+  movement: Partial<Movement>
+): Pick<Beast, 'challengeRating' | 'movement'> {
   return {
     challengeRating: cr,
     movement: {
       walking: 30,
-      ...movement
-    }
+      ...movement,
+    },
   };
 }
 
@@ -583,12 +586,20 @@ describe('canWildShapeInto', () => {
       const cr1Beast = createMockBeast(1, {});
 
       // Base druid cannot (both editions)
-      expect(canWildShapeInto(6, cr1Beast, '2024', null).canTransform).toBe(false);
-      expect(canWildShapeInto(6, cr1Beast, '2014', null).canTransform).toBe(false);
+      expect(canWildShapeInto(6, cr1Beast, '2024', null).canTransform).toBe(
+        false
+      );
+      expect(canWildShapeInto(6, cr1Beast, '2014', null).canTransform).toBe(
+        false
+      );
 
       // Moon druid can (both editions)
-      expect(canWildShapeInto(6, cr1Beast, '2024', 'Circle of the Moon').canTransform).toBe(true);
-      expect(canWildShapeInto(6, cr1Beast, '2014', 'Circle of the Moon').canTransform).toBe(true);
+      expect(
+        canWildShapeInto(6, cr1Beast, '2024', 'Circle of the Moon').canTransform
+      ).toBe(true);
+      expect(
+        canWildShapeInto(6, cr1Beast, '2014', 'Circle of the Moon').canTransform
+      ).toBe(true);
     });
 
     it('level 3 base druid limited to CR 1/4, Moon to CR 1', () => {
@@ -599,38 +610,70 @@ describe('canWildShapeInto', () => {
       expect(canWildShapeInto(3, cr1Beast, '2014').canTransform).toBe(false);
 
       // Moon druid can (both editions)
-      expect(canWildShapeInto(3, cr1Beast, '2024', 'Circle of the Moon').canTransform).toBe(true);
-      expect(canWildShapeInto(3, cr1Beast, '2014', 'Circle of the Moon').canTransform).toBe(true);
+      expect(
+        canWildShapeInto(3, cr1Beast, '2024', 'Circle of the Moon').canTransform
+      ).toBe(true);
+      expect(
+        canWildShapeInto(3, cr1Beast, '2014', 'Circle of the Moon').canTransform
+      ).toBe(true);
     });
 
     it('Moon druid still respects movement restrictions at same levels as base druid', () => {
       const flyingBeast = createMockBeast(1, { flying: 60 });
 
       // Both cannot fly at level 7 (both editions)
-      expect(canWildShapeInto(7, flyingBeast, '2024', null).canTransform).toBe(false);
-      expect(canWildShapeInto(7, flyingBeast, '2024', 'Circle of the Moon').canTransform).toBe(false);
-      expect(canWildShapeInto(7, flyingBeast, '2014', null).canTransform).toBe(false);
-      expect(canWildShapeInto(7, flyingBeast, '2014', 'Circle of the Moon').canTransform).toBe(false);
+      expect(canWildShapeInto(7, flyingBeast, '2024', null).canTransform).toBe(
+        false
+      );
+      expect(
+        canWildShapeInto(7, flyingBeast, '2024', 'Circle of the Moon')
+          .canTransform
+      ).toBe(false);
+      expect(canWildShapeInto(7, flyingBeast, '2014', null).canTransform).toBe(
+        false
+      );
+      expect(
+        canWildShapeInto(7, flyingBeast, '2014', 'Circle of the Moon')
+          .canTransform
+      ).toBe(false);
 
       // Both can fly at level 8 (both editions)
-      expect(canWildShapeInto(8, flyingBeast, '2024', null).canTransform).toBe(true);
-      expect(canWildShapeInto(8, flyingBeast, '2024', 'Circle of the Moon').canTransform).toBe(true);
-      expect(canWildShapeInto(8, flyingBeast, '2014', null).canTransform).toBe(true);
-      expect(canWildShapeInto(8, flyingBeast, '2014', 'Circle of the Moon').canTransform).toBe(true);
+      expect(canWildShapeInto(8, flyingBeast, '2024', null).canTransform).toBe(
+        true
+      );
+      expect(
+        canWildShapeInto(8, flyingBeast, '2024', 'Circle of the Moon')
+          .canTransform
+      ).toBe(true);
+      expect(canWildShapeInto(8, flyingBeast, '2014', null).canTransform).toBe(
+        true
+      );
+      expect(
+        canWildShapeInto(8, flyingBeast, '2014', 'Circle of the Moon')
+          .canTransform
+      ).toBe(true);
     });
 
     it('2014 Moon druid can use CR 1 at level 2 (special rule)', () => {
       const cr1Beast = createMockBeast(1, {});
 
       // Base druids cannot at level 2 (both editions)
-      expect(canWildShapeInto(2, cr1Beast, '2024', null).canTransform).toBe(false);
-      expect(canWildShapeInto(2, cr1Beast, '2014', null).canTransform).toBe(false);
+      expect(canWildShapeInto(2, cr1Beast, '2024', null).canTransform).toBe(
+        false
+      );
+      expect(canWildShapeInto(2, cr1Beast, '2014', null).canTransform).toBe(
+        false
+      );
 
       // 2024 Moon druid cannot at level 2
-      expect(canWildShapeInto(2, cr1Beast, '2024', 'Circle of the Moon').canTransform).toBe(false);
+      expect(
+        canWildShapeInto(2, cr1Beast, '2024', 'Circle of the Moon').canTransform
+      ).toBe(false);
 
       // 2014 Moon druid CAN at level 2 (special rule)
-      expect(canWildShapeInto(2, cr1Beast, '2014', 'Circle of the Moon').canTransform).toBe(true);
+      expect(
+        canWildShapeInto(2, cr1Beast, '2014', 'Circle of the Moon').canTransform
+      ).toBe(true);
     });
   });
 });

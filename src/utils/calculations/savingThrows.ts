@@ -57,7 +57,7 @@ export function getAllSavingThrows(
     'constitution',
     'intelligence',
     'wisdom',
-    'charisma'
+    'charisma',
   ];
 
   const savingThrows: Record<string, number> = {};
@@ -65,7 +65,11 @@ export function getAllSavingThrows(
   for (const ability of abilities) {
     const abilityScore = abilityScores[ability];
     const isProficient = proficientSaves.includes(ability);
-    savingThrows[ability] = getSavingThrowBonus(abilityScore, proficiencyBonus, isProficient);
+    savingThrows[ability] = getSavingThrowBonus(
+      abilityScore,
+      proficiencyBonus,
+      isProficient
+    );
   }
 
   return savingThrows as Record<AbilityName, number>;

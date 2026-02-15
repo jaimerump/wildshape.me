@@ -11,12 +11,24 @@ export type Edition = '2024' | '2014';
 /**
  * Creature size categories
  */
-export type Size = 'Tiny' | 'Small' | 'Medium' | 'Large' | 'Huge' | 'Gargantuan';
+export type Size =
+  | 'Tiny'
+  | 'Small'
+  | 'Medium'
+  | 'Large'
+  | 'Huge'
+  | 'Gargantuan';
 
 /**
  * Ability score names
  */
-export type AbilityName = 'strength' | 'dexterity' | 'constitution' | 'intelligence' | 'wisdom' | 'charisma';
+export type AbilityName =
+  | 'strength'
+  | 'dexterity'
+  | 'constitution'
+  | 'intelligence'
+  | 'wisdom'
+  | 'charisma';
 
 /**
  * Skill proficiency levels
@@ -137,7 +149,12 @@ export interface Beast extends Creature {
 /**
  * Druid circle (subclass)
  */
-export type DruidCircle = 'Circle of the Moon' | 'Circle of the Land' | 'Circle of the Sea' | 'Circle of the Stars' | null;
+export type DruidCircle =
+  | 'Circle of the Moon'
+  | 'Circle of the Land'
+  | 'Circle of the Sea'
+  | 'Circle of the Stars'
+  | null;
 
 /**
  * Druid character

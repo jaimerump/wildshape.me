@@ -3,7 +3,12 @@
  * Supports D&D 5e 2024 and 2014 edition rules
  */
 
-import type { Beast, WildShapeEligibility, DruidCircle, Edition } from '../../models';
+import type {
+  Beast,
+  WildShapeEligibility,
+  DruidCircle,
+  Edition,
+} from '../../models';
 
 /**
  * Gets the maximum CR a druid can Wild Shape into at their level.
@@ -73,7 +78,10 @@ export function getMaxWildShapeCR(
  * canWildShapeFlying(5, '2024')  // returns false
  * canWildShapeFlying(8, '2024')  // returns true
  */
-export function canWildShapeFlying(druidLevel: number, _edition: Edition): boolean {
+export function canWildShapeFlying(
+  druidLevel: number,
+  _edition: Edition
+): boolean {
   // Both editions have the same rule: flying at level 8+
   return druidLevel >= 8;
 }
@@ -94,7 +102,10 @@ export function canWildShapeFlying(druidLevel: number, _edition: Edition): boole
  * canWildShapeSwimming(3, '2014')  // returns false
  * canWildShapeSwimming(4, '2014')  // returns true
  */
-export function canWildShapeSwimming(druidLevel: number, edition: Edition): boolean {
+export function canWildShapeSwimming(
+  druidLevel: number,
+  edition: Edition
+): boolean {
   // 2024 edition: no swimming restriction
   if (edition === '2024') {
     return true;
@@ -150,7 +161,7 @@ export function canWildShapeInto(
   if (beast.challengeRating > maxCR) {
     return {
       canTransform: false,
-      reason: `CR ${beast.challengeRating} is too high. Maximum CR at level ${druidLevel} is ${maxCR}.`
+      reason: `CR ${beast.challengeRating} is too high. Maximum CR at level ${druidLevel} is ${maxCR}.`,
     };
   }
 
@@ -158,21 +169,22 @@ export function canWildShapeInto(
   if (beast.movement.flying && !canWildShapeFlying(druidLevel, edition)) {
     return {
       canTransform: false,
-      reason: `Cannot fly until level 8. Current level: ${druidLevel}.`
+      reason: `Cannot fly until level 8. Current level: ${druidLevel}.`,
     };
   }
 
   // Check swimming restriction
   if (beast.movement.swimming && !canWildShapeSwimming(druidLevel, edition)) {
-    const swimLevel = edition === '2014' ? 4 : 'never (2024 has no restriction)';
+    const swimLevel =
+      edition === '2014' ? 4 : 'never (2024 has no restriction)';
     return {
       canTransform: false,
-      reason: `Cannot swim until level ${swimLevel}. Current level: ${druidLevel}.`
+      reason: `Cannot swim until level ${swimLevel}. Current level: ${druidLevel}.`,
     };
   }
 
   // All checks passed
   return {
-    canTransform: true
+    canTransform: true,
   };
 }
