@@ -19,7 +19,7 @@ This document contains technical details, architecture decisions, and setup inst
 ### Development Tools
 - **Build System**: Expo
 - **Type Checking**: TypeScript
-- **Linting**: ESLint (to be configured)
+- **Linting**: ESLint
 - **Formatting**: Prettier (to be configured)
 
 ## Project Setup
