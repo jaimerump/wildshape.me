@@ -530,7 +530,7 @@ async function main(): Promise<void> {
   try {
     console.log('Starting beast download from D&D 5e API...\n');
 
-    const outputPath = path.join(__dirname, '../../data/beasts.json');
+    const outputPath = path.join(__dirname, '../../data/beasts_2014.json');
     const beasts = await downloadBeasts();
     saveBeasts(beasts, outputPath);
 
