@@ -250,6 +250,7 @@ function parseTraits(
   return special_abilities.map((ability) => ({
     name: ability.name,
     description: ability.desc,
+    source: 'species',
   }));
 }
 
@@ -271,6 +272,7 @@ function parseActions(
       name: action.name,
       actionType: 'Action',
       description: action.desc,
+      source: 'species',
     };
 
     // Determine attack type from description

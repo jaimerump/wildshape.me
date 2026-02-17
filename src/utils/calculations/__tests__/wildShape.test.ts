@@ -4,8 +4,17 @@ import {
   getMaxWildShapeCR,
   canWildShapeFlying,
   canWildShapeSwimming,
+  calculateWildshapedDruid,
 } from '../wildShape';
-import type { Beast, Movement } from '../../../models';
+import type {
+  Beast,
+  Druid,
+  Movement,
+  Trait,
+  Action,
+  AbilityName,
+  SkillProficiency,
+} from '../../../models';
 
 // Helper function to create mock beasts for testing
 function createMockBeast(
@@ -674,6 +683,769 @@ describe('canWildShapeInto', () => {
       expect(
         canWildShapeInto(2, cr1Beast, '2014', 'Circle of the Moon').canTransform
       ).toBe(true);
+    });
+  });
+});
+
+// Helper function to create a full mock druid for testing calculateWildshapedDruid
+function createMockDruid(options: {
+  edition?: '2024' | '2014';
+  druidLevel?: number;
+  totalCharacterLevel?: number;
+  druidCircle?: 'Circle of the Moon' | null;
+  strength?: number;
+  dexterity?: number;
+  constitution?: number;
+  intelligence?: number;
+  wisdom?: number;
+  charisma?: number;
+  hitPoints?: number;
+  savingThrowProficiencies?: AbilityName[];
+  skillProficiencies?: SkillProficiency[];
+  traits?: Trait[];
+  actions?: Action[];
+  otherClassLevels?: Record<string, number>;
+}): Druid {
+  return {
+    name: 'Test Druid',
+    edition: options.edition || '2024',
+    size: 'Medium',
+    strength: options.strength || 10,
+    dexterity: options.dexterity || 12,
+    constitution: options.constitution || 14,
+    intelligence: options.intelligence || 13,
+    wisdom: options.wisdom || 16,
+    charisma: options.charisma || 11,
+    armorClass: 15,
+    hitPoints: options.hitPoints || 30,
+    hitDice: '5d8',
+    movement: { walking: 30 },
+    senses: {},
+    passivePerception: 13,
+    languages: ['Common', 'Druidic'],
+    savingThrowProficiencies: options.savingThrowProficiencies || [
+      'intelligence',
+      'wisdom',
+    ],
+    skillProficiencies: options.skillProficiencies || [
+      { skill: 'Perception', proficiencyLevel: 'proficient' },
+      { skill: 'Nature', proficiencyLevel: 'proficient' },
+    ],
+    traits: options.traits || [
+      {
+        name: 'Spellcasting',
+        description: 'Can cast druid spells',
+        source: 'class',
+      },
+    ],
+    actions: options.actions || [
+      {
+        name: 'Quarterstaff',
+        actionType: 'Action',
+        description: 'Melee weapon attack',
+        source: 'class',
+      },
+    ],
+    totalCharacterLevel: options.totalCharacterLevel || 5,
+    druidLevel: options.druidLevel || 5,
+    druidCircle: options.druidCircle ?? null,
+    otherClassLevels: options.otherClassLevels,
+  };
+}
+
+// Helper function to create a full mock beast for testing calculateWildshapedDruid
+function createFullMockBeast(options: {
+  name?: string;
+  edition?: '2024' | '2014';
+  challengeRating?: number;
+  size?: 'Tiny' | 'Small' | 'Medium' | 'Large';
+  strength?: number;
+  dexterity?: number;
+  constitution?: number;
+  intelligence?: number;
+  wisdom?: number;
+  charisma?: number;
+  armorClass?: number;
+  hitPoints?: number;
+  movement?: Partial<Movement>;
+  savingThrowProficiencies?: AbilityName[];
+  skillProficiencies?: SkillProficiency[];
+  traits?: Trait[];
+  actions?: Action[];
+}): Beast {
+  return {
+    name: options.name || 'Test Beast',
+    edition: options.edition || '2024',
+    size: options.size || 'Medium',
+    strength: options.strength || 14,
+    dexterity: options.dexterity || 15,
+    constitution: options.constitution || 12,
+    intelligence: options.intelligence || 3,
+    wisdom: options.wisdom || 12,
+    charisma: options.charisma || 6,
+    armorClass: options.armorClass || 13,
+    hitPoints: options.hitPoints || 11,
+    hitDice: '2d8+2',
+    movement: {
+      walking: 40,
+      ...options.movement,
+    },
+    senses: { darkvision: 60 },
+    passivePerception: 11,
+    languages: [],
+    savingThrowProficiencies: options.savingThrowProficiencies || [],
+    skillProficiencies: options.skillProficiencies || [],
+    traits: options.traits || [
+      {
+        name: 'Keen Hearing',
+        description: 'Advantage on Wisdom (Perception) checks',
+        source: 'species',
+      },
+    ],
+    actions: options.actions || [
+      {
+        name: 'Bite',
+        actionType: 'Action',
+        description: 'Melee weapon attack',
+        source: 'species',
+      },
+    ],
+    challengeRating: options.challengeRating || 0.25,
+  };
+}
+
+describe('calculateWildshapedDruid', () => {
+  describe('Validation', () => {
+    it('should throw error if druid edition is 2014', () => {
+      const druid = createMockDruid({ edition: '2014', druidLevel: 5 });
+      const beast = createFullMockBeast({
+        edition: '2014',
+        challengeRating: 0.25,
+      });
+
+      expect(() => calculateWildshapedDruid(druid, beast)).toThrow(
+        'Wild Shape stat calculation is only supported for 2024 edition druids'
+      );
+    });
+
+    it('should throw error if editions do not match', () => {
+      const druid = createMockDruid({ edition: '2024', druidLevel: 5 });
+      const beast = createFullMockBeast({
+        edition: '2014',
+        challengeRating: 0.25,
+      });
+
+      expect(() => calculateWildshapedDruid(druid, beast)).toThrow(
+        'Edition mismatch'
+      );
+    });
+
+    it('should throw error if beast CR is too high', () => {
+      const druid = createMockDruid({ druidLevel: 5 });
+      const beast = createFullMockBeast({ challengeRating: 2 }); // CR 2 too high for level 5
+
+      expect(() => calculateWildshapedDruid(druid, beast)).toThrow(
+        'Cannot Wild Shape into'
+      );
+    });
+
+    it('should throw error if beast has flying speed but druid is under level 8', () => {
+      const druid = createMockDruid({ druidLevel: 5 });
+      const beast = createFullMockBeast({
+        challengeRating: 0.25,
+        movement: { flying: 60 },
+      });
+
+      expect(() => calculateWildshapedDruid(druid, beast)).toThrow(
+        'Cannot fly until level 8'
+      );
+    });
+  });
+
+  describe('Basic transformation - Ability scores and HP', () => {
+    it('should use physical ability scores from beast', () => {
+      const druid = createMockDruid({
+        druidLevel: 5,
+        strength: 8,
+        dexterity: 12,
+        constitution: 14,
+      });
+      const beast = createFullMockBeast({
+        challengeRating: 0.25,
+        strength: 16,
+        dexterity: 18,
+        constitution: 15,
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      expect(wildshaped.strength).toBe(16); // From beast
+      expect(wildshaped.dexterity).toBe(18); // From beast
+      expect(wildshaped.constitution).toBe(15); // From beast
+    });
+
+    it('should use mental ability scores from druid', () => {
+      const druid = createMockDruid({
+        druidLevel: 5,
+        intelligence: 13,
+        wisdom: 16,
+        charisma: 11,
+      });
+      const beast = createFullMockBeast({
+        challengeRating: 0.25,
+        intelligence: 3,
+        wisdom: 12,
+        charisma: 6,
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      expect(wildshaped.intelligence).toBe(13); // From druid
+      expect(wildshaped.wisdom).toBe(16); // From druid
+      expect(wildshaped.charisma).toBe(11); // From druid
+    });
+
+    it('should use hit points from druid', () => {
+      const druid = createMockDruid({ druidLevel: 5, hitPoints: 35 });
+      const beast = createFullMockBeast({ hitPoints: 11 });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      expect(wildshaped.hitPoints).toBe(35); // From druid
+    });
+
+    it('should set temporary hit points equal to druid level', () => {
+      const druid = createMockDruid({ druidLevel: 8 });
+      const beast = createFullMockBeast({ challengeRating: 1 });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      expect(wildshaped.temporaryHitPoints).toBe(8);
+    });
+
+    it('should use hit dice from druid', () => {
+      const druid = createMockDruid({ druidLevel: 5 });
+      const beast = createFullMockBeast({ challengeRating: 0.25 });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      expect(wildshaped.hitDice).toBe('5d8'); // From druid
+    });
+  });
+
+  describe('Basic transformation - Combat and movement', () => {
+    it('should use AC from beast', () => {
+      const druid = createMockDruid({ druidLevel: 5 });
+      const beast = createFullMockBeast({ armorClass: 14 });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      expect(wildshaped.armorClass).toBe(14);
+    });
+
+    it('should use movement from beast', () => {
+      const druid = createMockDruid({ druidLevel: 5 });
+      const beast = createFullMockBeast({
+        challengeRating: 0.25,
+        movement: { walking: 50, swimming: 30 },
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      expect(wildshaped.movement.walking).toBe(50);
+      expect(wildshaped.movement.swimming).toBe(30);
+    });
+
+    it('should use senses from beast', () => {
+      const druid = createMockDruid({ druidLevel: 5 });
+      const beast = createFullMockBeast({ challengeRating: 0.25 });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      expect(wildshaped.senses.darkvision).toBe(60);
+    });
+
+    it('should use languages from druid', () => {
+      const druid = createMockDruid({ druidLevel: 5 });
+      const beast = createFullMockBeast({ challengeRating: 0.25 });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      expect(wildshaped.languages).toEqual(['Common', 'Druidic']);
+    });
+
+    it('should use beast name and size', () => {
+      const druid = createMockDruid({ druidLevel: 5 });
+      const beast = createFullMockBeast({
+        name: 'Wolf',
+        size: 'Medium',
+        challengeRating: 0.25,
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      expect(wildshaped.name).toBe('Wolf');
+      expect(wildshaped.size).toBe('Medium');
+    });
+  });
+
+  describe('Saving throw merging', () => {
+    it('should use higher save bonus when druid is proficient and has higher total', () => {
+      const druid = createMockDruid({
+        druidLevel: 5,
+        totalCharacterLevel: 5,
+        wisdom: 16, // +3 modifier
+        savingThrowProficiencies: ['intelligence', 'wisdom'], // PB +3
+        // Wisdom save: +3 (mod) + 3 (PB) = +6
+      });
+      const beast = createFullMockBeast({
+        challengeRating: 0.25,
+        wisdom: 12, // +1 modifier
+        savingThrowProficiencies: [], // Not proficient, PB +2
+        // Wisdom save: +1 (mod) = +1
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      // Should use druid's higher save: +6
+      expect(wildshaped.savingThrowBonuses.wisdom).toBe(6);
+    });
+
+    it('should use higher save bonus when beast is proficient and has higher total', () => {
+      const druid = createMockDruid({
+        druidLevel: 5,
+        totalCharacterLevel: 5,
+        dexterity: 12, // Druid's physical score
+        savingThrowProficiencies: ['intelligence', 'wisdom'],
+        // Dex save: hybrid uses beast's Dex (18) = +4 (mod) = +4 (not proficient)
+      });
+      const beast = createFullMockBeast({
+        challengeRating: 0.25,
+        dexterity: 18, // +4 modifier
+        savingThrowProficiencies: ['dexterity'], // PB +2
+        // Dex save: +4 (mod) + 2 (PB) = +6
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      // Should use beast's higher save: +6
+      expect(wildshaped.savingThrowBonuses.dexterity).toBe(6);
+    });
+
+    it('should use druid save when neither is proficient but druid has better hybrid score', () => {
+      const druid = createMockDruid({
+        druidLevel: 5,
+        charisma: 14, // +2 modifier (from druid, mental stat)
+        savingThrowProficiencies: ['intelligence', 'wisdom'],
+        // Charisma save: +2 (not proficient)
+      });
+      const beast = createFullMockBeast({
+        challengeRating: 0.25,
+        charisma: 6, // -2 modifier
+        savingThrowProficiencies: [],
+        // Charisma save: -2 (not proficient)
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      // Should use druid's higher save: +2
+      expect(wildshaped.savingThrowBonuses.charisma).toBe(2);
+    });
+  });
+
+  describe('Skill merging', () => {
+    it('should use higher skill bonus when druid is proficient and has higher total', () => {
+      const druid = createMockDruid({
+        druidLevel: 5,
+        totalCharacterLevel: 5,
+        wisdom: 16, // +3 modifier
+        skillProficiencies: [
+          { skill: 'Perception', proficiencyLevel: 'proficient' }, // PB +3
+        ],
+        // Perception: +3 (mod) + 3 (PB) = +6
+      });
+      const beast = createFullMockBeast({
+        challengeRating: 0.25,
+        wisdom: 12, // +1 modifier
+        skillProficiencies: [],
+        // Perception: +1 (mod) = +1 (not proficient)
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      expect(wildshaped.skillBonuses['Perception']).toBe(6);
+    });
+
+    it('should use higher skill bonus when beast has expertise', () => {
+      const druid = createMockDruid({
+        druidLevel: 5,
+        totalCharacterLevel: 5,
+        dexterity: 12, // Druid's mental (but hybrid uses beast's 18)
+        skillProficiencies: [
+          { skill: 'Stealth', proficiencyLevel: 'proficient' },
+        ],
+        // Stealth: +4 (hybrid Dex mod) + 3 (PB) = +7
+      });
+      const beast = createFullMockBeast({
+        challengeRating: 0.25,
+        dexterity: 18, // +4 modifier
+        skillProficiencies: [
+          { skill: 'Stealth', proficiencyLevel: 'expertise' }, // 2x PB +2 = +4
+        ],
+        // Stealth: +4 (mod) + 4 (expertise) = +8
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      // Should use beast's higher skill: +8
+      expect(wildshaped.skillBonuses['Stealth']).toBe(8);
+    });
+
+    it('should calculate all 18 skills', () => {
+      const druid = createMockDruid({ druidLevel: 5 });
+      const beast = createFullMockBeast({ challengeRating: 0.25 });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      // Check that all skills have bonuses calculated
+      const skills = [
+        'Acrobatics',
+        'Animal Handling',
+        'Arcana',
+        'Athletics',
+        'Deception',
+        'History',
+        'Insight',
+        'Intimidation',
+        'Investigation',
+        'Medicine',
+        'Nature',
+        'Perception',
+        'Performance',
+        'Persuasion',
+        'Religion',
+        'Sleight of Hand',
+        'Stealth',
+        'Survival',
+      ];
+
+      for (const skill of skills) {
+        expect(wildshaped.skillBonuses[skill]).toBeDefined();
+        expect(typeof wildshaped.skillBonuses[skill]).toBe('number');
+      }
+    });
+  });
+
+  describe('Passive Perception', () => {
+    it('should recalculate passive perception from merged Perception skill', () => {
+      const druid = createMockDruid({
+        druidLevel: 5,
+        totalCharacterLevel: 5,
+        wisdom: 16, // +3 modifier
+        skillProficiencies: [
+          { skill: 'Perception', proficiencyLevel: 'proficient' },
+        ],
+        // Perception: +3 (mod) + 3 (PB) = +6
+      });
+      const beast = createFullMockBeast({
+        challengeRating: 0.25,
+        wisdom: 12,
+        skillProficiencies: [],
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      // Passive Perception = 10 + Perception bonus
+      expect(wildshaped.passivePerception).toBe(16); // 10 + 6
+    });
+  });
+
+  describe('Traits and actions source filtering', () => {
+    it('should include all beast species traits', () => {
+      const druid = createMockDruid({
+        druidLevel: 5,
+        traits: [
+          {
+            name: 'Spellcasting',
+            description: 'Can cast druid spells',
+            source: 'class',
+          },
+          {
+            name: 'Darkvision',
+            description: 'From species',
+            source: 'species',
+          },
+        ],
+      });
+      const beast = createFullMockBeast({
+        challengeRating: 0.25,
+        traits: [
+          {
+            name: 'Keen Hearing',
+            description: 'Advantage on Perception',
+            source: 'species',
+          },
+          {
+            name: 'Pack Tactics',
+            description: 'Advantage when ally is nearby',
+            source: 'species',
+          },
+        ],
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      const beastTraitNames = wildshaped.traits
+        .filter((t) => t.source === 'species')
+        .map((t) => t.name);
+
+      expect(beastTraitNames).toContain('Keen Hearing');
+      expect(beastTraitNames).toContain('Pack Tactics');
+    });
+
+    it('should include druid class and feat traits but exclude druid species traits', () => {
+      const druid = createMockDruid({
+        druidLevel: 5,
+        traits: [
+          {
+            name: 'Spellcasting',
+            description: 'Can cast druid spells',
+            source: 'class',
+          },
+          {
+            name: 'Wild Shape',
+            description: 'Can transform',
+            source: 'class',
+          },
+          {
+            name: 'Alert',
+            description: 'From feat',
+            source: 'feat',
+          },
+          {
+            name: 'Darkvision',
+            description: 'From elf species',
+            source: 'species',
+          },
+        ],
+      });
+      const beast = createFullMockBeast({
+        challengeRating: 0.25,
+        traits: [
+          {
+            name: 'Keen Hearing',
+            description: 'Advantage on Perception',
+            source: 'species',
+          },
+        ],
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      const traitNames = wildshaped.traits.map((t) => t.name);
+
+      // Should include druid class and feat traits
+      expect(traitNames).toContain('Spellcasting');
+      expect(traitNames).toContain('Wild Shape');
+      expect(traitNames).toContain('Alert');
+
+      // Should include beast species traits
+      expect(traitNames).toContain('Keen Hearing');
+
+      // Should NOT include druid species traits
+      expect(traitNames).not.toContain('Darkvision');
+    });
+
+    it('should include all beast species actions', () => {
+      const druid = createMockDruid({
+        druidLevel: 5,
+        actions: [
+          {
+            name: 'Quarterstaff',
+            actionType: 'Action',
+            description: 'Melee weapon attack',
+            source: 'class',
+          },
+        ],
+      });
+      const beast = createFullMockBeast({
+        challengeRating: 0.25,
+        actions: [
+          {
+            name: 'Bite',
+            actionType: 'Action',
+            description: 'Melee weapon attack',
+            source: 'species',
+          },
+          {
+            name: 'Claw',
+            actionType: 'Action',
+            description: 'Melee weapon attack',
+            source: 'species',
+          },
+        ],
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      const beastActionNames = wildshaped.actions
+        .filter((a) => a.source === 'species')
+        .map((a) => a.name);
+
+      expect(beastActionNames).toContain('Bite');
+      expect(beastActionNames).toContain('Claw');
+    });
+
+    it('should include druid class and feat actions', () => {
+      const druid = createMockDruid({
+        druidLevel: 5,
+        actions: [
+          {
+            name: 'Wild Shape',
+            actionType: 'Bonus Action',
+            description: 'Transform into beast',
+            source: 'class',
+          },
+          {
+            name: 'Second Wind',
+            actionType: 'Bonus Action',
+            description: 'From multiclass',
+            source: 'class',
+          },
+          {
+            name: 'Grappler Attack',
+            actionType: 'Action',
+            description: 'From feat',
+            source: 'feat',
+          },
+        ],
+      });
+      const beast = createFullMockBeast({
+        challengeRating: 0.25,
+        actions: [
+          {
+            name: 'Bite',
+            actionType: 'Action',
+            description: 'Melee weapon attack',
+            source: 'species',
+          },
+        ],
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      const actionNames = wildshaped.actions.map((a) => a.name);
+
+      // Should include druid class and feat actions
+      expect(actionNames).toContain('Wild Shape');
+      expect(actionNames).toContain('Second Wind');
+      expect(actionNames).toContain('Grappler Attack');
+
+      // Should include beast species actions
+      expect(actionNames).toContain('Bite');
+    });
+  });
+
+  describe('Retained druid properties', () => {
+    it('should retain druid progression properties', () => {
+      const druid = createMockDruid({
+        druidLevel: 8,
+        totalCharacterLevel: 10,
+        druidCircle: 'Circle of the Moon',
+      });
+      const beast = createFullMockBeast({ challengeRating: 2 });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      expect(wildshaped.druidLevel).toBe(8);
+      expect(wildshaped.totalCharacterLevel).toBe(10);
+      expect(wildshaped.druidCircle).toBe('Circle of the Moon');
+    });
+
+    it('should retain other class levels', () => {
+      const druid = createMockDruid({
+        druidLevel: 5,
+        totalCharacterLevel: 7,
+        otherClassLevels: { Fighter: 2 },
+      });
+
+      const beast = createFullMockBeast({ challengeRating: 0.5 });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      expect(wildshaped.otherClassLevels).toEqual({ Fighter: 2 });
+    });
+
+    it('should store references to source druid and beast', () => {
+      const druid = createMockDruid({ druidLevel: 5 });
+      const beast = createFullMockBeast({ challengeRating: 0.25 });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      expect(wildshaped.sourceDruid).toBe(druid);
+      expect(wildshaped.sourceBeast).toBe(beast);
+    });
+  });
+
+  describe('Edge cases', () => {
+    it('should work for level 2 druid (minimum Wild Shape level)', () => {
+      const druid = createMockDruid({ druidLevel: 2, totalCharacterLevel: 2 });
+      const beast = createFullMockBeast({ challengeRating: 0.25 });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      expect(wildshaped.temporaryHitPoints).toBe(2);
+      expect(wildshaped.druidLevel).toBe(2);
+    });
+
+    it('should work for Moon druid with high CR beast', () => {
+      const druid = createMockDruid({
+        druidLevel: 12,
+        totalCharacterLevel: 12,
+        druidCircle: 'Circle of the Moon',
+      });
+      const beast = createFullMockBeast({ challengeRating: 4 }); // CR 4 allowed at level 12
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      expect(wildshaped.druidCircle).toBe('Circle of the Moon');
+      expect(wildshaped.sourceBeast.challengeRating).toBe(4);
+    });
+
+    it('should handle skills where neither druid nor beast is proficient', () => {
+      const druid = createMockDruid({
+        druidLevel: 5,
+        skillProficiencies: [
+          { skill: 'Nature', proficiencyLevel: 'proficient' },
+        ],
+      });
+      const beast = createFullMockBeast({
+        challengeRating: 0.25,
+        skillProficiencies: [],
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      // Athletics should use just the ability modifier (no proficiency)
+      expect(wildshaped.skillBonuses['Athletics']).toBeDefined();
+      expect(typeof wildshaped.skillBonuses['Athletics']).toBe('number');
+    });
+
+    it('should handle multiclass druid', () => {
+      const druid = createMockDruid({
+        druidLevel: 5,
+        totalCharacterLevel: 8, // 5 druid + 3 other class
+        otherClassLevels: { Ranger: 3 },
+      });
+
+      const beast = createFullMockBeast({ challengeRating: 0.5 });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      // Should use total character level for proficiency bonus
+      // Level 8: PB = +3
+      expect(wildshaped.totalCharacterLevel).toBe(8);
+      expect(wildshaped.druidLevel).toBe(5);
     });
   });
 });

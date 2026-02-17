@@ -41,6 +41,11 @@ export type ProficiencyLevel = 'proficient' | 'expertise';
 export type ActionType = 'Action' | 'Bonus Action' | 'Reaction';
 
 /**
+ * Trait and action source (for Wild Shape stat merging)
+ */
+export type TraitSource = 'species' | 'class' | 'feat';
+
+/**
  * Attack types
  */
 export type AttackType = 'Melee' | 'Ranged';
@@ -80,6 +85,7 @@ export interface SkillProficiency {
 export interface Trait {
   name: string;
   description: string;
+  source: TraitSource;
 }
 
 /**
@@ -89,6 +95,7 @@ export interface Action {
   name: string;
   actionType: ActionType;
   description: string;
+  source: TraitSource;
   attackType?: AttackType;
   toHitBonus?: number;
   reach?: number;
@@ -160,6 +167,29 @@ export type DruidCircle =
  * Druid character
  */
 export interface Druid extends Creature {
+  totalCharacterLevel: number;
+  druidLevel: number;
+  druidCircle: DruidCircle;
+  otherClassLevels?: Record<string, number>;
+}
+
+/**
+ * Wildshaped druid (hybrid stats when transformed into a beast)
+ * Follows 2024 D&D 5e Wild Shape rules
+ */
+export interface WildshapedDruid extends Creature {
+  // Source references
+  sourceDruid: Druid;
+  sourceBeast: Beast;
+
+  // Wild Shape specific
+  temporaryHitPoints: number;
+
+  // Computed final bonuses (after merging druid/beast)
+  savingThrowBonuses: Record<AbilityName, number>;
+  skillBonuses: Record<string, number>;
+
+  // Retained druid properties
   totalCharacterLevel: number;
   druidLevel: number;
   druidCircle: DruidCircle;
