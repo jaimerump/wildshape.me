@@ -751,6 +751,7 @@ function createMockDruid(options: {
     druidLevel: options.druidLevel || 5,
     druidCircle: options.druidCircle ?? null,
     otherClassLevels: options.otherClassLevels,
+    equipment: [],
   };
 }
 

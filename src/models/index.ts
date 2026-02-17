@@ -34,6 +34,17 @@ export type BodyType =
   | 'snake';
 
 /**
+ * Equipment type categories
+ */
+export type EquipmentType =
+  | 'armor'
+  | 'shield'
+  | 'ring'
+  | 'weapon'
+  | 'clothing'
+  | 'other';
+
+/**
  * Ability score names
  */
 export type AbilityName =
@@ -57,7 +68,7 @@ export type ActionType = 'Action' | 'Bonus Action' | 'Reaction';
 /**
  * Trait and action source (for Wild Shape stat merging)
  */
-export type TraitSource = 'species' | 'class' | 'feat';
+export type TraitSource = 'species' | 'class' | 'feat' | 'equipment';
 
 /**
  * Attack types
@@ -94,12 +105,24 @@ export interface SkillProficiency {
 }
 
 /**
+ * Equipment (weapons, armor, magical items, etc.)
+ */
+export interface Equipment {
+  name: string;
+  description: string;
+  type: EquipmentType;
+  minSize: Size;
+  maxSize: Size;
+}
+
+/**
  * Creature trait (passive abilities)
  */
 export interface Trait {
   name: string;
   description: string;
   source: TraitSource;
+  equipmentName?: string;
 }
 
 /**
@@ -110,6 +133,7 @@ export interface Action {
   actionType: ActionType;
   description: string;
   source: TraitSource;
+  equipmentName?: string;
   attackType?: AttackType;
   toHitBonus?: number;
   reach?: number;
@@ -186,6 +210,7 @@ export interface Druid extends Creature {
   druidLevel: number;
   druidCircle: DruidCircle;
   otherClassLevels?: Record<string, number>;
+  equipment: Equipment[];
 }
 
 /**
