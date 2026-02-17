@@ -816,16 +816,17 @@ function createFullMockBeast(options: {
 
 describe('calculateWildshapedDruid', () => {
   describe('Validation', () => {
-    it('should throw error if druid edition is 2014', () => {
+    it('should support 2014 edition druids', () => {
       const druid = createMockDruid({ edition: '2014', druidLevel: 5 });
       const beast = createFullMockBeast({
         edition: '2014',
         challengeRating: 0.25,
       });
 
-      expect(() => calculateWildshapedDruid(druid, beast)).toThrow(
-        'Wild Shape stat calculation is only supported for 2024 edition druids'
-      );
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      expect(wildshaped.edition).toBe('2014');
+      expect(wildshaped.druidLevel).toBe(5);
     });
 
     it('should throw error if editions do not match', () => {
@@ -1446,6 +1447,283 @@ describe('calculateWildshapedDruid', () => {
       // Level 8: PB = +3
       expect(wildshaped.totalCharacterLevel).toBe(8);
       expect(wildshaped.druidLevel).toBe(5);
+    });
+  });
+
+  describe('2014 vs 2024 Edition Differences', () => {
+    describe('Hit Points and Hit Dice', () => {
+      it('2024 should use druid HP, 2014 should use beast HP', () => {
+        const druid2024 = createMockDruid({
+          edition: '2024',
+          druidLevel: 5,
+          hitPoints: 35,
+        });
+        const beast2024 = createFullMockBeast({
+          edition: '2024',
+          challengeRating: 0.25,
+          hitPoints: 11,
+        });
+
+        const druid2014 = createMockDruid({
+          edition: '2014',
+          druidLevel: 5,
+          hitPoints: 35,
+        });
+        const beast2014 = createFullMockBeast({
+          edition: '2014',
+          challengeRating: 0.25,
+          hitPoints: 11,
+        });
+
+        const wildshaped2024 = calculateWildshapedDruid(druid2024, beast2024);
+        const wildshaped2014 = calculateWildshapedDruid(druid2014, beast2014);
+
+        expect(wildshaped2024.hitPoints).toBe(35); // From druid
+        expect(wildshaped2014.hitPoints).toBe(11); // From beast
+      });
+
+      it('2024 should use druid hit dice, 2014 should use beast hit dice', () => {
+        const druid2024 = createMockDruid({
+          edition: '2024',
+          druidLevel: 5,
+        });
+        const beast2024 = createFullMockBeast({
+          edition: '2024',
+          challengeRating: 0.25,
+        });
+
+        const druid2014 = createMockDruid({
+          edition: '2014',
+          druidLevel: 5,
+        });
+        const beast2014 = createFullMockBeast({
+          edition: '2014',
+          challengeRating: 0.25,
+        });
+
+        const wildshaped2024 = calculateWildshapedDruid(druid2024, beast2024);
+        const wildshaped2014 = calculateWildshapedDruid(druid2014, beast2014);
+
+        expect(wildshaped2024.hitDice).toBe('5d8'); // From druid
+        expect(wildshaped2014.hitDice).toBe('2d8+2'); // From beast
+      });
+    });
+
+    describe('Temporary Hit Points', () => {
+      it('2024 should gain temp HP equal to druid level', () => {
+        const druid = createMockDruid({
+          edition: '2024',
+          druidLevel: 8,
+        });
+        const beast = createFullMockBeast({
+          edition: '2024',
+          challengeRating: 1,
+        });
+
+        const wildshaped = calculateWildshapedDruid(druid, beast);
+
+        expect(wildshaped.temporaryHitPoints).toBe(8);
+      });
+
+      it('2014 should not gain any temp HP', () => {
+        const druid = createMockDruid({
+          edition: '2014',
+          druidLevel: 8,
+        });
+        const beast = createFullMockBeast({
+          edition: '2014',
+          challengeRating: 1,
+        });
+
+        const wildshaped = calculateWildshapedDruid(druid, beast);
+
+        expect(wildshaped.temporaryHitPoints).toBe(0);
+      });
+    });
+
+    describe('Traits and Actions Merging', () => {
+      it('2024 should filter out druid species traits', () => {
+        const druid = createMockDruid({
+          edition: '2024',
+          druidLevel: 5,
+          traits: [
+            {
+              name: 'Fey Ancestry',
+              description: 'From elf species',
+              source: 'species',
+            },
+            {
+              name: 'Spellcasting',
+              description: 'From druid class',
+              source: 'class',
+            },
+          ],
+        });
+        const beast = createFullMockBeast({
+          edition: '2024',
+          challengeRating: 0.25,
+          traits: [
+            {
+              name: 'Keen Hearing',
+              description: 'From wolf species',
+              source: 'species',
+            },
+          ],
+        });
+
+        const wildshaped = calculateWildshapedDruid(druid, beast);
+
+        const traitNames = wildshaped.traits.map((t) => t.name);
+        expect(traitNames).toContain('Keen Hearing'); // Beast species ✓
+        expect(traitNames).toContain('Spellcasting'); // Druid class ✓
+        expect(traitNames).not.toContain('Fey Ancestry'); // Druid species ✗
+      });
+
+      it('2014 should include ALL traits from both druid and beast', () => {
+        const druid = createMockDruid({
+          edition: '2014',
+          druidLevel: 5,
+          traits: [
+            {
+              name: 'Fey Ancestry',
+              description: 'From elf species',
+              source: 'species',
+            },
+            {
+              name: 'Spellcasting',
+              description: 'From druid class',
+              source: 'class',
+            },
+          ],
+        });
+        const beast = createFullMockBeast({
+          edition: '2014',
+          challengeRating: 0.25,
+          traits: [
+            {
+              name: 'Keen Hearing',
+              description: 'From wolf species',
+              source: 'species',
+            },
+          ],
+        });
+
+        const wildshaped = calculateWildshapedDruid(druid, beast);
+
+        const traitNames = wildshaped.traits.map((t) => t.name);
+        expect(traitNames).toContain('Keen Hearing'); // Beast species ✓
+        expect(traitNames).toContain('Spellcasting'); // Druid class ✓
+        expect(traitNames).toContain('Fey Ancestry'); // Druid species ✓ (2014 keeps it!)
+      });
+
+      it('2024 should filter out druid species actions', () => {
+        const druid = createMockDruid({
+          edition: '2024',
+          druidLevel: 5,
+          actions: [
+            {
+              name: 'Weapon Attack',
+              actionType: 'Action',
+              description: 'From species weapon proficiency',
+              source: 'species',
+            },
+            {
+              name: 'Wild Shape',
+              actionType: 'Bonus Action',
+              description: 'From druid class',
+              source: 'class',
+            },
+          ],
+        });
+        const beast = createFullMockBeast({
+          edition: '2024',
+          challengeRating: 0.25,
+          actions: [
+            {
+              name: 'Bite',
+              actionType: 'Action',
+              description: 'From wolf species',
+              source: 'species',
+            },
+          ],
+        });
+
+        const wildshaped = calculateWildshapedDruid(druid, beast);
+
+        const actionNames = wildshaped.actions.map((a) => a.name);
+        expect(actionNames).toContain('Bite'); // Beast species ✓
+        expect(actionNames).toContain('Wild Shape'); // Druid class ✓
+        expect(actionNames).not.toContain('Weapon Attack'); // Druid species ✗
+      });
+
+      it('2014 should include ALL actions from both druid and beast', () => {
+        const druid = createMockDruid({
+          edition: '2014',
+          druidLevel: 5,
+          actions: [
+            {
+              name: 'Weapon Attack',
+              actionType: 'Action',
+              description: 'From species weapon proficiency',
+              source: 'species',
+            },
+            {
+              name: 'Wild Shape',
+              actionType: 'Bonus Action',
+              description: 'From druid class',
+              source: 'class',
+            },
+          ],
+        });
+        const beast = createFullMockBeast({
+          edition: '2014',
+          challengeRating: 0.25,
+          actions: [
+            {
+              name: 'Bite',
+              actionType: 'Action',
+              description: 'From wolf species',
+              source: 'species',
+            },
+          ],
+        });
+
+        const wildshaped = calculateWildshapedDruid(druid, beast);
+
+        const actionNames = wildshaped.actions.map((a) => a.name);
+        expect(actionNames).toContain('Bite'); // Beast species ✓
+        expect(actionNames).toContain('Wild Shape'); // Druid class ✓
+        expect(actionNames).toContain('Weapon Attack'); // Druid species ✓ (2014 keeps it!)
+      });
+    });
+
+    describe('Senses (same for both editions)', () => {
+      it('both editions should use beast senses only', () => {
+        const druid2024 = createMockDruid({
+          edition: '2024',
+          druidLevel: 5,
+        });
+        const beast2024 = createFullMockBeast({
+          edition: '2024',
+          challengeRating: 0.25,
+        });
+
+        const druid2014 = createMockDruid({
+          edition: '2014',
+          druidLevel: 5,
+        });
+        const beast2014 = createFullMockBeast({
+          edition: '2014',
+          challengeRating: 0.25,
+        });
+
+        const wildshaped2024 = calculateWildshapedDruid(druid2024, beast2024);
+        const wildshaped2014 = calculateWildshapedDruid(druid2014, beast2014);
+
+        // Both should have beast's darkvision
+        expect(wildshaped2024.senses.darkvision).toBe(60);
+        expect(wildshaped2014.senses.darkvision).toBe(60);
+      });
     });
   });
 });
