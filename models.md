@@ -307,10 +307,55 @@ Example: A Wood Elf druid transforms into a Wolf:
 - **Name**: Use **beast's** name (UI can display as "Druid Name (Beast Form)")
 - **Edition**: Use **beast's** edition (must match druid's edition for transformation to be valid)
 
+### 2014 Wild Shape Stat Merging Rules
+
+When a 2014 edition druid uses Wild Shape, most rules are the same as 2024, with these key differences:
+
+#### Differences from 2024
+
+**Hit Points and Defenses**:
+
+- **Hit Points**: Use **beast's** current HP and maximum HP (2024 uses druid's)
+- **Hit Dice**: Use **beast's** hit dice (2024 uses druid's)
+- **Temporary Hit Points**: **None** (0) - 2014 does not grant temporary HP (2024 grants druid level)
+- **Armor Class**: Same as 2024 - use beast's AC
+
+**Traits and Actions (No Source Filtering)**:
+
+- **Include ALL traits from beast**: All beast traits regardless of source
+- **Include ALL traits from druid**: All druid traits including species, class, and feat traits
+- **Include ALL actions from beast**: All beast actions regardless of source
+- **Include ALL actions from druid**: All druid actions including species, class, and feat actions
+
+Example: A Wood Elf druid (2014) transforms into a Wolf:
+
+- **Gains from Beast**: Wolf's Bite attack, Wolf's Keen Hearing trait
+- **Retains from Druid**:
+  - Druid's Wild Shape action (class)
+  - Druid's Spellcasting trait (class)
+  - Elf's Fey Ancestry trait (species) ← 2014 keeps this, 2024 removes it
+  - Elf's Trance trait (species) ← 2014 keeps this, 2024 removes it
+
+**Important Note on Senses**:
+While 2014 druids retain ALL traits (including species traits), **senses** are a separate property from traits. Senses (darkvision, blindsight, etc.) come ONLY from the beast in both 2014 and 2024 editions.
+
+#### Same as 2024
+
+The following work identically in both editions:
+
+- **Ability Scores**: Physical from beast, mental from druid
+- **Saving Throws**: Use higher bonus between druid and beast
+- **Skills**: Use higher bonus between druid and beast
+- **Passive Perception**: Recalculated from merged Perception skill
+- **Movement**: From beast
+- **Senses**: From beast only (not from druid)
+- **Languages**: From druid (understand but cannot speak)
+- **Proficiency Bonus**: From druid's total character level
+- **Size**: From beast
+
 ### Notes
 
-- Wild Shape stat calculation is currently only supported for **2024 edition**
+- Wild Shape stat calculation is supported for both **2024** and **2014** editions
 - The druid and beast must both use the same edition
 - All normal Wild Shape restrictions apply (CR limits, movement restrictions based on level)
 - The transformation must pass eligibility checks before stats can be calculated
-- 2014 edition druids use different Wild Shape rules that are not yet implemented for stat calculation

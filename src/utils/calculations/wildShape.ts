@@ -502,31 +502,35 @@ function mergeActions(
  * - Saving throws: use higher bonus between druid and beast
  * - Skills: use higher bonus between druid and beast
  * - Languages from druid (understand but cannot speak)
- * - Traits/Actions: beast species + druid class/feat
+ * - Traits/Actions: beast species + druid class/feat (filtered by source)
+ *
+ * D&D 5e 2014 Wild Shape Rules:
+ * - Ability scores, saves, skills: same as 2024
+ * - Hit points and hit dice from BEAST (different from 2024)
+ * - No temporary HP (different from 2024)
+ * - AC, movement, and senses from beast
+ * - Traits/Actions: ALL from both druid and beast (no source filtering)
  *
  * @param druid - The druid character
  * @param beast - The beast to transform into
  * @returns The wildshaped druid stat block
- * @throws Error if transformation is invalid or druid is not 2024 edition
+ * @throws Error if transformation is invalid or editions don't match
  *
  * @example
- * const druid = { edition: '2024', druidLevel: 5, totalCharacterLevel: 5, ... };
+ * // 2024 edition
+ * const druid2024 = { edition: '2024', druidLevel: 5, totalCharacterLevel: 5, ... };
  * const wolf = { edition: '2024', challengeRating: 0.25, ... };
- * const wildshaped = calculateWildshapedDruid(druid, wolf);
- * // Returns complete hybrid stat block
+ * const wildshaped2024 = calculateWildshapedDruid(druid2024, wolf);
+ *
+ * // 2014 edition
+ * const druid2014 = { edition: '2014', druidLevel: 5, totalCharacterLevel: 5, ... };
+ * const wolf2014 = { edition: '2014', challengeRating: 0.25, ... };
+ * const wildshaped2014 = calculateWildshapedDruid(druid2014, wolf2014);
  */
 export function calculateWildshapedDruid(
   druid: Druid,
   beast: Beast
 ): WildshapedDruid {
-  // Validation: Only 2024 edition supported
-  if (druid.edition !== '2024') {
-    throw new Error(
-      'Wild Shape stat calculation is only supported for 2024 edition druids. ' +
-        '2014 edition uses different rules that are not yet implemented.'
-    );
-  }
-
   // Validation: Editions must match
   if (druid.edition !== beast.edition) {
     throw new Error(
@@ -609,8 +613,17 @@ export function calculateWildshapedDruid(
   );
 
   // Merge traits and actions by source
-  const traits = mergeTraits(druid.traits, beast.traits);
-  const actions = mergeActions(druid.actions, beast.actions);
+  // 2024: Filter by source (beast species + druid class/feat)
+  // 2014: Take all from both
+  const traits =
+    druid.edition === '2024'
+      ? mergeTraits(druid.traits, beast.traits)
+      : [...beast.traits, ...druid.traits];
+
+  const actions =
+    druid.edition === '2024'
+      ? mergeActions(druid.actions, beast.actions)
+      : [...beast.actions, ...druid.actions];
 
   // Calculate passive perception from merged skill bonuses
   const passivePerception = 10 + skillBonuses['Perception'];
@@ -629,10 +642,12 @@ export function calculateWildshapedDruid(
     // Hybrid ability scores
     ...hybridAbilities,
 
-    // Hit points from druid
-    hitPoints: druid.hitPoints,
-    hitDice: druid.hitDice,
-    temporaryHitPoints: druid.druidLevel,
+    // Hit points: 2024 uses druid's, 2014 uses beast's
+    hitPoints: druid.edition === '2024' ? druid.hitPoints : beast.hitPoints,
+    hitDice: druid.edition === '2024' ? druid.hitDice : beast.hitDice,
+
+    // Temporary HP: 2024 gives druid level, 2014 gives none
+    temporaryHitPoints: druid.edition === '2024' ? druid.druidLevel : 0,
 
     // Combat stats from beast
     armorClass: beast.armorClass,
