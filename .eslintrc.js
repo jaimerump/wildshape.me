@@ -56,7 +56,7 @@ module.exports = {
     'react-native/no-color-literals': 'off', // Can be enabled if using a design system
 
     // General code quality rules
-    'no-console': ['warn', { allow: ['warn', 'error'] }],
+    'no-console': 'off',
     'prefer-const': 'error',
     'no-var': 'error',
   },

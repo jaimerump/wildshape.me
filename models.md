@@ -80,6 +80,11 @@ Array of special abilities and traits:
 
 - **Name**: string
 - **Description**: string (text describing the trait)
+- **Source**: enum - "species", "class", or "feat"
+  - Indicates where the trait originates (used for Wild Shape stat merging)
+  - "species": Inherent racial/species traits (e.g., Darkvision from being an Elf, Keen Hearing from being a Wolf)
+  - "class": Class features (e.g., Spellcasting, Wild Shape, Rage)
+  - "feat": Traits from feats (e.g., Alert, Lucky)
 
 #### Actions
 
@@ -87,6 +92,11 @@ Array of actions the creature can take:
 
 - **Name**: string
 - **Description**: string (text describing the action)
+- **Source**: enum - "species", "class", or "feat"
+  - Indicates where the action originates (used for Wild Shape stat merging)
+  - "species": Natural attacks and abilities (e.g., Bite, Claw, Multiattack for beasts)
+  - "class": Class-granted actions (e.g., Wild Shape activation, Channel Divinity)
+  - "feat": Actions from feats (e.g., special maneuvers)
 - **Action Type**: enum - "Action", "Bonus Action", or "Reaction"
 - **Attack Type**: enum - "Melee", "Ranged", or null (for non-attack actions)
 - **Attack Bonus**: number | null
@@ -167,3 +177,140 @@ All properties from the Creature base model.
       - Level 6 Moon Druid: CR 2 (6/3 = 2), no flying, swimming allowed
       - Level 9 Moon Druid: CR 3 (9/3 = 3), flying and swimming allowed
 - Multiclassing considerations are not currently implemented
+
+## WildshapedDruid
+
+The WildshapedDruid model represents a druid in Wild Shape form, with a hybrid stat block merging the druid's and beast's properties according to D&D 5e 2024 edition rules.
+
+### Inherits from Creature
+
+All properties from the Creature base model, with values calculated as described below.
+
+### Additional Properties
+
+#### Source References
+
+- **Source Druid**: reference to the original Druid object
+- **Source Beast**: reference to the Beast being transformed into
+
+#### Wild Shape Specific
+
+- **Temporary Hit Points**: number - Equal to the druid's level (2024 rule)
+
+#### Computed Bonuses
+
+These are pre-calculated final bonuses after merging druid and beast stats:
+
+- **Saving Throw Bonuses**: object mapping ability names to final save bonuses
+  - Uses the higher value between druid's save (with hybrid abilities) and beast's save (with original abilities)
+- **Skill Bonuses**: object mapping skill names to final skill bonuses
+  - Uses the higher value between druid's skill (with hybrid abilities) and beast's skill (with original abilities)
+
+#### Retained Druid Properties
+
+The following druid properties are retained for reference:
+
+- **Total Character Level**: number - The druid's total level
+- **Druid Level**: number - The druid's class level
+- **Druid Circle**: string | null - The druid's subclass
+- **Other Class Levels**: object | undefined - Multiclass levels if applicable
+
+### 2024 Wild Shape Stat Merging Rules
+
+When a 2024 edition druid uses Wild Shape, the wildshaped druid's stats are calculated as follows:
+
+#### Ability Scores
+
+- **Physical Scores** (Strength, Dexterity, Constitution): Use **beast's** values
+- **Mental Scores** (Intelligence, Wisdom, Charisma): Use **druid's** values
+
+This creates "hybrid ability scores" used for further calculations.
+
+#### Hit Points and Defenses
+
+- **Hit Points**: Use **druid's** current HP and maximum HP
+- **Hit Dice**: Use **druid's** hit dice
+- **Temporary Hit Points**: Gain temporary HP equal to **druid level**
+- **Armor Class**: Use **beast's** AC
+- **Proficiency Bonus**: Calculate from **druid's total character level**
+
+#### Saving Throws
+
+For each of the six abilities:
+
+1. Calculate druid's save bonus:
+   - Use **hybrid ability score** (physical from beast, mental from druid)
+   - Add proficiency bonus if druid is proficient
+2. Calculate beast's save bonus:
+   - Use **beast's original ability score**
+   - Add proficiency bonus if beast is proficient
+3. Use the **higher** of the two values
+
+Example: A level 5 druid (Wisdom 16, proficient in Wisdom saves, PB +3) transforms into a Wolf (Wisdom 12, not proficient, PB +2):
+
+- Druid's Wisdom save: +3 (mod) + 3 (PB) = +6
+- Wolf's Wisdom save: +1 (mod) = +1
+- Final Wisdom save: +6 (druid's is higher)
+
+#### Skills
+
+For each of the 18 skills:
+
+1. Calculate druid's skill bonus:
+   - Use **hybrid ability score** (physical from beast, mental from druid)
+   - Add proficiency bonus if druid is proficient (1x PB) or has expertise (2x PB)
+2. Calculate beast's skill bonus:
+   - Use **beast's original ability score**
+   - Add proficiency bonus if beast is proficient (1x PB) or has expertise (2x PB)
+3. Use the **higher** of the two values
+
+Example: A level 5 druid (Wisdom 16, proficient in Perception, PB +3) transforms into a Wolf (Wisdom 12, proficient in Perception, PB +2):
+
+- Druid's Perception: +3 (mod) + 3 (PB) = +6
+- Wolf's Perception: +1 (mod) + 2 (PB) = +3
+- Final Perception: +6 (druid's is higher)
+
+#### Passive Perception
+
+- Recalculated as **10 + final Perception skill bonus**
+
+#### Movement and Senses
+
+- **Movement**: Use **beast's** movement speeds (walking, swimming, flying, climbing, burrowing)
+- **Senses**: Use **beast's** senses (darkvision, blindsight, tremorsense, truesight)
+- **Size**: Use **beast's** size
+
+#### Languages
+
+- **Languages**: Use **druid's** languages
+- Note: In Wild Shape, the druid understands their known languages but cannot speak (UI/rules consideration, not enforced in the model)
+
+#### Traits and Actions (Source-Based Merging)
+
+Traits and actions are filtered by their **source** property:
+
+- **Include from Beast**: All traits and actions with `source === 'species'`
+  - The wildshaped druid gains the beast's natural abilities and attacks
+- **Include from Druid**: All traits and actions with `source === 'class'` or `source === 'feat'`
+  - The druid retains class features and feat-granted abilities
+- **Exclude from Druid**: Traits and actions with `source === 'species'`
+  - The druid's racial/species traits are lost during Wild Shape
+
+Example: A Wood Elf druid transforms into a Wolf:
+
+- **Gains**: Wolf's Bite attack (`source: 'species'`), Wolf's Keen Hearing trait (`source: 'species'`)
+- **Retains**: Druid's Wild Shape action (`source: 'class'`), Alert feat benefits (`source: 'feat'`)
+- **Loses**: Elf's Darkvision trait (`source: 'species'`), Elf's Fey Ancestry trait (`source: 'species'`)
+
+#### Name and Edition
+
+- **Name**: Use **beast's** name (UI can display as "Druid Name (Beast Form)")
+- **Edition**: Use **beast's** edition (must match druid's edition for transformation to be valid)
+
+### Notes
+
+- Wild Shape stat calculation is currently only supported for **2024 edition**
+- The druid and beast must both use the same edition
+- All normal Wild Shape restrictions apply (CR limits, movement restrictions based on level)
+- The transformation must pass eligibility checks before stats can be calculated
+- 2014 edition druids use different Wild Shape rules that are not yet implemented for stat calculation
