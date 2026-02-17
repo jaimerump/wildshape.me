@@ -120,6 +120,10 @@ All properties from the Creature base model.
 
 - **Challenge Rating**: number - The beast's CR (used to calculate proficiency bonus)
   - Proficiency bonus formula: floor(CR / 4) + 2
+- **Body Type**: enum - The beast's physical body structure, used for categorization and filtering
+  - Valid values: `"unassigned"`, `"bird"`, `"fish"`, `"insect"`, `"lizard"`, `"octopus"`, `"primate"`, `"quadruped"`, `"snake"`
+  - Defaults to `"unassigned"` for beasts that haven't been categorized yet
+  - Used to help players find beasts with similar body types for Wild Shape
 
 ### Notes
 

@@ -15,9 +15,9 @@ import {
   Trait,
   Action,
   ProficiencyLevel,
-} from '../../models/index';
-import { getAbilityModifier } from '../calculations/abilityScores';
-import { getProficiencyBonusFromCR } from '../calculations/proficiencyBonus';
+} from '../models/index';
+import { getAbilityModifier } from '../utils/calculations/abilityScores';
+import { getProficiencyBonusFromCR } from '../utils/calculations/proficiencyBonus';
 
 // API Response interfaces
 interface ApiMonster {
@@ -370,6 +370,7 @@ function transformApiBeastToBeast(apiMonster: ApiMonster): Beast {
     edition: '2014',
     size: parseSize(apiMonster.size),
     challengeRating: apiMonster.challenge_rating,
+    bodyType: 'unassigned',
 
     // Ability scores
     strength: apiMonster.strength,

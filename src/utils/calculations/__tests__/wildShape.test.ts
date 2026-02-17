@@ -14,6 +14,7 @@ import type {
   Action,
   AbilityName,
   SkillProficiency,
+  BodyType,
 } from '../../../models';
 
 // Helper function to create mock beasts for testing
@@ -772,6 +773,7 @@ function createFullMockBeast(options: {
   skillProficiencies?: SkillProficiency[];
   traits?: Trait[];
   actions?: Action[];
+  bodyType?: BodyType;
 }): Beast {
   return {
     name: options.name || 'Test Beast',
@@ -811,6 +813,7 @@ function createFullMockBeast(options: {
       },
     ],
     challengeRating: options.challengeRating || 0.25,
+    bodyType: options.bodyType || 'unassigned',
   };
 }
 

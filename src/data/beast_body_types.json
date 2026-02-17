@@ -1,0 +1,350 @@
+[
+  {
+    "name": "Ape",
+    "bodyType": "primate"
+  },
+  {
+    "name": "Axe Beak",
+    "bodyType": "bird"
+  },
+  {
+    "name": "Baboon",
+    "bodyType": "primate"
+  },
+  {
+    "name": "Badger",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Bat",
+    "bodyType": "bird"
+  },
+  {
+    "name": "Black Bear",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Blood Hawk",
+    "bodyType": "bird"
+  },
+  {
+    "name": "Boar",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Brown Bear",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Camel",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Cat",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Constrictor Snake",
+    "bodyType": "snake"
+  },
+  {
+    "name": "Crab",
+    "bodyType": "insect"
+  },
+  {
+    "name": "Crocodile",
+    "bodyType": "lizard"
+  },
+  {
+    "name": "Deer",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Dire Wolf",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Draft Horse",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Eagle",
+    "bodyType": "bird"
+  },
+  {
+    "name": "Elephant",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Elk",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Flying Snake",
+    "bodyType": "snake"
+  },
+  {
+    "name": "Frog",
+    "bodyType": "lizard"
+  },
+  {
+    "name": "Giant Ape",
+    "bodyType": "primate"
+  },
+  {
+    "name": "Giant Badger",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Giant Bat",
+    "bodyType": "bird"
+  },
+  {
+    "name": "Giant Boar",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Giant Centipede",
+    "bodyType": "insect"
+  },
+  {
+    "name": "Giant Constrictor Snake",
+    "bodyType": "snake"
+  },
+  {
+    "name": "Giant Crab",
+    "bodyType": "insect"
+  },
+  {
+    "name": "Giant Crocodile",
+    "bodyType": "lizard"
+  },
+  {
+    "name": "Giant Eagle",
+    "bodyType": "bird"
+  },
+  {
+    "name": "Giant Elk",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Giant Fire Beetle",
+    "bodyType": "insect"
+  },
+  {
+    "name": "Giant Frog",
+    "bodyType": "lizard"
+  },
+  {
+    "name": "Giant Goat",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Giant Hyena",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Giant Lizard",
+    "bodyType": "lizard"
+  },
+  {
+    "name": "Giant Octopus",
+    "bodyType": "octopus"
+  },
+  {
+    "name": "Giant Owl",
+    "bodyType": "bird"
+  },
+  {
+    "name": "Giant Poisonous Snake",
+    "bodyType": "snake"
+  },
+  {
+    "name": "Giant Rat",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Giant Rat (Diseased)",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Giant Scorpion",
+    "bodyType": "insect"
+  },
+  {
+    "name": "Giant Sea Horse",
+    "bodyType": "fish"
+  },
+  {
+    "name": "Giant Shark",
+    "bodyType": "fish"
+  },
+  {
+    "name": "Giant Spider",
+    "bodyType": "insect"
+  },
+  {
+    "name": "Giant Toad",
+    "bodyType": "lizard"
+  },
+  {
+    "name": "Giant Vulture",
+    "bodyType": "bird"
+  },
+  {
+    "name": "Giant Wasp",
+    "bodyType": "insect"
+  },
+  {
+    "name": "Giant Weasel",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Giant Wolf Spider",
+    "bodyType": "insect"
+  },
+  {
+    "name": "Goat",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Hawk",
+    "bodyType": "bird"
+  },
+  {
+    "name": "Hunter Shark",
+    "bodyType": "fish"
+  },
+  {
+    "name": "Hyena",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Jackal",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Killer Whale",
+    "bodyType": "fish"
+  },
+  {
+    "name": "Lion",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Lizard",
+    "bodyType": "lizard"
+  },
+  {
+    "name": "Mammoth",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Mastiff",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Mule",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Octopus",
+    "bodyType": "octopus"
+  },
+  {
+    "name": "Owl",
+    "bodyType": "bird"
+  },
+  {
+    "name": "Panther",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Plesiosaurus",
+    "bodyType": "lizard"
+  },
+  {
+    "name": "Poisonous Snake",
+    "bodyType": "snake"
+  },
+  {
+    "name": "Polar Bear",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Pony",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Quipper",
+    "bodyType": "fish"
+  },
+  {
+    "name": "Rat",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Raven",
+    "bodyType": "bird"
+  },
+  {
+    "name": "Reef Shark",
+    "bodyType": "fish"
+  },
+  {
+    "name": "Rhinoceros",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Riding Horse",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Saber-Toothed Tiger",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Scorpion",
+    "bodyType": "insect"
+  },
+  {
+    "name": "Sea Horse",
+    "bodyType": "fish"
+  },
+  {
+    "name": "Spider",
+    "bodyType": "insect"
+  },
+  {
+    "name": "Stirge",
+    "bodyType": "bird"
+  },
+  {
+    "name": "Tiger",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Triceratops",
+    "bodyType": "lizard"
+  },
+  {
+    "name": "Tyrannosaurus Rex",
+    "bodyType": "lizard"
+  },
+  {
+    "name": "Vulture",
+    "bodyType": "bird"
+  },
+  {
+    "name": "Warhorse",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Weasel",
+    "bodyType": "quadruped"
+  },
+  {
+    "name": "Wolf",
+    "bodyType": "quadruped"
+  }
+]

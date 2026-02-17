@@ -20,6 +20,20 @@ export type Size =
   | 'Gargantuan';
 
 /**
+ * Beast body type categories
+ */
+export type BodyType =
+  | 'unassigned'
+  | 'bird'
+  | 'fish'
+  | 'insect'
+  | 'lizard'
+  | 'octopus'
+  | 'primate'
+  | 'quadruped'
+  | 'snake';
+
+/**
  * Ability score names
  */
 export type AbilityName =
@@ -151,6 +165,7 @@ export interface Creature {
  */
 export interface Beast extends Creature {
   challengeRating: number;
+  bodyType: BodyType;
 }
 
 /**
