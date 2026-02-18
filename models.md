@@ -108,6 +108,107 @@ Array of actions the creature can take:
 - **Save Type**: string | null (e.g., "Strength", "Dexterity")
 - **Effects**: string | null (description of additional effects)
 
+#### Equipment Name (for equipment-sourced traits/actions)
+
+- **Equipment Name**: string | null - Links this trait/action to a specific piece of equipment
+  - Required when `source === 'equipment'`
+  - Must match the `name` of an item in the character's equipment list
+  - Example: A trait with `source: 'equipment'` and `equipmentName: 'Ring of Protection'`
+
+## Equipment
+
+The Equipment model represents items that a character carries or wears, such as weapons, armor, magical items, and other gear.
+
+### Properties
+
+- **Name**: string - The name of the equipment item
+- **Description**: string - What the item does and any relevant details
+- **Type**: enum - The category of equipment
+  - `"armor"` - Body armor (leather, chain mail, plate, etc.)
+  - `"shield"` - Shields
+  - `"ring"` - Rings
+  - `"weapon"` - Weapons, rods, staves, and wands
+  - `"clothing"` - Headwear, boots, cloaks, gloves, and other wearable items
+  - `"other"` - Miscellaneous items that don't fit other categories
+- **Minimum Size**: enum - Smallest creature size that can use this equipment
+  - Uses the Size type: `Tiny`, `Small`, `Medium`, `Large`, `Huge`, `Gargantuan`
+  - Example: A longsword might have `minSize: "Small"`
+- **Maximum Size**: enum - Largest creature size that can use this equipment
+  - Uses the Size type: `Tiny`, `Small`, `Medium`, `Large`, `Huge`, `Gargantuan`
+  - Example: A longsword might have `maxSize: "Large"`
+
+### Equipment-Sourced Traits and Actions
+
+Equipment can grant traits and actions to characters who carry them. When a trait or action has `source: 'equipment'`:
+
+1. The trait/action must include an `equipmentName` field
+2. The `equipmentName` must match a piece of equipment in the character's equipment list
+3. The trait/action should only apply while the character has that equipment
+
+**Example:**
+
+```typescript
+// Equipment
+{
+  name: "Ring of Protection",
+  description: "+1 bonus to AC and saving throws",
+  type: "ring",
+  minSize: "Tiny",
+  maxSize: "Large"
+}
+
+// Trait from this equipment
+{
+  name: "Protection",
+  description: "+1 bonus to AC and saving throws",
+  source: "equipment",
+  equipmentName: "Ring of Protection"
+}
+```
+
+### Equipment in Wild Shape
+
+When a druid transforms using Wild Shape, equipment-sourced traits and actions are only included if the beast form can physically use that equipment.
+
+#### Compatibility Requirements
+
+1. **Size**: Beast's size must be between the equipment's `minSize` and `maxSize` (inclusive)
+2. **Body Type**: Beast's body type must support the equipment type
+
+#### Body Type Compatibility Table
+
+| Body Type  | Compatible Equipment Types                         |
+| ---------- | -------------------------------------------------- |
+| Primate    | All (armor, shield, ring, weapon, clothing, other) |
+| Octopus    | Rings, weapons, shields                            |
+| Bird       | Rings only                                         |
+| Lizard     | Rings only                                         |
+| Snake      | Rings only                                         |
+| Fish       | None                                               |
+| Insect     | None                                               |
+| Quadruped  | None                                               |
+| Unassigned | None                                               |
+
+**Example:**
+A druid wearing a Ring of Protection (+1 AC) transforms into a wolf:
+
+- Wolf body type: quadruped
+- Quadrupeds cannot use any equipment
+- Result: Ring of Protection trait is NOT included in wildshaped form
+
+A druid wearing a Ring of Protection transforms into an ape:
+
+- Ape body type: primate
+- Ape size: Medium, ring size range: Tiny-Large (compatible)
+- Result: Ring of Protection trait IS included in wildshaped form
+
+### Notes
+
+- Equipment properties are intentionally simple - no weight, cost, or magical properties tracked in the model
+- Size restrictions help determine if equipment can be used in Wild Shape form (application logic)
+- Potions and scrolls are intentionally excluded as they cannot be used while wildshaped
+- Equipment handling during Wild Shape is determined by application logic, not the model
+
 ## Beast
 
 The Beast model represents creatures that a Druid can Wild Shape into.
@@ -120,6 +221,10 @@ All properties from the Creature base model.
 
 - **Challenge Rating**: number - The beast's CR (used to calculate proficiency bonus)
   - Proficiency bonus formula: floor(CR / 4) + 2
+- **Body Type**: enum - The beast's physical body structure, used for categorization and filtering
+  - Valid values: `"unassigned"`, `"bird"`, `"fish"`, `"insect"`, `"lizard"`, `"octopus"`, `"primate"`, `"quadruped"`, `"snake"`
+  - Defaults to `"unassigned"` for beasts that haven't been categorized yet
+  - Used to determine whether equipment is compatible with wildshape forms
 
 ### Notes
 
@@ -148,6 +253,14 @@ All properties from the Creature base model.
 - **Subspecies**: string | null - The character's subspecies (e.g., "High Elf", "Wood Elf")
 - **Background**: string - The character's background (e.g., "Sage", "Outlander")
 - **Feats**: array of strings - List of feat names the character has taken
+
+#### Equipment
+
+- **Equipment**: array of Equipment - All items the druid is carrying
+  - Includes weapons, armor, magical items, and other gear
+  - Equipment can grant traits and actions with `source: 'equipment'`
+  - Equipment handling during Wild Shape is determined by application logic
+  - See the Equipment model for details on item properties
 
 ### Notes
 

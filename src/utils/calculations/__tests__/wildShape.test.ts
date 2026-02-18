@@ -14,6 +14,9 @@ import type {
   Action,
   AbilityName,
   SkillProficiency,
+  BodyType,
+  Equipment,
+  EquipmentType,
 } from '../../../models';
 
 // Helper function to create mock beasts for testing
@@ -704,6 +707,7 @@ function createMockDruid(options: {
   skillProficiencies?: SkillProficiency[];
   traits?: Trait[];
   actions?: Action[];
+  equipment?: Equipment[];
   otherClassLevels?: Record<string, number>;
 }): Druid {
   return {
@@ -750,6 +754,7 @@ function createMockDruid(options: {
     druidLevel: options.druidLevel || 5,
     druidCircle: options.druidCircle ?? null,
     otherClassLevels: options.otherClassLevels,
+    equipment: options.equipment || [],
   };
 }
 
@@ -758,7 +763,7 @@ function createFullMockBeast(options: {
   name?: string;
   edition?: '2024' | '2014';
   challengeRating?: number;
-  size?: 'Tiny' | 'Small' | 'Medium' | 'Large';
+  size?: 'Tiny' | 'Small' | 'Medium' | 'Large' | 'Huge' | 'Gargantuan';
   strength?: number;
   dexterity?: number;
   constitution?: number;
@@ -772,6 +777,7 @@ function createFullMockBeast(options: {
   skillProficiencies?: SkillProficiency[];
   traits?: Trait[];
   actions?: Action[];
+  bodyType?: BodyType;
 }): Beast {
   return {
     name: options.name || 'Test Beast',
@@ -811,6 +817,7 @@ function createFullMockBeast(options: {
       },
     ],
     challengeRating: options.challengeRating || 0.25,
+    bodyType: options.bodyType || 'unassigned',
   };
 }
 
@@ -1723,6 +1730,407 @@ describe('calculateWildshapedDruid', () => {
         // Both should have beast's darkvision
         expect(wildshaped2024.senses.darkvision).toBe(60);
         expect(wildshaped2014.senses.darkvision).toBe(60);
+      });
+    });
+  });
+
+  describe('Equipment Compatibility in Wild Shape', () => {
+    describe('Size compatibility', () => {
+      it('should include equipment-sourced trait when beast size is within range', () => {
+        const equipment: Equipment = {
+          name: 'Ring of Protection',
+          description: '+1 AC',
+          type: 'ring',
+          minSize: 'Small',
+          maxSize: 'Large',
+        };
+
+        const druid = createMockDruid({
+          equipment: [equipment],
+          traits: [
+            {
+              name: 'Protection',
+              description: '+1 AC from ring',
+              source: 'equipment',
+              equipmentName: 'Ring of Protection',
+            },
+          ],
+        });
+
+        const beast = createFullMockBeast({
+          size: 'Medium', // Within Small-Large range
+          bodyType: 'primate', // Can use rings
+          challengeRating: 0.25,
+        });
+
+        const wildshaped = calculateWildshapedDruid(druid, beast);
+
+        const traitNames = wildshaped.traits.map((t) => t.name);
+        expect(traitNames).toContain('Protection');
+      });
+
+      it('should exclude equipment-sourced trait when beast is too small', () => {
+        const equipment: Equipment = {
+          name: 'Longsword',
+          description: 'A longsword',
+          type: 'weapon',
+          minSize: 'Small',
+          maxSize: 'Large',
+        };
+
+        const druid = createMockDruid({
+          equipment: [equipment],
+          actions: [
+            {
+              name: 'Longsword Attack',
+              actionType: 'Action',
+              description: 'Attack with longsword',
+              source: 'equipment',
+              equipmentName: 'Longsword',
+            },
+          ],
+        });
+
+        const beast = createFullMockBeast({
+          size: 'Tiny', // Below Small minimum
+          bodyType: 'primate',
+          challengeRating: 0.25,
+        });
+
+        const wildshaped = calculateWildshapedDruid(druid, beast);
+
+        const actionNames = wildshaped.actions.map((a) => a.name);
+        expect(actionNames).not.toContain('Longsword Attack');
+      });
+
+      it('should exclude equipment-sourced trait when beast is too large', () => {
+        const equipment: Equipment = {
+          name: 'Small Ring',
+          description: 'A tiny ring',
+          type: 'ring',
+          minSize: 'Tiny',
+          maxSize: 'Medium',
+        };
+
+        const druid = createMockDruid({
+          druidLevel: 9,
+          totalCharacterLevel: 9,
+          druidCircle: 'Circle of the Moon',
+          equipment: [equipment],
+          traits: [
+            {
+              name: 'Small Ring Benefit',
+              description: 'Benefit from tiny ring',
+              source: 'equipment',
+              equipmentName: 'Small Ring',
+            },
+          ],
+        });
+
+        const beast = createFullMockBeast({
+          size: 'Huge', // Above Medium maximum
+          bodyType: 'primate',
+          challengeRating: 2,
+        });
+
+        const wildshaped = calculateWildshapedDruid(druid, beast);
+
+        const traitNames = wildshaped.traits.map((t) => t.name);
+        expect(traitNames).not.toContain('Small Ring Benefit');
+      });
+    });
+
+    describe('Body type compatibility', () => {
+      const createTestScenario = (
+        bodyType: BodyType,
+        equipmentType: EquipmentType
+      ) => {
+        const equipment: Equipment = {
+          name: `Test ${equipmentType}`,
+          description: `A test ${equipmentType}`,
+          type: equipmentType,
+          minSize: 'Tiny',
+          maxSize: 'Gargantuan',
+        };
+
+        const druid = createMockDruid({
+          equipment: [equipment],
+          traits: [
+            {
+              name: `${equipmentType} Trait`,
+              description: `Trait from ${equipmentType}`,
+              source: 'equipment',
+              equipmentName: `Test ${equipmentType}`,
+            },
+          ],
+        });
+
+        const beast = createFullMockBeast({
+          size: 'Medium',
+          bodyType: bodyType,
+          challengeRating: 0.25,
+        });
+
+        return { druid, beast };
+      };
+
+      it('primate should use all equipment types', () => {
+        const types: EquipmentType[] = [
+          'armor',
+          'shield',
+          'ring',
+          'weapon',
+          'clothing',
+          'other',
+        ];
+
+        for (const type of types) {
+          const { druid, beast } = createTestScenario('primate', type);
+          const wildshaped = calculateWildshapedDruid(druid, beast);
+          const traitNames = wildshaped.traits.map((t) => t.name);
+          expect(traitNames).toContain(`${type} Trait`);
+        }
+      });
+
+      it('octopus should use rings, weapons, and shields only', () => {
+        // Can use
+        ['ring', 'weapon', 'shield'].forEach((type) => {
+          const { druid, beast } = createTestScenario(
+            'octopus',
+            type as EquipmentType
+          );
+          const wildshaped = calculateWildshapedDruid(druid, beast);
+          const traitNames = wildshaped.traits.map((t) => t.name);
+          expect(traitNames).toContain(`${type} Trait`);
+        });
+
+        // Cannot use
+        ['armor', 'clothing', 'other'].forEach((type) => {
+          const { druid, beast } = createTestScenario(
+            'octopus',
+            type as EquipmentType
+          );
+          const wildshaped = calculateWildshapedDruid(druid, beast);
+          const traitNames = wildshaped.traits.map((t) => t.name);
+          expect(traitNames).not.toContain(`${type} Trait`);
+        });
+      });
+
+      it('bird should use rings only', () => {
+        // Can use
+        const { druid: druid1, beast: beast1 } = createTestScenario(
+          'bird',
+          'ring'
+        );
+        const wildshaped1 = calculateWildshapedDruid(druid1, beast1);
+        expect(wildshaped1.traits.map((t) => t.name)).toContain('ring Trait');
+
+        // Cannot use
+        ['armor', 'shield', 'weapon', 'clothing', 'other'].forEach((type) => {
+          const { druid, beast } = createTestScenario(
+            'bird',
+            type as EquipmentType
+          );
+          const wildshaped = calculateWildshapedDruid(druid, beast);
+          expect(wildshaped.traits.map((t) => t.name)).not.toContain(
+            `${type} Trait`
+          );
+        });
+      });
+
+      it('lizard should use rings only', () => {
+        // Can use
+        const { druid: druid1, beast: beast1 } = createTestScenario(
+          'lizard',
+          'ring'
+        );
+        const wildshaped1 = calculateWildshapedDruid(druid1, beast1);
+        expect(wildshaped1.traits.map((t) => t.name)).toContain('ring Trait');
+
+        // Cannot use
+        ['armor', 'shield', 'weapon', 'clothing', 'other'].forEach((type) => {
+          const { druid, beast } = createTestScenario(
+            'lizard',
+            type as EquipmentType
+          );
+          const wildshaped = calculateWildshapedDruid(druid, beast);
+          expect(wildshaped.traits.map((t) => t.name)).not.toContain(
+            `${type} Trait`
+          );
+        });
+      });
+
+      it('snake should use rings only', () => {
+        // Can use
+        const { druid: druid1, beast: beast1 } = createTestScenario(
+          'snake',
+          'ring'
+        );
+        const wildshaped1 = calculateWildshapedDruid(druid1, beast1);
+        expect(wildshaped1.traits.map((t) => t.name)).toContain('ring Trait');
+
+        // Cannot use
+        ['armor', 'shield', 'weapon', 'clothing', 'other'].forEach((type) => {
+          const { druid, beast } = createTestScenario(
+            'snake',
+            type as EquipmentType
+          );
+          const wildshaped = calculateWildshapedDruid(druid, beast);
+          expect(wildshaped.traits.map((t) => t.name)).not.toContain(
+            `${type} Trait`
+          );
+        });
+      });
+
+      it('fish should not use any equipment', () => {
+        const types: EquipmentType[] = [
+          'armor',
+          'shield',
+          'ring',
+          'weapon',
+          'clothing',
+          'other',
+        ];
+
+        for (const type of types) {
+          const { druid, beast } = createTestScenario('fish', type);
+          const wildshaped = calculateWildshapedDruid(druid, beast);
+          const traitNames = wildshaped.traits.map((t) => t.name);
+          expect(traitNames).not.toContain(`${type} Trait`);
+        }
+      });
+
+      it('insect should not use any equipment', () => {
+        const types: EquipmentType[] = [
+          'armor',
+          'shield',
+          'ring',
+          'weapon',
+          'clothing',
+          'other',
+        ];
+
+        for (const type of types) {
+          const { druid, beast } = createTestScenario('insect', type);
+          const wildshaped = calculateWildshapedDruid(druid, beast);
+          const traitNames = wildshaped.traits.map((t) => t.name);
+          expect(traitNames).not.toContain(`${type} Trait`);
+        }
+      });
+
+      it('quadruped should not use any equipment', () => {
+        const types: EquipmentType[] = [
+          'armor',
+          'shield',
+          'ring',
+          'weapon',
+          'clothing',
+          'other',
+        ];
+
+        for (const type of types) {
+          const { druid, beast } = createTestScenario('quadruped', type);
+          const wildshaped = calculateWildshapedDruid(druid, beast);
+          const traitNames = wildshaped.traits.map((t) => t.name);
+          expect(traitNames).not.toContain(`${type} Trait`);
+        }
+      });
+
+      it('unassigned should not use any equipment', () => {
+        const types: EquipmentType[] = [
+          'armor',
+          'shield',
+          'ring',
+          'weapon',
+          'clothing',
+          'other',
+        ];
+
+        for (const type of types) {
+          const { druid, beast } = createTestScenario('unassigned', type);
+          const wildshaped = calculateWildshapedDruid(druid, beast);
+          const traitNames = wildshaped.traits.map((t) => t.name);
+          expect(traitNames).not.toContain(`${type} Trait`);
+        }
+      });
+    });
+
+    describe('Missing equipment handling', () => {
+      it('should skip equipment-sourced trait when equipment not found', () => {
+        const druid = createMockDruid({
+          equipment: [], // No equipment
+          traits: [
+            {
+              name: 'Mystery Trait',
+              description: 'From missing equipment',
+              source: 'equipment',
+              equipmentName: 'Nonexistent Ring',
+            },
+          ],
+        });
+
+        const beast = createFullMockBeast({
+          size: 'Medium',
+          bodyType: 'primate',
+          challengeRating: 0.25,
+        });
+
+        const wildshaped = calculateWildshapedDruid(druid, beast);
+
+        const traitNames = wildshaped.traits.map((t) => t.name);
+        expect(traitNames).not.toContain('Mystery Trait');
+      });
+    });
+
+    describe('2014 edition equipment compatibility', () => {
+      it('should filter equipment by compatibility in 2014 edition', () => {
+        const ring: Equipment = {
+          name: 'Ring of Swimming',
+          description: 'Grants swimming ability',
+          type: 'ring',
+          minSize: 'Tiny',
+          maxSize: 'Large',
+        };
+
+        const armor: Equipment = {
+          name: 'Plate Armor',
+          description: '+18 AC',
+          type: 'armor',
+          minSize: 'Medium',
+          maxSize: 'Large',
+        };
+
+        const druid = createMockDruid({
+          edition: '2014',
+          equipment: [ring, armor],
+          traits: [
+            {
+              name: 'Swimming',
+              description: 'From ring',
+              source: 'equipment',
+              equipmentName: 'Ring of Swimming',
+            },
+            {
+              name: 'Heavy Armor',
+              description: 'From armor',
+              source: 'equipment',
+              equipmentName: 'Plate Armor',
+            },
+          ],
+        });
+
+        const beast = createFullMockBeast({
+          edition: '2014',
+          size: 'Medium',
+          bodyType: 'bird', // Can only use rings
+          challengeRating: 0.25,
+        });
+
+        const wildshaped = calculateWildshapedDruid(druid, beast);
+
+        const traitNames = wildshaped.traits.map((t) => t.name);
+        expect(traitNames).toContain('Swimming'); // Ring - compatible
+        expect(traitNames).not.toContain('Heavy Armor'); // Armor - not compatible
       });
     });
   });
