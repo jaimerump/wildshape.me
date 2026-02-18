@@ -15,6 +15,10 @@ import type {
   ProficiencyLevel,
   Trait,
   Action,
+  Equipment,
+  BodyType,
+  Size,
+  EquipmentType,
 } from '../../models';
 import {
   getProficiencyBonusFromLevel,
@@ -22,6 +26,107 @@ import {
 } from './proficiencyBonus';
 import { getSkillBonus } from './skills';
 import { getSavingThrowBonus } from './savingThrows';
+
+/**
+ * Size order for comparison
+ */
+const SIZE_ORDER: Record<Size, number> = {
+  Tiny: 0,
+  Small: 1,
+  Medium: 2,
+  Large: 3,
+  Huge: 4,
+  Gargantuan: 5,
+};
+
+/**
+ * Checks if a creature's size falls within equipment's size range.
+ *
+ * @param creatureSize - The creature's size
+ * @param minSize - Minimum size that can use the equipment
+ * @param maxSize - Maximum size that can use the equipment
+ * @returns true if creature size is within range
+ */
+function isSizeCompatible(
+  creatureSize: Size,
+  minSize: Size,
+  maxSize: Size
+): boolean {
+  const creatureOrder = SIZE_ORDER[creatureSize];
+  const minOrder = SIZE_ORDER[minSize];
+  const maxOrder = SIZE_ORDER[maxSize];
+
+  return creatureOrder >= minOrder && creatureOrder <= maxOrder;
+}
+
+/**
+ * Checks if a beast's body type can use a specific equipment type.
+ *
+ * @param bodyType - The beast's body type
+ * @param equipmentType - The equipment type to check
+ * @returns true if this body type can use this equipment type
+ */
+function canBodyTypeUseEquipment(
+  bodyType: BodyType,
+  equipmentType: EquipmentType
+): boolean {
+  switch (bodyType) {
+    case 'primate':
+      // Primates can use all equipment types
+      return true;
+
+    case 'octopus':
+      // Octopuses can use rings, weapons, and shields
+      return (
+        equipmentType === 'ring' ||
+        equipmentType === 'weapon' ||
+        equipmentType === 'shield'
+      );
+
+    case 'bird':
+    case 'lizard':
+    case 'snake':
+      // Birds, lizards, and snakes can only use rings
+      return equipmentType === 'ring';
+
+    case 'fish':
+    case 'insect':
+    case 'quadruped':
+    case 'unassigned':
+    default:
+      // These body types cannot use any equipment
+      return false;
+  }
+}
+
+/**
+ * Checks if a beast can use a specific piece of equipment.
+ *
+ * Compatibility requires:
+ * 1. Beast size must be within equipment's size range (minSize to maxSize)
+ * 2. Beast's body type must support the equipment type
+ *
+ * @param beast - The beast form
+ * @param equipment - The equipment to check
+ * @returns true if the beast can use this equipment
+ */
+function canBeastUseEquipment(
+  beast: Pick<Beast, 'size' | 'bodyType'>,
+  equipment: Equipment
+): boolean {
+  // Check size compatibility
+  const sizeOk = isSizeCompatible(
+    beast.size,
+    equipment.minSize,
+    equipment.maxSize
+  );
+  if (!sizeOk) {
+    return false;
+  }
+
+  // Check body type compatibility
+  return canBodyTypeUseEquipment(beast.bodyType, equipment.type);
+}
 
 /**
  * Gets the maximum CR a druid can Wild Shape into at their level.
@@ -428,15 +533,24 @@ function mergeSkillProficiencies(
 
 /**
  * Merges traits by source, including beast species traits and druid class/feat traits.
+ * Also includes equipment-sourced traits if the beast can use that equipment.
  *
  * D&D 5e 2024 Wild Shape Rule: Retain druid's class and feat traits/actions,
- * but gain beast's species traits/actions.
+ * but gain beast's species traits/actions. Equipment-sourced traits only apply
+ * if the beast can physically use that equipment.
  *
  * @param druidTraits - Druid's traits
  * @param beastTraits - Beast's traits
+ * @param druidEquipment - Druid's equipment list
+ * @param beast - The beast form (for compatibility checking)
  * @returns Combined list of traits
  */
-function mergeTraits(druidTraits: Trait[], beastTraits: Trait[]): Trait[] {
+function mergeTraits(
+  druidTraits: Trait[],
+  beastTraits: Trait[],
+  druidEquipment: Equipment[],
+  beast: Pick<Beast, 'size' | 'bodyType'>
+): Trait[] {
   const merged: Trait[] = [];
 
   // Add all beast species traits
@@ -453,22 +567,48 @@ function mergeTraits(druidTraits: Trait[], beastTraits: Trait[]): Trait[] {
     }
   }
 
+  // Add equipment-sourced traits if beast can use the equipment
+  for (const trait of druidTraits) {
+    if (trait.source === 'equipment') {
+      // Find the equipment by name
+      const equipment = druidEquipment.find(
+        (e) => e.name === trait.equipmentName
+      );
+
+      // Skip if equipment not found (invalid reference)
+      if (!equipment) {
+        continue;
+      }
+
+      // Check if beast can use this equipment
+      if (canBeastUseEquipment(beast, equipment)) {
+        merged.push(trait);
+      }
+    }
+  }
+
   return merged;
 }
 
 /**
  * Merges actions by source, including beast species actions and druid class/feat actions.
+ * Also includes equipment-sourced actions if the beast can use that equipment.
  *
  * D&D 5e 2024 Wild Shape Rule: Retain druid's class and feat traits/actions,
- * but gain beast's species traits/actions.
+ * but gain beast's species traits/actions. Equipment-sourced actions only apply
+ * if the beast can physically use that equipment.
  *
  * @param druidActions - Druid's actions
  * @param beastActions - Beast's actions
+ * @param druidEquipment - Druid's equipment list
+ * @param beast - The beast form (for compatibility checking)
  * @returns Combined list of actions
  */
 function mergeActions(
   druidActions: Action[],
-  beastActions: Action[]
+  beastActions: Action[],
+  druidEquipment: Equipment[],
+  beast: Pick<Beast, 'size' | 'bodyType'>
 ): Action[] {
   const merged: Action[] = [];
 
@@ -483,6 +623,26 @@ function mergeActions(
   for (const action of druidActions) {
     if (action.source === 'class' || action.source === 'feat') {
       merged.push(action);
+    }
+  }
+
+  // Add equipment-sourced actions if beast can use the equipment
+  for (const action of druidActions) {
+    if (action.source === 'equipment') {
+      // Find the equipment by name
+      const equipment = druidEquipment.find(
+        (e) => e.name === action.equipmentName
+      );
+
+      // Skip if equipment not found (invalid reference)
+      if (!equipment) {
+        continue;
+      }
+
+      // Check if beast can use this equipment
+      if (canBeastUseEquipment(beast, equipment)) {
+        merged.push(action);
+      }
     }
   }
 
@@ -613,17 +773,40 @@ export function calculateWildshapedDruid(
   );
 
   // Merge traits and actions by source
-  // 2024: Filter by source (beast species + druid class/feat)
-  // 2014: Take all from both
+  // Both editions check equipment compatibility
   const traits =
     druid.edition === '2024'
-      ? mergeTraits(druid.traits, beast.traits)
-      : [...beast.traits, ...druid.traits];
+      ? mergeTraits(druid.traits, beast.traits, druid.equipment, beast)
+      : [
+          ...beast.traits,
+          ...druid.traits.filter((t) => {
+            // 2014: Include all non-equipment traits
+            if (t.source !== 'equipment') return true;
+
+            // 2014: Filter equipment traits by compatibility
+            const equipment = druid.equipment.find(
+              (e) => e.name === t.equipmentName
+            );
+            return equipment && canBeastUseEquipment(beast, equipment);
+          }),
+        ];
 
   const actions =
     druid.edition === '2024'
-      ? mergeActions(druid.actions, beast.actions)
-      : [...beast.actions, ...druid.actions];
+      ? mergeActions(druid.actions, beast.actions, druid.equipment, beast)
+      : [
+          ...beast.actions,
+          ...druid.actions.filter((a) => {
+            // 2014: Include all non-equipment actions
+            if (a.source !== 'equipment') return true;
+
+            // 2014: Filter equipment actions by compatibility
+            const equipment = druid.equipment.find(
+              (e) => e.name === a.equipmentName
+            );
+            return equipment && canBeastUseEquipment(beast, equipment);
+          }),
+        ];
 
   // Calculate passive perception from merged skill bonuses
   const passivePerception = 10 + skillBonuses['Perception'];

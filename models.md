@@ -166,6 +166,42 @@ Equipment can grant traits and actions to characters who carry them. When a trai
 }
 ```
 
+### Equipment in Wild Shape
+
+When a druid transforms using Wild Shape, equipment-sourced traits and actions are only included if the beast form can physically use that equipment.
+
+#### Compatibility Requirements
+
+1. **Size**: Beast's size must be between the equipment's `minSize` and `maxSize` (inclusive)
+2. **Body Type**: Beast's body type must support the equipment type
+
+#### Body Type Compatibility Table
+
+| Body Type  | Compatible Equipment Types                         |
+| ---------- | -------------------------------------------------- |
+| Primate    | All (armor, shield, ring, weapon, clothing, other) |
+| Octopus    | Rings, weapons, shields                            |
+| Bird       | Rings only                                         |
+| Lizard     | Rings only                                         |
+| Snake      | Rings only                                         |
+| Fish       | None                                               |
+| Insect     | None                                               |
+| Quadruped  | None                                               |
+| Unassigned | None                                               |
+
+**Example:**
+A druid wearing a Ring of Protection (+1 AC) transforms into a wolf:
+
+- Wolf body type: quadruped
+- Quadrupeds cannot use any equipment
+- Result: Ring of Protection trait is NOT included in wildshaped form
+
+A druid wearing a Ring of Protection transforms into an ape:
+
+- Ape body type: primate
+- Ape size: Medium, ring size range: Tiny-Large (compatible)
+- Result: Ring of Protection trait IS included in wildshaped form
+
 ### Notes
 
 - Equipment properties are intentionally simple - no weight, cost, or magical properties tracked in the model
