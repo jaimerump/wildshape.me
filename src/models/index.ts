@@ -193,14 +193,51 @@ export interface Beast extends Creature {
 }
 
 /**
- * Druid circle (subclass)
+ * Druid circles available in the 2024 edition
  */
-export type DruidCircle =
+export type DruidCircle2024 =
   | 'Circle of the Moon'
   | 'Circle of the Land'
   | 'Circle of the Sea'
+  | 'Circle of the Stars';
+
+/**
+ * Druid circles available in the 2014 edition
+ */
+export type DruidCircle2014 =
+  | 'Circle of the Land'
+  | 'Circle of the Moon'
+  | 'Circle of Dreams'
+  | 'Circle of the Shepherd'
+  | 'Circle of Spores'
   | 'Circle of the Stars'
-  | null;
+  | 'Circle of Wildfire';
+
+/**
+ * Druid circle (subclass) — union of all editions plus null (none selected)
+ */
+export type DruidCircle = DruidCircle2024 | DruidCircle2014 | null;
+
+/**
+ * Runtime-accessible list of druid circles per edition, for use in dropdowns
+ */
+export const DRUID_CIRCLES: Record<Edition, DruidCircle[]> = {
+  '2024': [
+    'Circle of the Moon',
+    'Circle of the Land',
+    'Circle of the Sea',
+    'Circle of the Stars',
+  ],
+  '2014': [
+    'Circle of the Land',
+    'Circle of the Moon',
+    'Circle of Dreams',
+    'Circle of the Shepherd',
+    'Circle of Spores',
+    'Circle of the Stars',
+    'Circle of Wildfire',
+  ],
+};
 
 /**
  * Druid character
