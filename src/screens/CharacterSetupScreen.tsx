@@ -2,6 +2,7 @@ import React from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import { AbilityScoreInput } from '../components/AbilityScoreInput';
+import { DruidCircleSelect } from '../components/DruidCircleSelect';
 import { EditionSelector } from '../components/EditionSelector';
 import { LevelInput } from '../components/LevelInput';
 import { AbilityName } from '../models';
@@ -33,7 +34,10 @@ export function CharacterSetupScreen() {
       </View>
 
       <View className="bg-white rounded-xl p-4 mb-4 shadow-sm">
-        <LevelInput />
+        <View className="flex-col md:flex-row gap-4 items-start">
+          <LevelInput />
+          <DruidCircleSelect />
+        </View>
       </View>
 
       <View className="bg-white rounded-xl p-4 shadow-sm">
