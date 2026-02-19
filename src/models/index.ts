@@ -66,11 +66,6 @@ export type ProficiencyLevel = 'proficient' | 'expertise';
 export type ActionType = 'Action' | 'Bonus Action' | 'Reaction';
 
 /**
- * Trait and action source (for Wild Shape stat merging)
- */
-export type TraitSource = 'species' | 'class' | 'feat' | 'equipment';
-
-/**
  * Attack types
  */
 export type AttackType = 'Melee' | 'Ranged';
@@ -116,24 +111,45 @@ export interface Equipment {
 }
 
 /**
- * Creature trait (passive abilities)
+ * Creature trait variants (discriminated union by source)
  */
-export interface Trait {
+export interface SpeciesTrait {
+  source: 'species';
   name: string;
   description: string;
-  source: TraitSource;
-  equipmentName?: string;
 }
 
+export interface ClassTrait {
+  source: 'class';
+  name: string;
+  description: string;
+  className: string;
+  levelRequirement: number;
+  subclass?: string;
+}
+
+export interface FeatTrait {
+  source: 'feat';
+  name: string;
+  description: string;
+}
+
+export interface EquipmentTrait {
+  source: 'equipment';
+  name: string;
+  description: string;
+  equipmentName: string;
+}
+
+export type Trait = SpeciesTrait | ClassTrait | FeatTrait | EquipmentTrait;
+
 /**
- * Creature action
+ * Base properties shared by all action variants
  */
-export interface Action {
+interface BaseAction {
   name: string;
   actionType: ActionType;
   description: string;
-  source: TraitSource;
-  equipmentName?: string;
   attackType?: AttackType;
   toHitBonus?: number;
   reach?: number;
@@ -143,6 +159,31 @@ export interface Action {
   damageType?: string;
   additionalEffects?: string;
 }
+
+/**
+ * Creature action variants (discriminated union by source)
+ */
+export interface SpeciesAction extends BaseAction {
+  source: 'species';
+}
+
+export interface ClassAction extends BaseAction {
+  source: 'class';
+  className: string;
+  levelRequirement: number;
+  subclass?: string;
+}
+
+export interface FeatAction extends BaseAction {
+  source: 'feat';
+}
+
+export interface EquipmentAction extends BaseAction {
+  source: 'equipment';
+  equipmentName: string;
+}
+
+export type Action = SpeciesAction | ClassAction | FeatAction | EquipmentAction;
 
 /**
  * Base creature interface
@@ -279,4 +320,18 @@ export interface WildshapedDruid extends Creature {
 export interface WildShapeEligibility {
   canTransform: boolean;
   reason?: string;
+}
+
+/**
+ * A D&D class definition with leveled feature progression.
+ * Class features for subclasses are stored flat in traits/actions,
+ * distinguished by the subclass field on each ClassTrait/ClassAction.
+ */
+export interface DnDClass {
+  name: string;
+  edition: Edition;
+  /** The first level at which subclass features become accessible */
+  subclassUnlockLevel: number;
+  traits: ClassTrait[];
+  actions: ClassAction[];
 }

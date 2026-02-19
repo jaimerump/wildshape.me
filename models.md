@@ -76,44 +76,56 @@ Skill bonuses are calculated from:
 
 #### Traits
 
-Array of special abilities and traits:
+Traits are a discriminated union on the `source` field. Each source variant carries different required fields:
 
-- **Name**: string
-- **Description**: string (text describing the trait)
-- **Source**: enum - "species", "class", or "feat"
-  - Indicates where the trait originates (used for Wild Shape stat merging)
-  - "species": Inherent racial/species traits (e.g., Darkvision from being an Elf, Keen Hearing from being a Wolf)
-  - "class": Class features (e.g., Spellcasting, Wild Shape, Rage)
-  - "feat": Traits from feats (e.g., Alert, Lucky)
+| Source        | Required fields                                | Description                                                     |
+| ------------- | ---------------------------------------------- | --------------------------------------------------------------- |
+| `"species"`   | name, description                              | Inherent racial/species traits (e.g., Darkvision, Keen Hearing) |
+| `"class"`     | name, description, className, levelRequirement | Class features (e.g., Spellcasting, Wild Shape)                 |
+| `"feat"`      | name, description                              | Traits from feats (e.g., Alert, Lucky)                          |
+| `"equipment"` | name, description, equipmentName               | Traits granted by a specific piece of equipment                 |
+
+**Class trait additional fields**:
+
+- **className**: string — The class that grants this trait (e.g., "Druid")
+- **levelRequirement**: number — Minimum class level required to have this trait
+- **subclass**: string (optional) — If present, this trait only applies to the named subclass
+
+**Equipment trait additional fields**:
+
+- **equipmentName**: string (required) — Must match the `name` of an item in the character's equipment list
 
 #### Actions
 
-Array of actions the creature can take:
+Actions are a discriminated union on the `source` field, following the same pattern as Traits. Each source variant carries different required fields:
 
-- **Name**: string
-- **Description**: string (text describing the action)
-- **Source**: enum - "species", "class", or "feat"
-  - Indicates where the action originates (used for Wild Shape stat merging)
-  - "species": Natural attacks and abilities (e.g., Bite, Claw, Multiattack for beasts)
-  - "class": Class-granted actions (e.g., Wild Shape activation, Channel Divinity)
-  - "feat": Actions from feats (e.g., special maneuvers)
+| Source        | Required fields                                            | Description                                                |
+| ------------- | ---------------------------------------------------------- | ---------------------------------------------------------- |
+| `"species"`   | name, actionType, description                              | Natural attacks and abilities (e.g., Bite, Claw)           |
+| `"class"`     | name, actionType, description, className, levelRequirement | Class-granted actions (e.g., Wild Shape, Channel Divinity) |
+| `"feat"`      | name, actionType, description                              | Actions from feats                                         |
+| `"equipment"` | name, actionType, description, equipmentName               | Actions granted by a specific piece of equipment           |
+
+**Class action additional fields** (same as class traits):
+
+- **className**: string — The class that grants this action
+- **levelRequirement**: number — Minimum class level required
+- **subclass**: string (optional) — If present, only applies to the named subclass
+
+**Equipment action additional fields**:
+
+- **equipmentName**: string (required) — Must match a piece of equipment in the character's list
+
+**All action variants also support these optional combat fields**:
+
 - **Action Type**: enum - "Action", "Bonus Action", or "Reaction"
-- **Attack Type**: enum - "Melee", "Ranged", or null (for non-attack actions)
-- **Attack Bonus**: number | null
-- **Reach**: number (in feet) | null (for melee attacks)
-- **Range**: string | null (e.g., "30/120" for ranged attacks)
-- **Damage Dice**: string | null (e.g., "2d6")
-- **Damage Type**: string | null (e.g., "piercing", "slashing")
-- **Save DC**: number | null
-- **Save Type**: string | null (e.g., "Strength", "Dexterity")
-- **Effects**: string | null (description of additional effects)
-
-#### Equipment Name (for equipment-sourced traits/actions)
-
-- **Equipment Name**: string | null - Links this trait/action to a specific piece of equipment
-  - Required when `source === 'equipment'`
-  - Must match the `name` of an item in the character's equipment list
-  - Example: A trait with `source: 'equipment'` and `equipmentName: 'Ring of Protection'`
+- **Attack Type**: enum - "Melee", "Ranged", or undefined (for non-attack actions)
+- **Attack Bonus**: number | undefined
+- **Reach**: number (in feet) | undefined (for melee attacks)
+- **Range**: string | undefined (e.g., "30/120" for ranged attacks)
+- **Damage Dice**: string | undefined (e.g., "2d6")
+- **Damage Type**: string | undefined (e.g., "piercing", "slashing")
+- **Additional Effects**: string | undefined (description of additional effects)
 
 ## Equipment
 
@@ -208,6 +220,65 @@ A druid wearing a Ring of Protection transforms into an ape:
 - Size restrictions help determine if equipment can be used in Wild Shape form (application logic)
 - Potions and scrolls are intentionally excluded as they cannot be used while wildshaped
 - Equipment handling during Wild Shape is determined by application logic, not the model
+
+## DnDClass
+
+The DnDClass model represents a D&D class with its leveled feature progression. It allows class features to be defined as data and derived for a specific character level and subclass.
+
+### Properties
+
+- **name**: string — The class name (e.g., "Druid", "Fighter")
+- **edition**: Edition — Which edition's rules this class uses ("2014" or "2024")
+- **subclassUnlockLevel**: number — The first level at which subclass features become accessible
+  - Example: 2 for the 2014 Druid, 3 for the 2024 Druid
+- **traits**: ClassTrait[] — All class traits, including subclass-specific traits
+- **actions**: ClassAction[] — All class actions, including subclass-specific actions
+
+### Subclass Features
+
+Subclass-specific features are stored flat in the `traits` and `actions` arrays alongside base class features. They are distinguished by the `subclass` field on each `ClassTrait` / `ClassAction`:
+
+- Features **without** a `subclass` field are base class features available to all subclasses
+- Features **with** a `subclass` field only apply to characters with that subclass, AND only once the character reaches `subclassUnlockLevel`
+
+### Feature Filtering
+
+Use `getActiveClassTraits(classDef, level, subclassName)` and `getActiveClassActions(classDef, level, subclassName)` from `src/utils/calculations/classFeatures.ts` to retrieve the features a character qualifies for at a given level and subclass.
+
+A feature is included when:
+
+1. `feature.levelRequirement <= level`, AND
+2. Either the feature has no `subclass` (base feature), OR the feature's `subclass` matches `subclassName` AND `level >= classDef.subclassUnlockLevel`
+
+### Example
+
+```typescript
+const druid2024: DnDClass = {
+  name: 'Druid',
+  edition: '2024',
+  subclassUnlockLevel: 3,
+  traits: [
+    // Base class feature — available to all druids at level 1
+    {
+      source: 'class',
+      name: 'Druidic',
+      description: '...',
+      className: 'Druid',
+      levelRequirement: 1,
+    },
+    // Subclass feature — only Moon druids, from level 3
+    {
+      source: 'class',
+      name: 'Combat Wild Shape',
+      description: '...',
+      className: 'Druid',
+      levelRequirement: 3,
+      subclass: 'Circle of the Moon',
+    },
+  ],
+  actions: [],
+};
+```
 
 ## Beast
 

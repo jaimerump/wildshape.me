@@ -740,6 +740,8 @@ function createMockDruid(options: {
         name: 'Spellcasting',
         description: 'Can cast druid spells',
         source: 'class',
+        className: 'Druid',
+        levelRequirement: 1,
       },
     ],
     actions: options.actions || [
@@ -748,6 +750,8 @@ function createMockDruid(options: {
         actionType: 'Action',
         description: 'Melee weapon attack',
         source: 'class',
+        className: 'Druid',
+        levelRequirement: 1,
       },
     ],
     totalCharacterLevel: options.totalCharacterLevel || 5,
@@ -1177,6 +1181,8 @@ describe('calculateWildshapedDruid', () => {
             name: 'Spellcasting',
             description: 'Can cast druid spells',
             source: 'class',
+            className: 'Druid',
+            levelRequirement: 1,
           },
           {
             name: 'Darkvision',
@@ -1219,11 +1225,15 @@ describe('calculateWildshapedDruid', () => {
             name: 'Spellcasting',
             description: 'Can cast druid spells',
             source: 'class',
+            className: 'Druid',
+            levelRequirement: 1,
           },
           {
             name: 'Wild Shape',
             description: 'Can transform',
             source: 'class',
+            className: 'Druid',
+            levelRequirement: 2,
           },
           {
             name: 'Alert',
@@ -1273,6 +1283,8 @@ describe('calculateWildshapedDruid', () => {
             actionType: 'Action',
             description: 'Melee weapon attack',
             source: 'class',
+            className: 'Druid',
+            levelRequirement: 1,
           },
         ],
       });
@@ -1313,12 +1325,16 @@ describe('calculateWildshapedDruid', () => {
             actionType: 'Bonus Action',
             description: 'Transform into beast',
             source: 'class',
+            className: 'Druid',
+            levelRequirement: 2,
           },
           {
             name: 'Second Wind',
             actionType: 'Bonus Action',
             description: 'From multiclass',
             source: 'class',
+            className: 'Fighter',
+            levelRequirement: 1,
           },
           {
             name: 'Grappler Attack',
@@ -1563,6 +1579,8 @@ describe('calculateWildshapedDruid', () => {
               name: 'Spellcasting',
               description: 'From druid class',
               source: 'class',
+              className: 'Druid',
+              levelRequirement: 1,
             },
           ],
         });
@@ -1600,6 +1618,8 @@ describe('calculateWildshapedDruid', () => {
               name: 'Spellcasting',
               description: 'From druid class',
               source: 'class',
+              className: 'Druid',
+              levelRequirement: 1,
             },
           ],
         });
@@ -1639,6 +1659,8 @@ describe('calculateWildshapedDruid', () => {
               actionType: 'Bonus Action',
               description: 'From druid class',
               source: 'class',
+              className: 'Druid',
+              levelRequirement: 2,
             },
           ],
         });
@@ -1679,6 +1701,8 @@ describe('calculateWildshapedDruid', () => {
               actionType: 'Bonus Action',
               description: 'From druid class',
               source: 'class',
+              className: 'Druid',
+              levelRequirement: 2,
             },
           ],
         });
