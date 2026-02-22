@@ -7,10 +7,72 @@
     "levelRequirement": 1
   },
   {
+    "name": "Primal Order: Magician",
+    "description": "You know one extra cantrip from the Druid spell list. You gain a bonus to Intelligence (Arcana and Nature) checks equal to your Wisdom modifier.",
+    "className": "Druid",
+    "levelRequirement": 1
+  },
+  {
+    "name": "Primal Order: Warden",
+    "description": "You have proficiency with Martial weapons and Medium armor.",
+    "className": "Druid",
+    "levelRequirement": 1
+  },
+  {
+    "name": "Elemental Fury: Potent Spellcasting",
+    "description": "Add your Widsom modifier to the damage you deal with any Druid cantrip.",
+    "className": "Druid",
+    "levelRequirement": 7
+  },
+  {
+    "name": "Elemental Fury: Primal Strike",
+    "description": "Once on each of your turns when you hit a creature with an attack roll using a weapon or a Beast form's attack in Wild Shape, you can cause the target to take an extra 1d8 Cold, Fire, Lightning, or Thunder damage (choose when you hit).",
+    "className": "Druid",
+    "levelRequirement": 7
+  },
+  {
+    "name": "Improved Elemental Fury: Potent Spellcasting",
+    "description": "When you cast a Druid cantrip with a range of 10 feet or greater, the spell's range increases by 300 feet.",
+    "className": "Druid",
+    "levelRequirement": 15
+  },
+  {
+    "name": "Improved Elemental Fury: Primal Strike",
+    "description": "The extra damage of your Primal Strike increases to 2d8",
+    "className": "Druid",
+    "levelRequirement": 15
+  },
+  {
     "source": "class",
     "name": "Beast Spells",
     "description": "You can cast spells in Beast form, except for any spell that has a Material component with a cost specified or that consumes its Material component.",
     "className": "Druid",
     "levelRequirement": 18
+  },
+  {
+    "name": "Archdruid: Evergreen Wild Shape",
+    "description": "Whenever you roll Initiative and have no uses of Wild Shape left you regain one expended use.",
+    "className": "Druid",
+    "levelRequirement": 20
+  },
+  {
+    "name": "Archdruid: Longevity",
+    "description": "For every ten years that pass, your body only ages one year.",
+    "className": "Druid",
+    "levelRequirement": 20
+  },
+  {
+    "name": "Natural Recovery",
+    "description": "You can cast one of your Circle spells without expending a spell slot once per Long Rest. When you finish a Short Rest, you can choose expended spell slots to recover. The spell slots can have a combined level less than or equal to half of your Druid level (round up), and none of them can be level 6+. Once you recover spell slots with this feature, you can't do so again until you finish a Long Rest.",
+    "className": "Druid",
+    "subclass": "Circle of the Land",
+    "levelRequirement": 6
+  },
+  {
+    "name": "Nature's Ward",
+    "description": "You are immune to the Poisoned condition, and you have Resistance to the damage type associated with your current land choice in the Circle Spells feature (Arid=Fire, Polar=Cold, Temperate=Lightning, Tropical=Poison).",
+    "className": "Druid",
+    "subclass": "Circle of the Land",
+    "levelRequirement": 10
   }
 ]

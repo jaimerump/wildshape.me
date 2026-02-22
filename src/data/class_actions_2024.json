@@ -23,5 +23,40 @@
     "name": "Wild Resurgence",
     "description": "Once on each of your turns, if you have no uses of Wild Shape left, you can give yourself one use by expending a spell slot (no action required). In addition, you can expend one use of Wild Shape (no action required) to give yourself a level 1 spell slot, but you can't do so again until you finish a Long Rest.",
     "actionType": "Free Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "levelRequirement": 20,
+    "name": "Archdruid: Nature Magician",
+    "description": "You can convert uses of Wild Shape into a spell slot. Choose a number of unexpended uses of Wild Shape and convert them into a single spell slot, with each use contributing 2 spell levels. You cannot use this feature again until you finish a Long Rest.",
+    "actionType": "Free Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Land",
+    "levelRequirement": 3,
+    "name": "Land's Aid",
+    "description": "As a Magic action you can expend a use of your Wild Shape and choose a point within 60 feet of yourself. Vitality-giving flowers and life-draing thorns appear for a moment in a 10-foot-radius Sphere centered on that point. Each creature of your choice in the Sphere must make a Constitution saving throw against your spell save DC, taking 2d6 Necrotic damage on a failed save, or half as much damage on a sucessful one. One creature of your choice in that area regains 2d6 Hit Points. The damage and healing increase to 3d6 at 10th level, and 4d6 at 14th level.",
+    "actionType": "Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Land",
+    "levelRequirement": 14,
+    "name": "Nature's Sanctuary",
+    "description": "As a Magic action you can expend a use of your Wild Shape and cause spectral trees and vines to appear in a 15-foot Cube on the grouns within 120 feet of yourself. They last for 1 minute, or until you have the Incapacitated condition or die. You and your allies have Half Cover while in that area, and your allies gain the current Resistance of your Nature's Ward while there.",
+    "actionType": "Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Land",
+    "levelRequirement": 14,
+    "name": "Move Nature's Sanctuary",
+    "description": "As a Bonus Action, you can move your Nature's Sanctuary up to 60 feet to a ground surface within 120 feet of yourself.",
+    "actionType": "Bonus Action"
   }
 ]
