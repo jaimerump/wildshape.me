@@ -130,5 +130,13 @@
     "levelRequirement": 10,
     "name": "Guardian Spirit",
     "description": "When a beast or fey that you summoned or created with a spell ends its turn in your Spirit Totem aura, that creature regains a number of hit points equal to half your druid level."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Spores",
+    "levelRequirement": 14,
+    "name": "Fungal Body",
+    "description": "You can't be Blinded, Deafened, Frightened, or Poisoned, and any critical hit against you counts as a normal hit instead, unless you are Incapacitated."
   }
 ]

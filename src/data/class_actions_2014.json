@@ -102,5 +102,44 @@
     "name": "Faithful Summons",
     "description": "If you are reduced to 0 hit points or incapacitated against your will, you immediately gain the benefits of Conjure Animals as if you had cast it at 9th level. It summons four beasts of your choice that are CR 2 or lower that appear within 20 feet of you. If they receive no commands from you, they protect you from harm and attack your foes. The spell lasts for 1 hour, requiring no concentation, or until you dismiss it (no action required). Once you use this feature, you can't use it again until you finish a Long Rest.",
     "actionType": "Free Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Spores",
+    "levelRequirement": 2,
+    "name": "Halo of Spores",
+    "description": "When a creature you can see moves into a space within 10 feet of you, or starts its turn there, you can use your Reaction to deal 1d4 Necrotic damage unless is succeeds on a Constitution saving throw against your spell save DC. The damage increases to 1d6 at 6th level, ad8 and 10th level and 1d10 at 14th level.",
+    "actionType": "Reaction",
+    "damage": "1d4",
+    "damageType": "Necrotic"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Spores",
+    "levelRequirement": 2,
+    "name": "Symbiotic Entity",
+    "description": "As an Action you can expend a use of Wild Shape. You gain 4 temporary hit points for each Druid level. When you deal your Halo of Spores damage, roll the damage a second time and add it to the total. Your melee weapon attacks deal an extra 1d6 necrotic damage. These benefits last for 10 minutes, until you lose all of these Temporary Hit Points, or until you use Wild Shape again.",
+    "actionType": "Action",
+    "additionalEffects": "4x Druid level Temp HP. 2x Halo of Spores damage. +1d6 necrotic damage to melee attacks."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Spores",
+    "levelRequirement": 6,
+    "name": "Fungal Infestation",
+    "description": "If a Small or Medium beast or humanoid dies within 10 feet of you, you can use your reaction to animate it, causing it to stand up as a Zombie with 1 hit point. Its turn comes immediately after yours, and the only Action it can take is a single Attack action. You can use this feature a number of times equal to your Wisdom modifier per Long Rest.",
+    "actionType": "Reaction"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Spores",
+    "levelRequirement": 10,
+    "name": "Spreading Spores",
+    "description": "As a Bonus Action while your Symbiotic Entity feature is active, you can hurl spores up to 30 feet away, where they swirl in a 10-foot Cube for 1 minute. They disappear early if you use this feature again, if you dismiss them as a Bonus Action, or if your Symbiotic Entity feature ends. While the cube of spores is active, you can't use your Halo of Spores Reaction. Whenever a creature moves into the cube or starts its turn there it must pass a Constitution saving throw or takes your Halo of Spores damage. A creature can only take this damage once per turn.",
+    "actionType": "Bonus Action"
   }
 ]
