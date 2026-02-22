@@ -82,5 +82,53 @@
     "className": "Druid",
     "levelRequirement": 6,
     "subclass": "Circle of Dreams"
+  },
+  {
+    "source": "class",
+    "name": "Speech of the Woods",
+    "description": "You can speak, read, and write Sylvan. Beasts can understand your speech, and you can decipher their noises and motions. They cannot convey or understand sophisticated concepts, but they can communicate basic information.",
+    "className": "Druid",
+    "levelRequirement": 2,
+    "subclass": "Circle of the Shepherd"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Shepherd",
+    "levelRequirement": 2,
+    "name": "Spirit Totem: Bear Spirit",
+    "description": "Each creature of your choice in the aura when the spirit appears gains temporary hit points equal to 5 + your druid level. You and your allies gain Advantage on Strength checks and Strength saving throws made while in the aura."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Shepherd",
+    "levelRequirement": 2,
+    "name": "Spirit Totem: Hawk Spirit",
+    "description": "You and your allies have advantage on Wisdom (Perception) checks while in the aura."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Shepherd",
+    "levelRequirement": 2,
+    "name": "Spirit Totem: Unicorn Spirit",
+    "description": "You and your allies gain advantage on all ability checks made to detect creatures in the spirit's aura. If you cast a spell using a spell slot that restores hit points to any creature inside or outside the aura, each creature of your choice in the aura also regains hit points equal to your druid level."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Shepherd",
+    "levelRequirement": 6,
+    "name": "Mighty Summoner",
+    "description": "Any beasts or fey summoned or created by a spell that you cast gains the following benefits. It gains an extra 2 Hit Points per Hit Die it has. The damage from its natural weapons is considered magical for the purpose of overcoming immunity or resistance to nonmagical attacks and damage."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Shepherd",
+    "levelRequirement": 10,
+    "name": "Guardian Spirit",
+    "description": "When a beast or fey that you summoned or created with a spell ends its turn in your Spirit Totem aura, that creature regains a number of hit points equal to half your druid level."
   }
 ]

@@ -64,5 +64,43 @@
     "description": "As an action you can teleport a willing creature you touch up to 30 feet to an unoccupied space you can see. You can use this feature a number of times equal to your Wisdom modifier and regain all expended uses when you finish a Long Rest.",
     "actionType": "Action",
     "range": "30 feet"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Shepherd",
+    "levelRequirement": 2,
+    "name": "Spirit Totem",
+    "description": "As a Bonus Action, you summon a spirit to a point you can see within 60 feet of you. The spirit creates an aura in a 30-foot radius around that point. The spirit persists for 1 minute or until you are Incapacitated. When you use this feature, choose a spirit from: Bear, Hawk, Unicorn. Each grants different benefits. Once you use this feature, you cannot use it again until you finish a Short or Long Rest.",
+    "actionType": "Bonus Action",
+    "range": "60 feet"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Shepherd",
+    "levelRequirement": 2,
+    "name": "Spirit Totem: Move",
+    "description": "As a Bonus Action, you can move your Spirit Toem up to 60 feet to a point you can see.",
+    "actionType": "Bonus Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Shepherd",
+    "levelRequirement": 2,
+    "name": "Spirit Totem: Hawk Spirit",
+    "description": "When a creature makes an attack roll against a target in the spirit's aura, you can use your Reaction to grant advantage to that attack roll. In addition, you and your allies have advantage on Wisdom (Perception) checks while in the aura.",
+    "actionType": "Reaction",
+    "range": "60 feet"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Shepherd",
+    "levelRequirement": 14,
+    "name": "Faithful Summons",
+    "description": "If you are reduced to 0 hit points or incapacitated against your will, you immediately gain the benefits of Conjure Animals as if you had cast it at 9th level. It summons four beasts of your choice that are CR 2 or lower that appear within 20 feet of you. If they receive no commands from you, they protect you from harm and attack your foes. The spell lasts for 1 hour, requiring no concentation, or until you dismiss it (no action required). Once you use this feature, you can't use it again until you finish a Long Rest.",
+    "actionType": "Free Action"
   }
 ]
