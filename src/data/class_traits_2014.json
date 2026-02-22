@@ -16,7 +16,7 @@
   {
     "source": "class",
     "name": "Beast Spells",
-    "description": "You can cast spells while Wildshaped. You can perform the somatic and verbal components of spells, but you aren't able to provide material components.",
+    "description": "You can cast spells while Wild Shaped. You can perform the somatic and verbal components of spells, but you aren't able to provide material components.",
     "className": "Druid",
     "levelRequirement": 18
   },
@@ -26,5 +26,45 @@
     "description": "You can use your Wild Shape an unlimited number of times.",
     "className": "Druid",
     "levelRequirement": 20
+  },
+  {
+    "source": "class",
+    "name": "Natural Recovery",
+    "description": "During a short rest, you choose expended spell slots to recover. The spell slots can have a combined level that less than or equal to half of your druid level rounded up, and none of the slots can be 6th level or higher. You can't use this feature again until you finish a long rest.",
+    "className": "Druid",
+    "levelRequirement": 2,
+    "subclass": "Circle of the Land"
+  },
+  {
+    "source": "class",
+    "name": "Land's Stride",
+    "description": "Moving through nonmagical difficult terrain costs you no extra movement. You can pass through nonmagical plants without being slowed by them, and without taking damage from them if they have thorns, spines, or a similar hazard. You have advantage on saving throws against plants that are magically created or manipulated to impede movement, such as those created by the Entangle spell.",
+    "className": "Druid",
+    "levelRequirement": 6,
+    "subclass": "Circle of the Land"
+  },
+  {
+    "source": "class",
+    "name": "Nature's Ward",
+    "description": "You can't be charmed or frightened by elementals or fey, and you are immune to poison and disease.",
+    "className": "Druid",
+    "levelRequirement": 10,
+    "subclass": "Circle of the Land"
+  },
+  {
+    "source": "class",
+    "name": "Nature's Sanctuary",
+    "description": "When a beast or plant creature attacks you, that creature must make a Wisdom saving throw against your druid spell save DC. On a failed save, taht creature must choose a different target, or the attack automatically misses. On a successful save, the creature is immune to this effect for 24 hours. The creature is aware of this effect before it makes its attack against you.",
+    "className": "Druid",
+    "levelRequirement": 14,
+    "subclass": "Circle of the Land"
+  },
+  {
+    "source": "class",
+    "name": "Primal Strike",
+    "description": "Your attacks in Beast form count as magical for the purpose of overcoming resistance and immunity to nonmagical attacks and damage.",
+    "className": "Druid",
+    "levelRequirement": 6,
+    "subclass": "Circle of the Moon"
   }
 ]

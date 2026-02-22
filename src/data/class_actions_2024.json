@@ -1,0 +1,27 @@
+[
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Moon",
+    "levelRequirement": 10,
+    "name": "Elemental Wild Shape",
+    "description": "You can expend two uses of Wild Shape at the same time to transform into an air, earth, fire, or water elemental.",
+    "actionType": "Bonus Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "levelRequirement": 2,
+    "name": "Wild Companion",
+    "description": "As a Magic action you can expend a spell slot or a use of Wild Shape to cast the Find Familiar spell without Material components.",
+    "actionType": "Free Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "levelRequirement": 5,
+    "name": "Wild Resurgence",
+    "description": "Once on each of your turns, if you have no uses of Wild Shape left, you can give yourself one use by expending a spell slot (no action required). In addition, you can expend one use of Wild Shape (no action required) to give yourself a level 1 spell slot, but you can't do so again until you finish a Long Rest.",
+    "actionType": "Free Action"
+  }
+]

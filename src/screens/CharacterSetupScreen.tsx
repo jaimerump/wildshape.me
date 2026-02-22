@@ -2,7 +2,8 @@ import React from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import { AbilityScoreInput } from '../components/AbilityScoreInput';
-import { ClassFeaturesSection } from '../components/ClassFeaturesSection';
+import { ClassActionsSection } from '../components/ClassActionsSection';
+import { PassiveTraitsSection } from '../components/PassiveTraitsSection';
 import { DruidCircleSelect } from '../components/DruidCircleSelect';
 import { EditionSelector } from '../components/EditionSelector';
 import { LevelInput } from '../components/LevelInput';
@@ -55,7 +56,11 @@ export function CharacterSetupScreen() {
       </View>
 
       <View className="bg-white rounded-xl p-4 mt-4 shadow-sm">
-        <ClassFeaturesSection />
+        <PassiveTraitsSection />
+      </View>
+
+      <View className="bg-white rounded-xl p-4 mt-4 shadow-sm">
+        <ClassActionsSection />
       </View>
     </ScrollView>
   );

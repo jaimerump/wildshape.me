@@ -1,0 +1,38 @@
+[
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Moon",
+    "levelRequirement": 2,
+    "name": "Combat Wild Shape",
+    "description": "You can Wild Shape as a Bonus Action.",
+    "actionType": "Bonus Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Moon",
+    "levelRequirement": 2,
+    "name": "Combat Wild Shape: Heal",
+    "description": "While in Wild Shape you can expend one spell slot to regain 1d8 hip points per level of the spell slot expended.",
+    "actionType": "Bonus Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Moon",
+    "levelRequirement": 10,
+    "name": "Elemental Wild Shape",
+    "description": "You can expend two uses of Wild Shape at the same time to transform into an air, earth, fire, or water elemental.",
+    "actionType": "Bonus Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Moon",
+    "levelRequirement": 14,
+    "name": "Thousand Forms",
+    "description": "You can cast the Alter Self spell at will.",
+    "actionType": "Action"
+  }
+]

@@ -24,7 +24,7 @@ const CLASS_DEFS: Record<Edition, DnDClass> = {
   },
 };
 
-export function ClassFeaturesSection() {
+export function PassiveTraitsSection() {
   const edition = useDruidStore((s) => s.edition);
   const druidLevel = useDruidStore((s) => s.druidLevel);
   const druidCircle = useDruidStore((s) => s.druidCircle);
@@ -47,7 +47,7 @@ export function ClassFeaturesSection() {
   return (
     <View>
       <Text className="text-lg font-semibold mb-4 text-gray-800">
-        Class Features
+        Passive Traits
       </Text>
       {sortedTraits.map((trait, index) => (
         <View
@@ -58,6 +58,9 @@ export function ClassFeaturesSection() {
             <Text className="font-semibold text-gray-800">{trait.name}</Text>
             <Text className="text-xs text-green-700">
               Level {trait.levelRequirement}
+            </Text>
+            <Text className="text-xs text-gray-500">
+              {trait.subclass ?? trait.className}
             </Text>
           </View>
           <Text className="text-sm text-gray-600 mt-1">

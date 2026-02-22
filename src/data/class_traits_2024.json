@@ -8,20 +8,6 @@
   },
   {
     "source": "class",
-    "name": "Wild Companion",
-    "description": "As a Magic action you can expend a spell slot or a use of Wild Shape to cast the Find Familiar spell without Material components.",
-    "className": "Druid",
-    "levelRequirement": 2
-  },
-  {
-    "source": "class",
-    "name": "Wild Resurgence",
-    "description": "Once on each of your turns, if you have no uses of Wild Shape left, you can give yourself one use by expending a spell slot (no action required). In addition, you can expend one use of Wild Shape (no action required) to give yourself a level 1 spell slot, but you can't do so again until you finish a Long Rest.",
-    "className": "Druid",
-    "levelRequirement": 5
-  },
-  {
-    "source": "class",
     "name": "Beast Spells",
     "description": "You can cast spells in Beast form, except for any spell that has a Material component with a cost specified or that consumes its Material component.",
     "className": "Druid",

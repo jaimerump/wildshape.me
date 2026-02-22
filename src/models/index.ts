@@ -63,7 +63,7 @@ export type ProficiencyLevel = 'proficient' | 'expertise';
 /**
  * Action types
  */
-export type ActionType = 'Action' | 'Bonus Action' | 'Reaction';
+export type ActionType = 'Action' | 'Bonus Action' | 'Reaction' | 'Free Action';
 
 /**
  * Attack types
