@@ -66,5 +66,21 @@
     "className": "Druid",
     "levelRequirement": 6,
     "subclass": "Circle of the Moon"
+  },
+  {
+    "source": "class",
+    "name": "Hearth of Moonlight and Shadow",
+    "description": "At the beginning of a Short or Long Rest, you can create an invisible 30-foot radius sphere. While within the sphere, you and your allies gain a +5 bonus to Dsxterity (Stealth) and Wisdom (Perception) checks, and light produced within the sphere is not visible from outside it.",
+    "className": "Druid",
+    "levelRequirement": 6,
+    "subclass": "Circle of Dreams"
+  },
+  {
+    "source": "class",
+    "name": "Walker in Dreams",
+    "description": "When you finish a short rest, you can cast Dream, Scrying, or Teleportation Circle without expending a spell slot. Once you use this feature, you can't use it again until you finish a Long Rest. If you cast Teleportation Circle this way, it takes you to the last location where you finished a Long Rest on the current plane.",
+    "className": "Druid",
+    "levelRequirement": 6,
+    "subclass": "Circle of Dreams"
   }
 ]

@@ -34,5 +34,35 @@
     "name": "Thousand Forms",
     "description": "You can cast the Alter Self spell at will.",
     "actionType": "Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Dreams",
+    "levelRequirement": 2,
+    "name": "Balm of the Summer Court",
+    "description": "You have a number of d6s equal to your druid level. As a bonus action, you can choose one creature you can see within 120 feet of you and spend a number of those d6s less than or equal to half your druid level. The target regains that many Hit Points, and also gains 1 temporary hit point per die spent. You regain all expended dice when you finish a long rest.",
+    "actionType": "Bonus Action",
+    "range": "120 feet"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Dreams",
+    "levelRequirement": 10,
+    "name": "Hidden Paths",
+    "description": "As a bonus action you can teleport yourself up to 60 feet to an unoccupied space you can see. You can use this feature a number of times equal to your Wisdom modifier and regain all expended uses when you finish a Long Rest.",
+    "actionType": "Bonus Action",
+    "range": "60 feet"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Dreams",
+    "levelRequirement": 10,
+    "name": "Hidden Paths: Ally",
+    "description": "As an action you can teleport a willing creature you touch up to 30 feet to an unoccupied space you can see. You can use this feature a number of times equal to your Wisdom modifier and regain all expended uses when you finish a Long Rest.",
+    "actionType": "Action",
+    "range": "30 feet"
   }
 ]
