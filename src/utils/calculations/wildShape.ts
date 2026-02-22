@@ -26,6 +26,7 @@ import {
 } from './proficiencyBonus';
 import { getSkillBonus } from './skills';
 import { getSavingThrowBonus } from './savingThrows';
+import { getAbilityModifier } from './abilityScores';
 
 /**
  * Size order for comparison
@@ -829,11 +830,19 @@ export function calculateWildshapedDruid(
     hitPoints: druid.edition === '2024' ? druid.hitPoints : beast.hitPoints,
     hitDice: druid.edition === '2024' ? druid.hitDice : beast.hitDice,
 
-    // Temporary HP: 2024 gives druid level, 2014 gives none
-    temporaryHitPoints: druid.edition === '2024' ? druid.druidLevel : 0,
+    // Temporary HP: 2024 Moon druids get 3x druid level, other 2024 druids get druid level, 2014 gives none
+    temporaryHitPoints:
+      druid.edition === '2024'
+        ? druid.druidCircle === 'Circle of the Moon'
+          ? 3 * druid.druidLevel
+          : druid.druidLevel
+        : 0,
 
-    // Combat stats from beast
-    armorClass: beast.armorClass,
+    // Combat stats from beast (2024 Moon druids can use 13 + Wisdom mod if higher)
+    armorClass:
+      druid.edition === '2024' && druid.druidCircle === 'Circle of the Moon'
+        ? Math.max(beast.armorClass, 13 + getAbilityModifier(druid.wisdom))
+        : beast.armorClass,
     movement: beast.movement,
     senses: beast.senses,
 

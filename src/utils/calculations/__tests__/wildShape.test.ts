@@ -2158,4 +2158,121 @@ describe('calculateWildshapedDruid', () => {
       });
     });
   });
+
+  describe('2024 Circle of the Moon specific rules', () => {
+    describe('Temporary hit points', () => {
+      it('should give 3x druid level temp HP for 2024 Moon druid', () => {
+        const druid = createMockDruid({
+          edition: '2024',
+          druidLevel: 8,
+          druidCircle: 'Circle of the Moon',
+        });
+        const beast = createFullMockBeast({ challengeRating: 1 });
+
+        const wildshaped = calculateWildshapedDruid(druid, beast);
+
+        expect(wildshaped.temporaryHitPoints).toBe(24); // 3 × 8
+      });
+
+      it('should give 1x druid level temp HP for non-Moon 2024 druid', () => {
+        const druid = createMockDruid({
+          edition: '2024',
+          druidLevel: 8,
+          druidCircle: null,
+        });
+        const beast = createFullMockBeast({ challengeRating: 1 });
+
+        const wildshaped = calculateWildshapedDruid(druid, beast);
+
+        expect(wildshaped.temporaryHitPoints).toBe(8); // 1 × 8
+      });
+
+      it('should give no temp HP for 2014 Moon druid', () => {
+        const druid = createMockDruid({
+          edition: '2014',
+          druidLevel: 8,
+          druidCircle: 'Circle of the Moon',
+        });
+        const beast = createFullMockBeast({
+          edition: '2014',
+          challengeRating: 1,
+        });
+
+        const wildshaped = calculateWildshapedDruid(druid, beast);
+
+        expect(wildshaped.temporaryHitPoints).toBe(0);
+      });
+    });
+
+    describe('Armor class', () => {
+      it('should use 13 + Wisdom mod when it exceeds beast AC for 2024 Moon druid', () => {
+        const druid = createMockDruid({
+          edition: '2024',
+          druidLevel: 8,
+          druidCircle: 'Circle of the Moon',
+          wisdom: 20, // +5 mod → AC 18
+        });
+        const beast = createFullMockBeast({
+          challengeRating: 1,
+          armorClass: 13,
+        });
+
+        const wildshaped = calculateWildshapedDruid(druid, beast);
+
+        expect(wildshaped.armorClass).toBe(18); // 13 + 5 = 18 > 13
+      });
+
+      it('should use beast AC when it exceeds 13 + Wisdom mod for 2024 Moon druid', () => {
+        const druid = createMockDruid({
+          edition: '2024',
+          druidLevel: 8,
+          druidCircle: 'Circle of the Moon',
+          wisdom: 10, // +0 mod → AC 13
+        });
+        const beast = createFullMockBeast({
+          challengeRating: 1,
+          armorClass: 15,
+        });
+
+        const wildshaped = calculateWildshapedDruid(druid, beast);
+
+        expect(wildshaped.armorClass).toBe(15); // 15 > 13 + 0 = 13
+      });
+
+      it('should use beast AC unchanged for non-Moon 2024 druid', () => {
+        const druid = createMockDruid({
+          edition: '2024',
+          druidLevel: 8,
+          druidCircle: null,
+          wisdom: 20, // +5 mod
+        });
+        const beast = createFullMockBeast({
+          challengeRating: 1,
+          armorClass: 13,
+        });
+
+        const wildshaped = calculateWildshapedDruid(druid, beast);
+
+        expect(wildshaped.armorClass).toBe(13); // No Moon bonus
+      });
+
+      it('should use beast AC unchanged for 2014 Moon druid', () => {
+        const druid = createMockDruid({
+          edition: '2014',
+          druidLevel: 8,
+          druidCircle: 'Circle of the Moon',
+          wisdom: 20, // +5 mod
+        });
+        const beast = createFullMockBeast({
+          edition: '2014',
+          challengeRating: 1,
+          armorClass: 13,
+        });
+
+        const wildshaped = calculateWildshapedDruid(druid, beast);
+
+        expect(wildshaped.armorClass).toBe(13); // Rule is 2024-only
+      });
+    });
+  });
 });
