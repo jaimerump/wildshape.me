@@ -1,0 +1,182 @@
+[
+  {
+    "source": "class",
+    "name": "Druidic",
+    "description": "You know the Druidic language and can speak with plants and animals. You can use this language to communicate with plants and animals as if they were a human.",
+    "className": "Druid",
+    "levelRequirement": 1
+  },
+  {
+    "name": "Primal Order: Magician",
+    "description": "You know one extra cantrip from the Druid spell list. You gain a bonus to Intelligence (Arcana and Nature) checks equal to your Wisdom modifier.",
+    "className": "Druid",
+    "levelRequirement": 1
+  },
+  {
+    "name": "Primal Order: Warden",
+    "description": "You have proficiency with Martial weapons and Medium armor.",
+    "className": "Druid",
+    "levelRequirement": 1
+  },
+  {
+    "name": "Elemental Fury: Potent Spellcasting",
+    "description": "Add your Widsom modifier to the damage you deal with any Druid cantrip.",
+    "className": "Druid",
+    "levelRequirement": 7
+  },
+  {
+    "name": "Elemental Fury: Primal Strike",
+    "description": "Once on each of your turns when you hit a creature with an attack roll using a weapon or a Beast form's attack in Wild Shape, you can cause the target to take an extra 1d8 Cold, Fire, Lightning, or Thunder damage (choose when you hit).",
+    "className": "Druid",
+    "levelRequirement": 7
+  },
+  {
+    "name": "Improved Elemental Fury: Potent Spellcasting",
+    "description": "When you cast a Druid cantrip with a range of 10 feet or greater, the spell's range increases by 300 feet.",
+    "className": "Druid",
+    "levelRequirement": 15
+  },
+  {
+    "name": "Improved Elemental Fury: Primal Strike",
+    "description": "The extra damage of your Primal Strike increases to 2d8",
+    "className": "Druid",
+    "levelRequirement": 15
+  },
+  {
+    "source": "class",
+    "name": "Beast Spells",
+    "description": "You can cast spells in Beast form, except for any spell that has a Material component with a cost specified or that consumes its Material component.",
+    "className": "Druid",
+    "levelRequirement": 18
+  },
+  {
+    "name": "Archdruid: Evergreen Wild Shape",
+    "description": "Whenever you roll Initiative and have no uses of Wild Shape left you regain one expended use.",
+    "className": "Druid",
+    "levelRequirement": 20
+  },
+  {
+    "name": "Archdruid: Longevity",
+    "description": "For every ten years that pass, your body only ages one year.",
+    "className": "Druid",
+    "levelRequirement": 20
+  },
+  {
+    "name": "Natural Recovery",
+    "description": "You can cast one of your Circle spells without expending a spell slot once per Long Rest. When you finish a Short Rest, you can choose expended spell slots to recover. The spell slots can have a combined level less than or equal to half of your Druid level (round up), and none of them can be level 6+. Once you recover spell slots with this feature, you can't do so again until you finish a Long Rest.",
+    "className": "Druid",
+    "subclass": "Circle of the Land",
+    "levelRequirement": 6
+  },
+  {
+    "name": "Nature's Ward",
+    "description": "You are immune to the Poisoned condition, and you have Resistance to the damage type associated with your current land choice in the Circle Spells feature (Arid=Fire, Polar=Cold, Temperate=Lightning, Tropical=Poison).",
+    "className": "Druid",
+    "subclass": "Circle of the Land",
+    "levelRequirement": 10
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Moon",
+    "levelRequirement": 6,
+    "name": "Improved Circle Forms: Lunar Radiance",
+    "description": "Each time you attack while in a Wild Shape form, you can choose to deal either the normal damage type or Radiant damage."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Moon",
+    "levelRequirement": 6,
+    "name": "Improved Circle Forms: Increased Toughness",
+    "description": "You can add your Wisdom modifier to your Constitution saving throws"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Moon",
+    "levelRequirement": 14,
+    "name": "Lunar Form: Improved Lunar Radiance",
+    "description": "Once per turn, you can deal an extra 2d10 Radiant damage to a target you hit with a Wild Shape form's attack."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Moon",
+    "levelRequirement": 14,
+    "name": "Lunar Form: Shared Moonlight",
+    "description": "Whenever you use Moonlight Step, you can also teleport one willing creature. That creature must be within 10 feet of you, and you teleport it to an unoccupied space you can see within 10 feet of your destination space."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Sea",
+    "levelRequirement": 6,
+    "name": "Aquatic Affinity",
+    "description": "The Emanation created by your Wrath of the Sea increases to 10 feet. In addition, you gain a Swim Speed equal to your Speed."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Sea",
+    "levelRequirement": 10,
+    "name": "Stormborn: Flight",
+    "description": "While your Wrath of the Sea is active, you gain a Fly speed equal to your Speed."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Sea",
+    "levelRequirement": 10,
+    "name": "Stormborn: Resistance",
+    "description": "While your Wrath of the Sea is active, you have Resistance to Cold, Lightning, and Thunder damage."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Sea",
+    "levelRequirement": 14,
+    "name": "Oceanic Gift",
+    "description": "When you use Wrath of the Sea, instead of manifesting it around yourself, you can manifest it around a willing creature within 60 feet of yourself. That creature gains all of the benefits of the Emanation and uses your spell save DC and Wisdom modifier. In addition, you can expend two uses of Wild Shape to manifest it around both yourself and another creature."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 3,
+    "name": "Star Map",
+    "description": "While holding your Star Map, you have Guidance and Guiding Bolt prepared, and you can cast Guiding Bolt without expending a spell slot a number of times equal to your Wisdom modifier per Long Rest. If you lose the map, you can perform a 1-hour ceremony to magically create a replacement during a Short or Long Rest."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 3,
+    "name": "Starry Form",
+    "description": "While in your Starry Form, you regtain your game statistics, but you glow like a constellation. You shed Bright Light in a 10-foot radius, and Dim Light for an additional 10 feet. This form lasts for 10 minutes, and ends early if you dismiss it (no action required), have the Incapacitated condition, or use the feature again."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 6,
+    "name": "Cosmic Omen",
+    "description": "When you finish a Long Rest, you can consult your Star Map and roll a die. Until you finish your next Long Rest, you gain a special Reaction based on whether you rolled an even or odd number on the die. You can use this Reaction a number of times equal to your Wisdom modifier, and you regain all expended uses when you finish a Long Rest."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 10,
+    "name": "Twinkling Constellations",
+    "description": "The 1d8 of the Archer and Chalice becomes 2d8, and while the Dragon is active you have a Fly Speed of 20 feet and can hover. At the start of each of your turns while in Starry Form, you can change constellations."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 14,
+    "name": "Full of Stars",
+    "description": "While in your Starry Form, you gain Resistance to Bludgeoning, Piercing, and Slashing damage."
+  }
+]
