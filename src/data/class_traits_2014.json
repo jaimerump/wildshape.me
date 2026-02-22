@@ -1,0 +1,30 @@
+[
+  {
+    "source": "class",
+    "name": "Druidic",
+    "description": "You know the Druidic language and can speak with plants and animals. You can use this language to communicate with plants and animals as if they were a human.",
+    "className": "Druid",
+    "levelRequirement": 1
+  },
+  {
+    "source": "class",
+    "name": "Timeless Body",
+    "description": "For every 10 years that pass, your body only ages by 1 year.",
+    "className": "Druid",
+    "levelRequirement": 18
+  },
+  {
+    "source": "class",
+    "name": "Beast Spells",
+    "description": "You can cast spells while Wildshaped. You can perform the somatic and verbal components of spells, but you aren't able to provide material components.",
+    "className": "Druid",
+    "levelRequirement": 18
+  },
+  {
+    "source": "class",
+    "name": "Archdruid",
+    "description": "You can use your Wild Shape an unlimited number of times.",
+    "className": "Druid",
+    "levelRequirement": 20
+  }
+]
