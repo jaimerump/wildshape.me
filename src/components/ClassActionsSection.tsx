@@ -64,9 +64,55 @@ export function ClassActionsSection() {
               <Text className="text-xs text-blue-700">{action.actionType}</Text>
             </View>
           </View>
+          {(action.attackType ||
+            action.toHitBonus != null ||
+            action.reach != null ||
+            action.range ||
+            action.targets != null ||
+            action.damage ||
+            action.damageType) && (
+            <View className="flex-row items-center gap-2 flex-wrap mt-1">
+              {action.attackType && (
+                <Text className="text-xs text-orange-700">
+                  {action.attackType}
+                </Text>
+              )}
+              {action.toHitBonus != null && (
+                <Text className="text-xs text-gray-500">
+                  {action.toHitBonus >= 0 ? '+' : ''}
+                  {action.toHitBonus} to hit
+                </Text>
+              )}
+              {action.reach != null && (
+                <Text className="text-xs text-gray-500">
+                  {action.reach} ft. reach
+                </Text>
+              )}
+              {action.range && (
+                <Text className="text-xs text-gray-500">
+                  Range: {action.range}
+                </Text>
+              )}
+              {action.targets != null && (
+                <Text className="text-xs text-gray-500">
+                  {action.targets} target{action.targets !== 1 ? 's' : ''}
+                </Text>
+              )}
+              {(action.damage || action.damageType) && (
+                <Text className="text-xs text-gray-500">
+                  {[action.damage, action.damageType].filter(Boolean).join(' ')}
+                </Text>
+              )}
+            </View>
+          )}
           <Text className="text-sm text-gray-600 mt-1">
             {action.description}
           </Text>
+          {action.additionalEffects && (
+            <Text className="text-xs text-gray-500 mt-1 italic">
+              {action.additionalEffects}
+            </Text>
+          )}
         </View>
       ))}
     </View>

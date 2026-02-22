@@ -39,7 +39,8 @@
     "levelRequirement": 3,
     "name": "Land's Aid",
     "description": "As a Magic action you can expend a use of your Wild Shape and choose a point within 60 feet of yourself. Vitality-giving flowers and life-draing thorns appear for a moment in a 10-foot-radius Sphere centered on that point. Each creature of your choice in the Sphere must make a Constitution saving throw against your spell save DC, taking 2d6 Necrotic damage on a failed save, or half as much damage on a sucessful one. One creature of your choice in that area regains 2d6 Hit Points. The damage and healing increase to 3d6 at 10th level, and 4d6 at 14th level.",
-    "actionType": "Action"
+    "actionType": "Action",
+    "range": "60 feet"
   },
   {
     "source": "class",
@@ -48,7 +49,8 @@
     "levelRequirement": 14,
     "name": "Nature's Sanctuary",
     "description": "As a Magic action you can expend a use of your Wild Shape and cause spectral trees and vines to appear in a 15-foot Cube on the grouns within 120 feet of yourself. They last for 1 minute, or until you have the Incapacitated condition or die. You and your allies have Half Cover while in that area, and your allies gain the current Resistance of your Nature's Ward while there.",
-    "actionType": "Action"
+    "actionType": "Action",
+    "range": "120 feet"
   },
   {
     "source": "class",
@@ -57,6 +59,92 @@
     "levelRequirement": 14,
     "name": "Move Nature's Sanctuary",
     "description": "As a Bonus Action, you can move your Nature's Sanctuary up to 60 feet to a ground surface within 120 feet of yourself.",
+    "actionType": "Bonus Action",
+    "range": "120 feet"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Moon",
+    "levelRequirement": 10,
+    "name": "Moonlight Step",
+    "description": "As a Bonus Action, you teleport up to 30 feet to an unoccupied space you can see, and you have Advantage on the next attack roll you make before the end of this turn. You can use this feature a number of times equal to your Wisdom modifier, and you regain all expended uses when you finish a Long Rest. You can also regain uses by expending a level 2+",
+    "actionType": "Bonus Action",
+    "range": "30 feet"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Moon",
+    "levelRequirement": 10,
+    "name": "Moonlight Step: Regain Uses",
+    "description": "You can regain uses of Moonlight Step by expending a level 2+ spell slot for each use you want to restore.",
+    "actionType": "Free Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Sea",
+    "levelRequirement": 3,
+    "name": "Wrath of the Sea",
+    "description": "As a Bonus Action, you can expend a use of your Wild Shape to manifest a 5-foot Emanation of ocean spray that surrounds you for 10 minutes. It ends early if you dismiss it (no action required), manifest it again, or have the Incapacitated condition. When you manifest the Emanation, and as a Bonus Action on your subsequent turns you can shoose another creature you can see in the Emanation. The target must succeed on a Constitution save against your spell save DC or take Cold damage, and if the creature is Large or smaller it is pushed up to 15 feet away from you. The damage is a number of d6s equal to your Wisdom modifier.",
+    "actionType": "Bonus Action",
+    "range": "5 feet",
+    "damage": "Wisdom modifier x d6",
+    "damageType": "Cold",
+    "additionalEffects": "Pushes a Large or smaller creature up to 15 feet away from you"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 3,
+    "name": "Starry Form: Archer",
+    "description": "As a Bonus Action, you can expend a use of your Wild Shape to become a constellation of an Archer. When you activate this form, and as a Bonus Action on your subsequent turns, you can make a ranged spell attack. This attack targets one creature within 60 feet of you, and deals Radiant damage equal to 1d8 plus your Wisdom modifier.",
+    "actionType": "Bonus Action",
+    "attackType": "Ranged",
+    "range": "60 feet",
+    "targets": 1,
+    "damage": "1d8 + Wisdom modifier",
+    "damageType": "Radiant"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 3,
+    "name": "Starry Form: Chalice",
+    "description": "As a Bonus Action, you can expend a use of your Wild Shape to become a constellation of a chalice. Whenever you cast a spell using a spell slot that restores Hit Points to a creature, you or another creature within 30 feet of you can regain Hit Points equal to 1d8 plus your Wisdom modifier.",
+    "actionType": "Bonus Action",
+    "range": "30 feet"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 3,
+    "name": "Starry Form: Dragon",
+    "description": "As a Bonus Action, you can expend a use of your Wild Shape to become a constellation of a dragon. When you make an Intelligence or a Wisdom check, or a Constitution saving throw to maintain Contentration, you can treat a roll of 9 or lower on the d20 as a 10.",
     "actionType": "Bonus Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 6,
+    "name": "Cosmic Omen: Weal (Even)",
+    "description": "Whenever a creature you can see within 30 feet of you is about to make a d20 Test, you can use your Reaction to roll 1d6 and add the number rolled to the total.",
+    "actionType": "Reaction",
+    "range": "30 feet"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 6,
+    "name": "Cosmic Omen: Woe (Odd)",
+    "description": "Whenever a creature you can see within 30 feet of you is about to make a d20 Test, you can use your Reaction to roll 1d6 and subtract the number rolled from the total.",
+    "actionType": "Reaction",
+    "range": "30 feet"
   }
 ]
