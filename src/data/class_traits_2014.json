@@ -1,0 +1,221 @@
+[
+  {
+    "source": "class",
+    "name": "Druidic",
+    "description": "You know the Druidic language and can speak with plants and animals. You can use this language to communicate with plants and animals as if they were a human.",
+    "className": "Druid",
+    "levelRequirement": 1
+  },
+  {
+    "source": "class",
+    "name": "Timeless Body",
+    "description": "For every 10 years that pass, your body only ages by 1 year.",
+    "className": "Druid",
+    "levelRequirement": 18
+  },
+  {
+    "source": "class",
+    "name": "Beast Spells",
+    "description": "You can cast spells while Wild Shaped. You can perform the somatic and verbal components of spells, but you aren't able to provide material components.",
+    "className": "Druid",
+    "levelRequirement": 18
+  },
+  {
+    "source": "class",
+    "name": "Archdruid",
+    "description": "You can use your Wild Shape an unlimited number of times.",
+    "className": "Druid",
+    "levelRequirement": 20
+  },
+  {
+    "source": "class",
+    "name": "Natural Recovery",
+    "description": "During a short rest, you choose expended spell slots to recover. The spell slots can have a combined level that less than or equal to half of your druid level rounded up, and none of the slots can be 6th level or higher. You can't use this feature again until you finish a long rest.",
+    "className": "Druid",
+    "levelRequirement": 2,
+    "subclass": "Circle of the Land"
+  },
+  {
+    "source": "class",
+    "name": "Land's Stride",
+    "description": "Moving through nonmagical difficult terrain costs you no extra movement. You can pass through nonmagical plants without being slowed by them, and without taking damage from them if they have thorns, spines, or a similar hazard. You have advantage on saving throws against plants that are magically created or manipulated to impede movement, such as those created by the Entangle spell.",
+    "className": "Druid",
+    "levelRequirement": 6,
+    "subclass": "Circle of the Land"
+  },
+  {
+    "source": "class",
+    "name": "Nature's Ward",
+    "description": "You can't be charmed or frightened by elementals or fey, and you are immune to poison and disease.",
+    "className": "Druid",
+    "levelRequirement": 10,
+    "subclass": "Circle of the Land"
+  },
+  {
+    "source": "class",
+    "name": "Nature's Sanctuary",
+    "description": "When a beast or plant creature attacks you, that creature must make a Wisdom saving throw against your druid spell save DC. On a failed save, taht creature must choose a different target, or the attack automatically misses. On a successful save, the creature is immune to this effect for 24 hours. The creature is aware of this effect before it makes its attack against you.",
+    "className": "Druid",
+    "levelRequirement": 14,
+    "subclass": "Circle of the Land"
+  },
+  {
+    "source": "class",
+    "name": "Primal Strike",
+    "description": "Your attacks in Beast form count as magical for the purpose of overcoming resistance and immunity to nonmagical attacks and damage.",
+    "className": "Druid",
+    "levelRequirement": 6,
+    "subclass": "Circle of the Moon"
+  },
+  {
+    "source": "class",
+    "name": "Hearth of Moonlight and Shadow",
+    "description": "At the beginning of a Short or Long Rest, you can create an invisible 30-foot radius sphere. While within the sphere, you and your allies gain a +5 bonus to Dsxterity (Stealth) and Wisdom (Perception) checks, and light produced within the sphere is not visible from outside it.",
+    "className": "Druid",
+    "levelRequirement": 6,
+    "subclass": "Circle of Dreams"
+  },
+  {
+    "source": "class",
+    "name": "Walker in Dreams",
+    "description": "When you finish a short rest, you can cast Dream, Scrying, or Teleportation Circle without expending a spell slot. Once you use this feature, you can't use it again until you finish a Long Rest. If you cast Teleportation Circle this way, it takes you to the last location where you finished a Long Rest on the current plane.",
+    "className": "Druid",
+    "levelRequirement": 6,
+    "subclass": "Circle of Dreams"
+  },
+  {
+    "source": "class",
+    "name": "Speech of the Woods",
+    "description": "You can speak, read, and write Sylvan. Beasts can understand your speech, and you can decipher their noises and motions. They cannot convey or understand sophisticated concepts, but they can communicate basic information.",
+    "className": "Druid",
+    "levelRequirement": 2,
+    "subclass": "Circle of the Shepherd",
+    "modifies": [
+      { "targetType": "druid", "field": "language", "value": "Sylvan" }
+    ]
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Shepherd",
+    "levelRequirement": 2,
+    "name": "Spirit Totem: Bear Spirit",
+    "description": "Each creature of your choice in the aura when the spirit appears gains temporary hit points equal to 5 + your druid level. You and your allies gain Advantage on Strength checks and Strength saving throws made while in the aura."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Shepherd",
+    "levelRequirement": 2,
+    "name": "Spirit Totem: Hawk Spirit",
+    "description": "You and your allies have advantage on Wisdom (Perception) checks while in the aura."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Shepherd",
+    "levelRequirement": 2,
+    "name": "Spirit Totem: Unicorn Spirit",
+    "description": "You and your allies gain advantage on all ability checks made to detect creatures in the spirit's aura. If you cast a spell using a spell slot that restores hit points to any creature inside or outside the aura, each creature of your choice in the aura also regains hit points equal to your druid level."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Shepherd",
+    "levelRequirement": 6,
+    "name": "Mighty Summoner",
+    "description": "Any beasts or fey summoned or created by a spell that you cast gains the following benefits. It gains an extra 2 Hit Points per Hit Die it has. The damage from its natural weapons is considered magical for the purpose of overcoming immunity or resistance to nonmagical attacks and damage."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Shepherd",
+    "levelRequirement": 10,
+    "name": "Guardian Spirit",
+    "description": "When a beast or fey that you summoned or created with a spell ends its turn in your Spirit Totem aura, that creature regains a number of hit points equal to half your druid level."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Spores",
+    "levelRequirement": 14,
+    "name": "Fungal Body",
+    "description": "You can't be Blinded, Deafened, Frightened, or Poisoned, and any critical hit against you counts as a normal hit instead, unless you are Incapacitated."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 2,
+    "name": "Star Map",
+    "description": "You know the Guidance cantrip. You have the Guiding Bolt spell prepared, it is a Druid spell for you, and it doesn't count against the number of spells you can prepare. You can cast Guiding Bolt without expending a spell slot a number of times equal to your Proficiency Bonus per Long Rest. You can replace the Star Map by performing a ritual during a Short or Long Rest."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 3,
+    "name": "Starry Form",
+    "description": "While in your Starry Form, you retain your game statistics, but you glow like a constellation. You shed Bright Light in a 10-foot radius, and Dim Light for an additional 10 feet. This form lasts for 10 minutes, and ends early if you dismiss it (no action required), have the Incapacitated condition, or use the feature again."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 6,
+    "name": "Cosmic Omen",
+    "description": "When you finish a Long Rest, you can consult your Star Map and roll a die. Until you finish your next Long Rest, you gain a special Reaction based on whether you rolled an even or odd number on the die. You can use this Reaction a number of times equal to your Profiency Bonus, and you regain all expended uses when you finish a Long Rest."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 10,
+    "name": "Twinkling Constellations",
+    "description": "The 1d8 of the Archer and Chalice becomes 2d8, and while the Dragon is active you have a Fly Speed of 20 feet and can hover. At the start of each of your turns while in Starry Form, you can change constellations.",
+    "modifies": [
+      {
+        "targetType": "action",
+        "targetName": "Starry Form: Archer",
+        "field": "damage",
+        "value": "2d8 + Wisdom modifier"
+      },
+      {
+        "targetType": "action",
+        "targetName": "Starry Form: Chalice",
+        "field": "damage",
+        "value": "2d8 + Wisdom modifier"
+      },
+      {
+        "targetType": "action",
+        "targetName": "Starry Form: Dragon",
+        "field": "additionalEffects",
+        "value": "Grants Fly Speed 20 and the ability to hover."
+      }
+    ]
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 14,
+    "name": "Full of Stars",
+    "description": "While in your Starry Form, you gain Resistance to Bludgeoning, Piercing, and Slashing damage."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Wildfire",
+    "levelRequirement": 6,
+    "name": "Enhanced Bond",
+    "description": "When your Wildfire Spirit is summoned and you cast a spell that deals fire damage or restores hit points, you can add a d8 to the damage or healing. When you cast a spell with a range other than Self, you can have the spell originate from your Wildfire Spirit."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Wildfire",
+    "levelRequirement": 10,
+    "name": "Cauterizing Flame",
+    "description": "When a Small or larger creature dies within 30 feet of you, a spectral flame appears in the dead creature's space and flickers there for one minute. When a creature enters that space, you can use your Reaction to consume the flame and produce an effect described by Cauterizing Flame: Consume Flame. You can use this reaction a number of times equal to your Proficiency Bonus per Long Rest."
+  }
+]

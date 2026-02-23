@@ -1,0 +1,238 @@
+[
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Moon",
+    "levelRequirement": 2,
+    "name": "Combat Wild Shape",
+    "description": "You can Wild Shape as a Bonus Action.",
+    "actionType": "Bonus Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Moon",
+    "levelRequirement": 2,
+    "name": "Combat Wild Shape: Heal",
+    "description": "While in Wild Shape you can expend one spell slot to regain 1d8 hip points per level of the spell slot expended.",
+    "actionType": "Bonus Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Moon",
+    "levelRequirement": 10,
+    "name": "Elemental Wild Shape",
+    "description": "You can expend two uses of Wild Shape at the same time to transform into an air, earth, fire, or water elemental.",
+    "actionType": "Bonus Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Moon",
+    "levelRequirement": 14,
+    "name": "Thousand Forms",
+    "description": "You can cast the Alter Self spell at will.",
+    "actionType": "Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Dreams",
+    "levelRequirement": 2,
+    "name": "Balm of the Summer Court",
+    "description": "You have a number of d6s equal to your druid level. As a bonus action, you can choose one creature you can see within 120 feet of you and spend a number of those d6s less than or equal to half your druid level. The target regains that many Hit Points, and also gains 1 temporary hit point per die spent. You regain all expended dice when you finish a long rest.",
+    "actionType": "Bonus Action",
+    "range": "120 feet"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Dreams",
+    "levelRequirement": 10,
+    "name": "Hidden Paths",
+    "description": "As a bonus action you can teleport yourself up to 60 feet to an unoccupied space you can see. You can use this feature a number of times equal to your Wisdom modifier and regain all expended uses when you finish a Long Rest.",
+    "actionType": "Bonus Action",
+    "range": "60 feet"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Dreams",
+    "levelRequirement": 10,
+    "name": "Hidden Paths: Ally",
+    "description": "As an action you can teleport a willing creature you touch up to 30 feet to an unoccupied space you can see. You can use this feature a number of times equal to your Wisdom modifier and regain all expended uses when you finish a Long Rest.",
+    "actionType": "Action",
+    "range": "30 feet"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Shepherd",
+    "levelRequirement": 2,
+    "name": "Spirit Totem",
+    "description": "As a Bonus Action, you summon a spirit to a point you can see within 60 feet of you. The spirit creates an aura in a 30-foot radius around that point. The spirit persists for 1 minute or until you are Incapacitated. When you use this feature, choose a spirit from: Bear, Hawk, Unicorn. Each grants different benefits. Once you use this feature, you cannot use it again until you finish a Short or Long Rest.",
+    "actionType": "Bonus Action",
+    "range": "60 feet"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Shepherd",
+    "levelRequirement": 2,
+    "name": "Spirit Totem: Move",
+    "description": "As a Bonus Action, you can move your Spirit Toem up to 60 feet to a point you can see.",
+    "actionType": "Bonus Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Shepherd",
+    "levelRequirement": 2,
+    "name": "Spirit Totem: Hawk Spirit",
+    "description": "When a creature makes an attack roll against a target in the spirit's aura, you can use your Reaction to grant advantage to that attack roll. In addition, you and your allies have advantage on Wisdom (Perception) checks while in the aura.",
+    "actionType": "Reaction",
+    "range": "60 feet"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Shepherd",
+    "levelRequirement": 14,
+    "name": "Faithful Summons",
+    "description": "If you are reduced to 0 hit points or incapacitated against your will, you immediately gain the benefits of Conjure Animals as if you had cast it at 9th level. It summons four beasts of your choice that are CR 2 or lower that appear within 20 feet of you. If they receive no commands from you, they protect you from harm and attack your foes. The spell lasts for 1 hour, requiring no concentation, or until you dismiss it (no action required). Once you use this feature, you can't use it again until you finish a Long Rest.",
+    "actionType": "Free Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Spores",
+    "levelRequirement": 2,
+    "name": "Halo of Spores",
+    "description": "When a creature you can see moves into a space within 10 feet of you, or starts its turn there, you can use your Reaction to deal 1d4 Necrotic damage unless is succeeds on a Constitution saving throw against your spell save DC. The damage increases to 1d6 at 6th level, ad8 and 10th level and 1d10 at 14th level.",
+    "actionType": "Reaction",
+    "damage": "1d4",
+    "damageType": "Necrotic"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Spores",
+    "levelRequirement": 2,
+    "name": "Symbiotic Entity",
+    "description": "As an Action you can expend a use of Wild Shape. You gain 4 temporary hit points for each Druid level. When you deal your Halo of Spores damage, roll the damage a second time and add it to the total. Your melee weapon attacks deal an extra 1d6 necrotic damage. These benefits last for 10 minutes, until you lose all of these Temporary Hit Points, or until you use Wild Shape again.",
+    "actionType": "Action",
+    "additionalEffects": "4x Druid level Temp HP. 2x Halo of Spores damage. +1d6 necrotic damage to melee attacks."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Spores",
+    "levelRequirement": 6,
+    "name": "Fungal Infestation",
+    "description": "If a Small or Medium beast or humanoid dies within 10 feet of you, you can use your reaction to animate it, causing it to stand up as a Zombie with 1 hit point. Its turn comes immediately after yours, and the only Action it can take is a single Attack action. You can use this feature a number of times equal to your Wisdom modifier per Long Rest.",
+    "actionType": "Reaction"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Spores",
+    "levelRequirement": 10,
+    "name": "Spreading Spores",
+    "description": "As a Bonus Action while your Symbiotic Entity feature is active, you can hurl spores up to 30 feet away, where they swirl in a 10-foot Cube for 1 minute. They disappear early if you use this feature again, if you dismiss them as a Bonus Action, or if your Symbiotic Entity feature ends. While the cube of spores is active, you can't use your Halo of Spores Reaction. Whenever a creature moves into the cube or starts its turn there it must pass a Constitution saving throw or takes your Halo of Spores damage. A creature can only take this damage once per turn.",
+    "actionType": "Bonus Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 3,
+    "name": "Starry Form: Archer",
+    "description": "As a Bonus Action, you can expend a use of your Wild Shape to become a constellation of an Archer. When you activate this form, and as a Bonus Action on your subsequent turns, you can make a ranged spell attack. This attack targets one creature within 60 feet of you, and deals Radiant damage equal to 1d8 plus your Wisdom modifier.",
+    "actionType": "Bonus Action",
+    "attackType": "Ranged",
+    "range": "60 feet",
+    "targets": 1,
+    "damage": "1d8 + Wisdom modifier",
+    "damageType": "Radiant"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 3,
+    "name": "Starry Form: Chalice",
+    "description": "As a Bonus Action, you can expend a use of your Wild Shape to become a constellation of a chalice. Whenever you cast a spell using a spell slot that restores Hit Points to a creature, you or another creature within 30 feet of you can regain Hit Points equal to 1d8 plus your Wisdom modifier.",
+    "actionType": "Bonus Action",
+    "range": "30 feet",
+    "damage": "1d8 + Wisdom modifier",
+    "damageType": "Healing"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 3,
+    "name": "Starry Form: Dragon",
+    "description": "As a Bonus Action, you can expend a use of your Wild Shape to become a constellation of a dragon. When you make an Intelligence or a Wisdom check, or a Constitution saving throw to maintain Contentration, you can treat a roll of 9 or lower on the d20 as a 10.",
+    "actionType": "Bonus Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 6,
+    "name": "Cosmic Omen: Weal (Even)",
+    "description": "Whenever a creature you can see within 30 feet of you is about to make a d20 Test, you can use your Reaction to roll 1d6 and add the number rolled to the total.",
+    "actionType": "Reaction",
+    "range": "30 feet"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 6,
+    "name": "Cosmic Omen: Woe (Odd)",
+    "description": "Whenever a creature you can see within 30 feet of you is about to make a d20 Test, you can use your Reaction to roll 1d6 and subtract the number rolled from the total.",
+    "actionType": "Reaction",
+    "range": "30 feet"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Wildfire",
+    "levelRequirement": 2,
+    "name": "Summon Wildfire Spirit",
+    "description": "As an Action, you can expend a use of your Wild Shape to summon your wildfire spirit. It appears in an unoccupied space of your choice that you can see within 30 feet of you. Each creature within 10 feet of this space (other than you) must succeed on a Dexterity save against your Spell save DC or take 2d6 fire damage. It shares your initiative but acts immediately after your turn. It takes the Dodge action unless you use your bonus action to command it. It manifests for one hour, until it is reduced to 0 hit points, until you use this feature again, or until you die.",
+    "actionType": "Action",
+    "damage": "2d6",
+    "damageType": "Fire"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Wildfire",
+    "levelRequirement": 2,
+    "name": "Command Wildfire Spirit",
+    "description": "As a Bonus Action on your turn, you can command your Wildfire Spirit to take an Action on its turn. If you do not, it Dodges on its turn.",
+    "actionType": "Bonus Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Wildfire",
+    "levelRequirement": 10,
+    "name": "Cauterizing Flame: Consume Flame",
+    "description": "When a creature enters the space of a flame produced by Cauterizing Flame, you can use your Reaction to either heal it or deal fire damage to it. The healing or fire damage equals 2d10 + your Wisdom modifier.",
+    "actionType": "Reaction"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Wildfire",
+    "levelRequirement": 14,
+    "name": "Blazing Revival",
+    "description": "If your Wildfire Spirit is within 120 feet of you when you are reduced to 0 hit points, you can cause the spirit to drop to 0. You then regain half of your hit points and imemdiately rise to your feet. You can't use this feature again until you complete a Long Rest.",
+    "actionType": "Free Action"
+  }
+]
