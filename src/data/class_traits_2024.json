@@ -113,7 +113,16 @@
     "subclass": "Circle of the Sea",
     "levelRequirement": 6,
     "name": "Aquatic Affinity",
-    "description": "The Emanation created by your Wrath of the Sea increases to 10 feet. In addition, you gain a Swim Speed equal to your Speed."
+    "description": "The Emanation created by your Wrath of the Sea increases to 10 feet. In addition, you gain a Swim Speed equal to your Speed.",
+    "modifies": [
+      {
+        "targetType": "action",
+        "targetName": "Wrath of the Sea",
+        "field": "range",
+        "value": "10 feet"
+      },
+      { "targetType": "druid", "field": "swimSpeed", "value": "equal to Speed" }
+    ]
   },
   {
     "source": "class",
@@ -169,7 +178,27 @@
     "subclass": "Circle of the Stars",
     "levelRequirement": 10,
     "name": "Twinkling Constellations",
-    "description": "The 1d8 of the Archer and Chalice becomes 2d8, and while the Dragon is active you have a Fly Speed of 20 feet and can hover. At the start of each of your turns while in Starry Form, you can change constellations."
+    "description": "The 1d8 of the Archer and Chalice becomes 2d8, and while the Dragon is active you have a Fly Speed of 20 feet and can hover. At the start of each of your turns while in Starry Form, you can change constellations.",
+    "modifies": [
+      {
+        "targetType": "action",
+        "targetName": "Starry Form: Archer",
+        "field": "damage",
+        "value": "2d8 + Wisdom modifier"
+      },
+      {
+        "targetType": "action",
+        "targetName": "Starry Form: Chalice",
+        "field": "damage",
+        "value": "2d8 + Wisdom modifier"
+      },
+      {
+        "targetType": "action",
+        "targetName": "Starry Form: Dragon",
+        "field": "additionalEffects",
+        "value": "Grants Fly Speed 20 and the ability to hover."
+      }
+    ]
   },
   {
     "source": "class",

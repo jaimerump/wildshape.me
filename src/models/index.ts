@@ -119,6 +119,13 @@ export interface SpeciesTrait {
   description: string;
 }
 
+export interface TraitModification {
+  targetType: 'druid' | 'action' | 'trait';
+  targetName?: string;
+  field: string;
+  value: string | number | boolean;
+}
+
 export interface ClassTrait {
   source: 'class';
   name: string;
@@ -126,6 +133,7 @@ export interface ClassTrait {
   className: string;
   levelRequirement: number;
   subclass?: string;
+  modifies?: TraitModification[];
 }
 
 export interface FeatTrait {

@@ -89,7 +89,10 @@
     "description": "You can speak, read, and write Sylvan. Beasts can understand your speech, and you can decipher their noises and motions. They cannot convey or understand sophisticated concepts, but they can communicate basic information.",
     "className": "Druid",
     "levelRequirement": 2,
-    "subclass": "Circle of the Shepherd"
+    "subclass": "Circle of the Shepherd",
+    "modifies": [
+      { "targetType": "druid", "field": "language", "value": "Sylvan" }
+    ]
   },
   {
     "source": "class",
@@ -169,7 +172,27 @@
     "subclass": "Circle of the Stars",
     "levelRequirement": 10,
     "name": "Twinkling Constellations",
-    "description": "The 1d8 of the Archer and Chalice becomes 2d8, and while the Dragon is active you have a Fly Speed of 20 feet and can hover. At the start of each of your turns while in Starry Form, you can change constellations."
+    "description": "The 1d8 of the Archer and Chalice becomes 2d8, and while the Dragon is active you have a Fly Speed of 20 feet and can hover. At the start of each of your turns while in Starry Form, you can change constellations.",
+    "modifies": [
+      {
+        "targetType": "action",
+        "targetName": "Starry Form: Archer",
+        "field": "damage",
+        "value": "2d8 + Wisdom modifier"
+      },
+      {
+        "targetType": "action",
+        "targetName": "Starry Form: Chalice",
+        "field": "damage",
+        "value": "2d8 + Wisdom modifier"
+      },
+      {
+        "targetType": "action",
+        "targetName": "Starry Form: Dragon",
+        "field": "additionalEffects",
+        "value": "Grants Fly Speed 20 and the ability to hover."
+      }
+    ]
   },
   {
     "source": "class",

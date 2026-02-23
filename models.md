@@ -90,6 +90,22 @@ Traits are a discriminated union on the `source` field. Each source variant carr
 - **className**: string — The class that grants this trait (e.g., "Druid")
 - **levelRequirement**: number — Minimum class level required to have this trait
 - **subclass**: string (optional) — If present, this trait only applies to the named subclass
+- **modifies**: TraitModification[] (optional) — Machine-readable list of changes this trait makes to actions, other traits, or the druid character
+
+#### TraitModification
+
+Describes a single change that a trait makes to another entity:
+
+- **targetType**: enum — What kind of thing is being modified: `"druid"`, `"action"`, or `"trait"`
+- **targetName**: string (optional) — The name of the specific action or trait being modified; required when `targetType` is `"action"` or `"trait"`
+- **field**: string — The property being changed (e.g., `"damage"`, `"range"`, `"swimSpeed"`, `"language"`)
+- **value**: string | number | boolean — The new value for the field
+
+**Examples**:
+
+- Twinkling Constellations upgrades Starry Form archer damage: `{ targetType: "action", targetName: "Starry Form: Archer", field: "damage", value: "2d8 + Wisdom modifier" }`
+- Aquatic Affinity grants swim speed: `{ targetType: "druid", field: "swimSpeed", value: "equal to Speed" }`
+- Speech of the Woods grants a language: `{ targetType: "druid", field: "language", value: "Sylvan" }`
 
 **Equipment trait additional fields**:
 

@@ -3,9 +3,18 @@ import { Text, View } from 'react-native';
 
 import traits2014 from '../data/class_traits_2014.json';
 import traits2024 from '../data/class_traits_2024.json';
-import { ClassTrait, DnDClass, Edition } from '../models';
+import { ClassTrait, DnDClass, Edition, TraitModification } from '../models';
 import { useDruidStore } from '../store/useDruidStore';
 import { getActiveClassTraits } from '../utils/calculations/classFeatures';
+
+const FIELD_LABELS: Record<string, string> = {
+  damage: 'Damage',
+  range: 'Range',
+  additionalEffects: 'Additional Effects',
+  swimSpeed: 'Swim Speed',
+  flySpeed: 'Fly Speed',
+  language: 'Language',
+};
 
 const CLASS_DEFS: Record<Edition, DnDClass> = {
   '2014': {
@@ -66,6 +75,17 @@ export function PassiveTraitsSection() {
           <Text className="text-sm text-gray-600 mt-1">
             {trait.description}
           </Text>
+          {trait.modifies && trait.modifies.length > 0 && (
+            <View className="mt-1">
+              <Text className="text-xs text-gray-400 italic">Modifies:</Text>
+              {trait.modifies.map((mod: TraitModification, i: number) => (
+                <Text key={i} className="text-xs text-gray-500 italic">
+                  {mod.targetName ? `${mod.targetName} — ` : ''}
+                  {FIELD_LABELS[mod.field] ?? mod.field}: {String(mod.value)}
+                </Text>
+              ))}
+            </View>
+          )}
         </View>
       ))}
     </View>

@@ -116,7 +116,9 @@
     "name": "Starry Form: Chalice",
     "description": "As a Bonus Action, you can expend a use of your Wild Shape to become a constellation of a chalice. Whenever you cast a spell using a spell slot that restores Hit Points to a creature, you or another creature within 30 feet of you can regain Hit Points equal to 1d8 plus your Wisdom modifier.",
     "actionType": "Bonus Action",
-    "range": "30 feet"
+    "range": "30 feet",
+    "damage": "1d8 + Wisdom modifier",
+    "damageType": "Healing"
   },
   {
     "source": "class",
