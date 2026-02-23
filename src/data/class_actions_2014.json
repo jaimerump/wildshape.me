@@ -141,5 +141,58 @@
     "name": "Spreading Spores",
     "description": "As a Bonus Action while your Symbiotic Entity feature is active, you can hurl spores up to 30 feet away, where they swirl in a 10-foot Cube for 1 minute. They disappear early if you use this feature again, if you dismiss them as a Bonus Action, or if your Symbiotic Entity feature ends. While the cube of spores is active, you can't use your Halo of Spores Reaction. Whenever a creature moves into the cube or starts its turn there it must pass a Constitution saving throw or takes your Halo of Spores damage. A creature can only take this damage once per turn.",
     "actionType": "Bonus Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 3,
+    "name": "Starry Form: Archer",
+    "description": "As a Bonus Action, you can expend a use of your Wild Shape to become a constellation of an Archer. When you activate this form, and as a Bonus Action on your subsequent turns, you can make a ranged spell attack. This attack targets one creature within 60 feet of you, and deals Radiant damage equal to 1d8 plus your Wisdom modifier.",
+    "actionType": "Bonus Action",
+    "attackType": "Ranged",
+    "range": "60 feet",
+    "targets": 1,
+    "damage": "1d8 + Wisdom modifier",
+    "damageType": "Radiant"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 3,
+    "name": "Starry Form: Chalice",
+    "description": "As a Bonus Action, you can expend a use of your Wild Shape to become a constellation of a chalice. Whenever you cast a spell using a spell slot that restores Hit Points to a creature, you or another creature within 30 feet of you can regain Hit Points equal to 1d8 plus your Wisdom modifier.",
+    "actionType": "Bonus Action",
+    "range": "30 feet"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 3,
+    "name": "Starry Form: Dragon",
+    "description": "As a Bonus Action, you can expend a use of your Wild Shape to become a constellation of a dragon. When you make an Intelligence or a Wisdom check, or a Constitution saving throw to maintain Contentration, you can treat a roll of 9 or lower on the d20 as a 10.",
+    "actionType": "Bonus Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 6,
+    "name": "Cosmic Omen: Weal (Even)",
+    "description": "Whenever a creature you can see within 30 feet of you is about to make a d20 Test, you can use your Reaction to roll 1d6 and add the number rolled to the total.",
+    "actionType": "Reaction",
+    "range": "30 feet"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 6,
+    "name": "Cosmic Omen: Woe (Odd)",
+    "description": "Whenever a creature you can see within 30 feet of you is about to make a d20 Test, you can use your Reaction to roll 1d6 and subtract the number rolled from the total.",
+    "actionType": "Reaction",
+    "range": "30 feet"
   }
 ]

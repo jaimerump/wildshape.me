@@ -138,5 +138,45 @@
     "levelRequirement": 14,
     "name": "Fungal Body",
     "description": "You can't be Blinded, Deafened, Frightened, or Poisoned, and any critical hit against you counts as a normal hit instead, unless you are Incapacitated."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 2,
+    "name": "Star Map",
+    "description": "You know the Guidance cantrip. You have the Guiding Bolt spell prepared, it is a Druid spell for you, and it doesn't count against the number of spells you can prepare. You can cast Guiding Bolt without expending a spell slot a number of times equal to your Proficiency Bonus per Long Rest. You can replace the Star Map by performing a ritual during a Short or Long Rest."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 3,
+    "name": "Starry Form",
+    "description": "While in your Starry Form, you retain your game statistics, but you glow like a constellation. You shed Bright Light in a 10-foot radius, and Dim Light for an additional 10 feet. This form lasts for 10 minutes, and ends early if you dismiss it (no action required), have the Incapacitated condition, or use the feature again."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 6,
+    "name": "Cosmic Omen",
+    "description": "When you finish a Long Rest, you can consult your Star Map and roll a die. Until you finish your next Long Rest, you gain a special Reaction based on whether you rolled an even or odd number on the die. You can use this Reaction a number of times equal to your Profiency Bonus, and you regain all expended uses when you finish a Long Rest."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 10,
+    "name": "Twinkling Constellations",
+    "description": "The 1d8 of the Archer and Chalice becomes 2d8, and while the Dragon is active you have a Fly Speed of 20 feet and can hover. At the start of each of your turns while in Starry Form, you can change constellations."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of the Stars",
+    "levelRequirement": 14,
+    "name": "Full of Stars",
+    "description": "While in your Starry Form, you gain Resistance to Bludgeoning, Piercing, and Slashing damage."
   }
 ]

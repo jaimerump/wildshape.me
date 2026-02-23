@@ -153,7 +153,7 @@
     "subclass": "Circle of the Stars",
     "levelRequirement": 3,
     "name": "Starry Form",
-    "description": "While in your Starry Form, you regtain your game statistics, but you glow like a constellation. You shed Bright Light in a 10-foot radius, and Dim Light for an additional 10 feet. This form lasts for 10 minutes, and ends early if you dismiss it (no action required), have the Incapacitated condition, or use the feature again."
+    "description": "While in your Starry Form, you retain your game statistics, but you glow like a constellation. You shed Bright Light in a 10-foot radius, and Dim Light for an additional 10 feet. This form lasts for 10 minutes, and ends early if you dismiss it (no action required), have the Incapacitated condition, or use the feature again."
   },
   {
     "source": "class",
