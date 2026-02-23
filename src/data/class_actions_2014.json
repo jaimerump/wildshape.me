@@ -194,5 +194,43 @@
     "description": "Whenever a creature you can see within 30 feet of you is about to make a d20 Test, you can use your Reaction to roll 1d6 and subtract the number rolled from the total.",
     "actionType": "Reaction",
     "range": "30 feet"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Wildfire",
+    "levelRequirement": 2,
+    "name": "Summon Wildfire Spirit",
+    "description": "As an Action, you can expend a use of your Wild Shape to summon your wildfire spirit. It appears in an unoccupied space of your choice that you can see within 30 feet of you. Each creature within 10 feet of this space (other than you) must succeed on a Dexterity save against your Spell save DC or take 2d6 fire damage. It shares your initiative but acts immediately after your turn. It takes the Dodge action unless you use your bonus action to command it. It manifests for one hour, until it is reduced to 0 hit points, until you use this feature again, or until you die.",
+    "actionType": "Action",
+    "damage": "2d6",
+    "damageType": "Fire"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Wildfire",
+    "levelRequirement": 2,
+    "name": "Command Wildfire Spirit",
+    "description": "As a Bonus Action on your turn, you can command your Wildfire Spirit to take an Action on its turn. If you do not, it Dodges on its turn.",
+    "actionType": "Bonus Action"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Wildfire",
+    "levelRequirement": 10,
+    "name": "Cauterizing Flame: Consume Flame",
+    "description": "When a creature enters the space of a flame produced by Cauterizing Flame, you can use your Reaction to either heal it or deal fire damage to it. The healing or fire damage equals 2d10 + your Wisdom modifier.",
+    "actionType": "Reaction"
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Wildfire",
+    "levelRequirement": 14,
+    "name": "Blazing Revival",
+    "description": "If your Wildfire Spirit is within 120 feet of you when you are reduced to 0 hit points, you can cause the spirit to drop to 0. You then regain half of your hit points and imemdiately rise to your feet. You can't use this feature again until you complete a Long Rest.",
+    "actionType": "Free Action"
   }
 ]

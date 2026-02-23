@@ -178,5 +178,21 @@
     "levelRequirement": 14,
     "name": "Full of Stars",
     "description": "While in your Starry Form, you gain Resistance to Bludgeoning, Piercing, and Slashing damage."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Wildfire",
+    "levelRequirement": 6,
+    "name": "Enhanced Bond",
+    "description": "When your Wildfire Spirit is summoned and you cast a spell that deals fire damage or restores hit points, you can add a d8 to the damage or healing. When you cast a spell with a range other than Self, you can have the spell originate from your Wildfire Spirit."
+  },
+  {
+    "source": "class",
+    "className": "Druid",
+    "subclass": "Circle of Wildfire",
+    "levelRequirement": 10,
+    "name": "Cauterizing Flame",
+    "description": "When a Small or larger creature dies within 30 feet of you, a spectral flame appears in the dead creature's space and flickers there for one minute. When a creature enters that space, you can use your Reaction to consume the flame and produce an effect described by Cauterizing Flame: Consume Flame. You can use this reaction a number of times equal to your Proficiency Bonus per Long Rest."
   }
 ]
