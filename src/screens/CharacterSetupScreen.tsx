@@ -5,6 +5,7 @@ import { AbilityScoreInput } from '../components/AbilityScoreInput';
 import { ClassActionsSection } from '../components/ClassActionsSection';
 import { PassiveTraitsSection } from '../components/PassiveTraitsSection';
 import { SavingThrowsSection } from '../components/SavingThrowsSection';
+import { SkillsSection } from '../components/SkillsSection';
 import { DruidCircleSelect } from '../components/DruidCircleSelect';
 import { EditionSelector } from '../components/EditionSelector';
 import { LevelInput } from '../components/LevelInput';
@@ -58,6 +59,10 @@ export function CharacterSetupScreen() {
 
       <View className="bg-white rounded-xl p-4 mt-4 shadow-sm">
         <SavingThrowsSection />
+      </View>
+
+      <View className="bg-white rounded-xl p-4 mt-4 shadow-sm">
+        <SkillsSection />
       </View>
 
       <View className="bg-white rounded-xl p-4 mt-4 shadow-sm">

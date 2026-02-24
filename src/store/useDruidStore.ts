@@ -2,7 +2,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
-import { AbilityName, DruidCircle, Edition } from '../models';
+import {
+  AbilityName,
+  DruidCircle,
+  Edition,
+  ProficiencyLevel,
+  SkillProficiency,
+} from '../models';
 
 interface DruidState {
   edition: Edition;
@@ -16,12 +22,16 @@ interface DruidState {
   charisma: number;
   savingThrowProficiencies: AbilityName[];
   savingThrowOverrides: Partial<Record<AbilityName, number>>;
+  skillProficiencies: SkillProficiency[];
+  skillOverrides: Partial<Record<string, number>>;
   setEdition: (edition: Edition) => void;
   setDruidLevel: (level: number) => void;
   setDruidCircle: (circle: DruidCircle) => void;
   setAbilityScore: (ability: AbilityName, score: number) => void;
   toggleSavingThrowProficiency: (ability: AbilityName) => void;
   setSavingThrowOverride: (ability: AbilityName, value: number | null) => void;
+  setSkillProficiency: (skill: string, level: ProficiencyLevel | null) => void;
+  setSkillOverride: (skill: string, value: number | null) => void;
 }
 
 export const useDruidStore = create<DruidState>()(
@@ -38,6 +48,8 @@ export const useDruidStore = create<DruidState>()(
       charisma: 10,
       savingThrowProficiencies: ['intelligence', 'wisdom'],
       savingThrowOverrides: {},
+      skillProficiencies: [],
+      skillOverrides: {},
       setEdition: (edition) => set({ edition, druidCircle: null }),
       setDruidLevel: (level) =>
         set({ druidLevel: Math.min(20, Math.max(2, level)) }),
@@ -61,6 +73,42 @@ export const useDruidStore = create<DruidState>()(
             overrides[ability] = value;
           }
           return { savingThrowOverrides: overrides };
+        }),
+      setSkillProficiency: (skill, level) =>
+        set((state) => {
+          if (level === null) {
+            return {
+              skillProficiencies: state.skillProficiencies.filter(
+                (p) => p.skill !== skill
+              ),
+            };
+          }
+          const existing = state.skillProficiencies.find(
+            (p) => p.skill === skill
+          );
+          if (existing) {
+            return {
+              skillProficiencies: state.skillProficiencies.map((p) =>
+                p.skill === skill ? { ...p, proficiencyLevel: level } : p
+              ),
+            };
+          }
+          return {
+            skillProficiencies: [
+              ...state.skillProficiencies,
+              { skill, proficiencyLevel: level },
+            ],
+          };
+        }),
+      setSkillOverride: (skill, value) =>
+        set((state) => {
+          const overrides = { ...state.skillOverrides };
+          if (value === null) {
+            delete overrides[skill];
+          } else {
+            overrides[skill] = value;
+          }
+          return { skillOverrides: overrides };
         }),
     }),
     {

@@ -12,7 +12,7 @@ import type {
 /**
  * Skill-to-Ability mapping for D&D 5e (2024 edition)
  */
-const SKILL_ABILITY_MAP: Record<string, AbilityName> = {
+export const SKILL_ABILITY_MAP: Record<string, AbilityName> = {
   Acrobatics: 'dexterity',
   'Animal Handling': 'wisdom',
   Arcana: 'intelligence',
