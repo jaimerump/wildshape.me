@@ -14,10 +14,14 @@ interface DruidState {
   intelligence: number;
   wisdom: number;
   charisma: number;
+  savingThrowProficiencies: AbilityName[];
+  savingThrowOverrides: Partial<Record<AbilityName, number>>;
   setEdition: (edition: Edition) => void;
   setDruidLevel: (level: number) => void;
   setDruidCircle: (circle: DruidCircle) => void;
   setAbilityScore: (ability: AbilityName, score: number) => void;
+  toggleSavingThrowProficiency: (ability: AbilityName) => void;
+  setSavingThrowOverride: (ability: AbilityName, value: number | null) => void;
 }
 
 export const useDruidStore = create<DruidState>()(
@@ -32,12 +36,32 @@ export const useDruidStore = create<DruidState>()(
       intelligence: 10,
       wisdom: 10,
       charisma: 10,
+      savingThrowProficiencies: ['intelligence', 'wisdom'],
+      savingThrowOverrides: {},
       setEdition: (edition) => set({ edition, druidCircle: null }),
       setDruidLevel: (level) =>
         set({ druidLevel: Math.min(20, Math.max(2, level)) }),
       setDruidCircle: (circle) => set({ druidCircle: circle }),
       setAbilityScore: (ability, score) =>
         set({ [ability]: Math.min(30, Math.max(1, score)) }),
+      toggleSavingThrowProficiency: (ability) =>
+        set((state) => {
+          const current = state.savingThrowProficiencies;
+          const next = current.includes(ability)
+            ? current.filter((a) => a !== ability)
+            : [...current, ability];
+          return { savingThrowProficiencies: next };
+        }),
+      setSavingThrowOverride: (ability, value) =>
+        set((state) => {
+          const overrides = { ...state.savingThrowOverrides };
+          if (value === null) {
+            delete overrides[ability];
+          } else {
+            overrides[ability] = value;
+          }
+          return { savingThrowOverrides: overrides };
+        }),
     }),
     {
       name: 'druid-storage',
