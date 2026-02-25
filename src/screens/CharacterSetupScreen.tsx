@@ -26,10 +26,6 @@ export function CharacterSetupScreen() {
       className="flex-1 bg-gray-50"
       contentContainerClassName="px-4 py-6"
     >
-      <Text className="text-3xl font-bold text-green-800 text-center mb-8">
-        Wildshape.me
-      </Text>
-
       <View className="bg-white rounded-xl p-4 mb-4 shadow-sm">
         <Text className="text-lg font-semibold mb-2 text-gray-800">
           Edition
