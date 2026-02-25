@@ -116,16 +116,8 @@ src/store/
 
 ```
 src/data/
-├── beasts/
-│   ├── 2014/             # Beasts from 2014 edition
-│   │   ├── cr0.json
-│   │   ├── cr1.json
-│   │   └── ...
-│   └── 2024/             # Beasts from 2024 edition
-│       ├── cr0.json
-│       ├── cr1.json
-│       └── ...
-└── index.ts              # Data access functions
+├── beasts_2014.json
+└── beasts_2024.json
 ```
 
 ## Styling with NativeWind
