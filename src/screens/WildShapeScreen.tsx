@@ -2,8 +2,16 @@ import React, { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import { BeastSelect } from '../components/BeastSelect';
+import { ClassActionsSection } from '../components/ClassActionsSection';
+import { PassiveTraitsSection } from '../components/PassiveTraitsSection';
 import beasts2014 from '../data/beasts_2014.json';
-import type { AbilityName, Beast, Druid, WildshapedDruid } from '../models';
+import type {
+  AbilityName,
+  Beast,
+  Druid,
+  SpeciesAction,
+  WildshapedDruid,
+} from '../models';
 import { useDruidStore } from '../store/useDruidStore';
 import { getAbilityModifier } from '../utils/calculations/abilityScores';
 import { getProficiencyBonusFromCR } from '../utils/calculations/proficiencyBonus';
@@ -321,6 +329,16 @@ export function WildShapeScreen() {
               )}
             </Text>
           </View>
+
+          {/* Horizontal rule above passive traits */}
+          <View className="border-t border-gray-200 my-3" />
+
+          <PassiveTraitsSection />
+
+          <ClassActionsSection
+            beastActions={wildshaped.sourceBeast.actions as SpeciesAction[]}
+            beastName={wildshaped.sourceBeast.name}
+          />
         </View>
       )}
     </ScrollView>

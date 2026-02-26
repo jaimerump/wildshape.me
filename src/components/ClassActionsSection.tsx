@@ -3,9 +3,30 @@ import { Text, View } from 'react-native';
 
 import actions2014 from '../data/class_actions_2014.json';
 import actions2024 from '../data/class_actions_2024.json';
-import { ClassAction, DnDClass, Edition } from '../models';
+import { ClassAction, DnDClass, Edition, SpeciesAction } from '../models';
 import { useDruidStore } from '../store/useDruidStore';
 import { getActiveClassActions } from '../utils/calculations/classFeatures';
+
+interface DisplayAction {
+  name: string;
+  actionType: string;
+  levelRequirement: number;
+  sourceLabel: string;
+  attackType?: string;
+  toHitBonus?: number;
+  reach?: number;
+  range?: string;
+  targets?: number;
+  damage?: string;
+  damageType?: string;
+  description: string;
+  additionalEffects?: string;
+}
+
+interface Props {
+  beastActions?: SpeciesAction[];
+  beastName?: string;
+}
 
 const CLASS_DEFS: Record<Edition, DnDClass> = {
   '2014': {
@@ -24,18 +45,51 @@ const CLASS_DEFS: Record<Edition, DnDClass> = {
   },
 };
 
-export function ClassActionsSection() {
+export function ClassActionsSection({ beastActions, beastName }: Props) {
   const edition = useDruidStore((s) => s.edition);
   const druidLevel = useDruidStore((s) => s.druidLevel);
   const druidCircle = useDruidStore((s) => s.druidCircle);
 
-  const activeActions = getActiveClassActions(
+  const activeClassActions = getActiveClassActions(
     CLASS_DEFS[edition],
     druidLevel,
     druidCircle
   );
 
-  const sortedActions = [...activeActions].sort((a, b) => {
+  const allActions: DisplayAction[] = [
+    ...activeClassActions.map((a) => ({
+      name: a.name,
+      actionType: a.actionType,
+      levelRequirement: a.levelRequirement,
+      sourceLabel: a.subclass ?? a.className,
+      attackType: a.attackType,
+      toHitBonus: a.toHitBonus,
+      reach: a.reach,
+      range: a.range,
+      targets: a.targets,
+      damage: a.damage,
+      damageType: a.damageType,
+      description: a.description,
+      additionalEffects: a.additionalEffects,
+    })),
+    ...(beastActions ?? []).map((a) => ({
+      name: a.name,
+      actionType: a.actionType,
+      levelRequirement: 1,
+      sourceLabel: beastName ?? 'Beast Form',
+      attackType: a.attackType,
+      toHitBonus: a.toHitBonus,
+      reach: a.reach,
+      range: a.range,
+      targets: a.targets,
+      damage: a.damage,
+      damageType: a.damageType,
+      description: a.description,
+      additionalEffects: a.additionalEffects,
+    })),
+  ];
+
+  const sortedActions = [...allActions].sort((a, b) => {
     if (a.levelRequirement !== b.levelRequirement) {
       return a.levelRequirement - b.levelRequirement;
     }
@@ -46,10 +100,11 @@ export function ClassActionsSection() {
 
   return (
     <View>
+      <View className="border-t border-gray-200 my-3" />
       <Text className="text-lg font-semibold mb-4 text-gray-800">Actions</Text>
       {sortedActions.map((action, index) => (
         <View
-          key={action.name}
+          key={`${action.sourceLabel}-${action.name}`}
           className={index > 0 ? 'border-t border-gray-100 mt-3 pt-3' : ''}
         >
           <View className="flex-row items-baseline gap-2 flex-wrap">
@@ -57,9 +112,7 @@ export function ClassActionsSection() {
             <Text className="text-xs text-green-700">
               Level {action.levelRequirement}
             </Text>
-            <Text className="text-xs text-gray-500">
-              {action.subclass ?? action.className}
-            </Text>
+            <Text className="text-xs text-gray-500">{action.sourceLabel}</Text>
             <View className="bg-blue-100 rounded px-1.5 py-0.5">
               <Text className="text-xs text-blue-700">{action.actionType}</Text>
             </View>
