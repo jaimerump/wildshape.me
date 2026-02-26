@@ -613,11 +613,10 @@ function mergeActions(
 ): Action[] {
   const merged: Action[] = [];
 
-  // Add all beast species actions
+  // Add all beast actions (beast actions are inherently species actions;
+  // the JSON data does not include a source field)
   for (const action of beastActions) {
-    if (action.source === 'species') {
-      merged.push(action);
-    }
+    merged.push(action);
   }
 
   // Add druid's class and feat actions

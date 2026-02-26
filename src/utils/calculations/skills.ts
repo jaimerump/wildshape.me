@@ -48,8 +48,14 @@ const ALL_SKILLS = Object.keys(SKILL_ABILITY_MAP);
  * getSkillAbility('Stealth')     // returns 'dexterity'
  * getSkillAbility('Perception')  // returns 'wisdom'
  */
+const SKILL_ABILITY_MAP_LOWER: Record<string, AbilityName> = Object.fromEntries(
+  Object.entries(SKILL_ABILITY_MAP).map(([k, v]) => [k.toLowerCase(), v])
+);
+
 export function getSkillAbility(skillName: string): AbilityName {
-  const ability = SKILL_ABILITY_MAP[skillName];
+  const ability =
+    SKILL_ABILITY_MAP[skillName] ??
+    SKILL_ABILITY_MAP_LOWER[skillName.toLowerCase()];
   if (!ability) {
     throw new Error(`Unknown skill: ${skillName}`);
   }
