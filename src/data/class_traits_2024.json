@@ -89,7 +89,7 @@
     "subclass": "Circle of the Moon",
     "levelRequirement": 6,
     "name": "Improved Circle Forms: Increased Toughness",
-    "description": "You can add your Wisdom modifier to your Constitution saving throws"
+    "description": "While in a Wild Shape form, you can add your Wisdom modifier to your Constitution saving throws"
   },
   {
     "source": "class",
