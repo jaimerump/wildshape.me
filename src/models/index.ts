@@ -128,7 +128,7 @@ export interface TraitModification {
   targetType: 'druid' | 'action' | 'trait' | 'savingThrow';
   targetName?: string;
   field: string;
-  operation?: 'replace' | 'add';
+  operation?: 'replace' | 'add' | 'addToArray';
   value: string | number | boolean | DynamicValue;
   onlyWhileWildshaped?: boolean;
 }
@@ -172,6 +172,7 @@ interface BaseAction {
   targets?: number;
   damage?: string;
   damageType?: string;
+  alternativeDamageTypes?: string[];
   additionalEffects?: string;
 }
 

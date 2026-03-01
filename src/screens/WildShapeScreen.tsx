@@ -373,7 +373,9 @@ export function WildShapeScreen() {
           <PassiveTraitsSection />
 
           <ClassActionsSection
-            beastActions={wildshaped.sourceBeast.actions as SpeciesAction[]}
+            beastActions={wildshaped.actions.filter(
+              (a): a is SpeciesAction => a.source === 'species'
+            )}
             beastName={wildshaped.sourceBeast.name}
           />
         </View>

@@ -19,6 +19,7 @@ interface DisplayAction {
   targets?: number;
   damage?: string;
   damageType?: string;
+  alternativeDamageTypes?: string[];
   description: string;
   additionalEffects?: string;
 }
@@ -84,6 +85,7 @@ export function ClassActionsSection({ beastActions, beastName }: Props) {
       targets: a.targets,
       damage: a.damage,
       damageType: a.damageType,
+      alternativeDamageTypes: a.alternativeDamageTypes,
       description: a.description,
       additionalEffects: a.additionalEffects,
     })),
@@ -154,6 +156,9 @@ export function ClassActionsSection({ beastActions, beastName }: Props) {
               {(action.damage || action.damageType) && (
                 <Text className="text-xs text-gray-500">
                   {[action.damage, action.damageType].filter(Boolean).join(' ')}
+                  {action.damageType && action.alternativeDamageTypes?.length
+                    ? ` or ${action.alternativeDamageTypes.join(' or ')}`
+                    : ''}
                 </Text>
               )}
             </View>
