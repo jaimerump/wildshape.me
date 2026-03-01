@@ -15,10 +15,12 @@ import type {
   ProficiencyLevel,
   Trait,
   Action,
+  SpeciesAction,
   Equipment,
   BodyType,
   Size,
   EquipmentType,
+  TraitModification,
 } from '../../models';
 import {
   getProficiencyBonusFromLevel,
@@ -613,10 +615,10 @@ function mergeActions(
 ): Action[] {
   const merged: Action[] = [];
 
-  // Add all beast actions (beast actions are inherently species actions;
-  // the JSON data does not include a source field)
+  // Add all beast actions tagged as species source
+  // (the JSON data does not include a source field, so we add it here)
   for (const action of beastActions) {
-    merged.push(action);
+    merged.push({ ...action, source: 'species' as const });
   }
 
   // Add druid's class and feat actions
@@ -647,6 +649,94 @@ function mergeActions(
   }
 
   return merged;
+}
+
+/**
+ * Resolves a DynamicValue or static value to a number.
+ */
+function resolveDynamicValue(
+  value: TraitModification['value'],
+  abilities: Record<AbilityName, number>
+): number {
+  if (
+    typeof value === 'object' &&
+    value !== null &&
+    value.type === 'abilityModifier'
+  ) {
+    return getAbilityModifier(abilities[value.ability]);
+  }
+  return typeof value === 'number' ? value : 0;
+}
+
+/**
+ * Applies saving throw modifications from wildshape-active class traits.
+ */
+function applyTraitModificationsToSavingThrows(
+  traits: Trait[],
+  savingThrowBonuses: Record<AbilityName, number>,
+  abilities: Record<AbilityName, number>
+): Record<AbilityName, number> {
+  const result = { ...savingThrowBonuses };
+
+  for (const trait of traits) {
+    if (trait.source !== 'class' || !trait.modifies) continue;
+
+    for (const mod of trait.modifies) {
+      if (mod.targetType !== 'savingThrow') continue;
+      if (!mod.targetName) continue;
+
+      const ability = mod.targetName as AbilityName;
+      const operation = mod.operation ?? 'replace';
+
+      if (operation === 'add') {
+        const addend = resolveDynamicValue(mod.value, abilities);
+        result[ability] = (result[ability] ?? 0) + addend;
+      }
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Applies action modifications from wildshape-active class traits.
+ * Handles targetType: 'action' modifications such as addToArray.
+ */
+function applyTraitModificationsToActions(
+  traits: Trait[],
+  actions: Action[]
+): Action[] {
+  // Collect all action-targeting modifications from class traits
+  const mods: TraitModification[] = [];
+  for (const trait of traits) {
+    if (trait.source !== 'class' || !trait.modifies) continue;
+    for (const mod of trait.modifies) {
+      if (mod.targetType === 'action') {
+        mods.push(mod);
+      }
+    }
+  }
+
+  if (mods.length === 0) return actions;
+
+  return actions.map((action) => {
+    let modified = action;
+
+    for (const mod of mods) {
+      // Filter by targetName (action source) if specified
+      if (mod.targetName && action.source !== mod.targetName) continue;
+
+      if (mod.operation === 'addToArray' && typeof mod.value === 'string') {
+        const field = mod.field as keyof SpeciesAction;
+        const existing = (modified[field] as string[] | undefined) ?? [];
+        if (!existing.includes(mod.value)) {
+          modified = { ...modified, [field]: [...existing, mod.value] };
+        }
+      }
+    }
+
+    return modified;
+  });
 }
 
 /**
@@ -795,7 +885,7 @@ export function calculateWildshapedDruid(
     druid.edition === '2024'
       ? mergeActions(druid.actions, beast.actions, druid.equipment, beast)
       : [
-          ...beast.actions,
+          ...beast.actions.map((a) => ({ ...a, source: 'species' as const })),
           ...druid.actions.filter((a) => {
             // 2014: Include all non-equipment actions
             if (a.source !== 'equipment') return true;
@@ -807,6 +897,16 @@ export function calculateWildshapedDruid(
             return equipment && canBeastUseEquipment(beast, equipment);
           }),
         ];
+
+  // Apply wildshape-active trait modifications to saving throws
+  const finalSavingThrowBonuses = applyTraitModificationsToSavingThrows(
+    traits,
+    savingThrowBonuses,
+    hybridAbilities
+  );
+
+  // Apply wildshape-active trait modifications to actions
+  const finalActions = applyTraitModificationsToActions(traits, actions);
 
   // Calculate passive perception from merged skill bonuses
   const passivePerception = 10 + skillBonuses['Perception'];
@@ -853,13 +953,13 @@ export function calculateWildshapedDruid(
 
     // Merged proficiencies and bonuses
     savingThrowProficiencies,
-    savingThrowBonuses,
+    savingThrowBonuses: finalSavingThrowBonuses,
     skillProficiencies,
     skillBonuses,
 
     // Merged traits and actions
     traits,
-    actions,
+    actions: finalActions,
 
     // Retained druid progression
     totalCharacterLevel: druid.totalCharacterLevel,

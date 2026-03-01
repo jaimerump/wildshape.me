@@ -2275,4 +2275,302 @@ describe('calculateWildshapedDruid', () => {
       });
     });
   });
+
+  describe('Increased Toughness trait modification', () => {
+    it('should add Wisdom modifier to Constitution saving throw for level 6+ 2024 Moon druid', () => {
+      // Druid: level 6, Circle of the Moon, Wisdom 16 (+3 mod)
+      // Beast: Con 12 (+1 mod), not proficient in Con saves
+      // Druid: not proficient in Con saves
+      // PB at level 6: +3
+      // Base merged Con save: max(druid Con save, beast Con save)
+      //   druid Con (hybrid uses beast's Con 12, not proficient): +1
+      //   beast Con (original Con 12, not proficient): +1
+      //   merged: +1
+      // After Increased Toughness: +1 + 3 (Wisdom mod) = +4
+      const increasedToughnessTrait = {
+        source: 'class' as const,
+        name: 'Improved Circle Forms: Increased Toughness',
+        description:
+          'While in a Wild Shape form, you can add your Wisdom modifier to your Constitution saving throws',
+        className: 'Druid',
+        subclass: 'Circle of the Moon',
+        levelRequirement: 6,
+        modifies: [
+          {
+            targetType: 'savingThrow' as const,
+            targetName: 'constitution',
+            field: 'bonus',
+            operation: 'add' as const,
+            value: {
+              type: 'abilityModifier' as const,
+              ability: 'wisdom' as const,
+            },
+            onlyWhileWildshaped: true,
+          },
+        ],
+      };
+
+      const druid = createMockDruid({
+        edition: '2024',
+        druidLevel: 6,
+        totalCharacterLevel: 6,
+        druidCircle: 'Circle of the Moon',
+        wisdom: 16, // +3 modifier
+        savingThrowProficiencies: ['intelligence', 'wisdom'], // not constitution
+        traits: [increasedToughnessTrait],
+      });
+
+      const beast = createFullMockBeast({
+        edition: '2024',
+        challengeRating: 2,
+        constitution: 12, // +1 modifier
+        savingThrowProficiencies: [], // not proficient in Con saves
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      // Base Con save (not proficient, Con 12 → +1), plus Wisdom mod (+3) = +4
+      expect(wildshaped.savingThrowBonuses['constitution']).toBe(4);
+    });
+
+    it('should not apply Increased Toughness modification when trait is absent', () => {
+      const druid = createMockDruid({
+        edition: '2024',
+        druidLevel: 6,
+        totalCharacterLevel: 6,
+        druidCircle: 'Circle of the Moon',
+        wisdom: 16, // +3 modifier
+        savingThrowProficiencies: ['intelligence', 'wisdom'],
+        traits: [], // no Increased Toughness
+      });
+
+      const beast = createFullMockBeast({
+        edition: '2024',
+        challengeRating: 2,
+        constitution: 12,
+        savingThrowProficiencies: [],
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      // Base Con save only: +1 (no Wisdom modifier added)
+      expect(wildshaped.savingThrowBonuses['constitution']).toBe(1);
+    });
+  });
+
+  describe('Lunar Radiance (applyTraitModificationsToActions)', () => {
+    const lunarRadianceTrait: Trait = {
+      source: 'class',
+      name: 'Improved Circle Forms: Lunar Radiance',
+      description:
+        'Each time you attack while in a Wild Shape form, you can choose to deal either the normal damage type or Radiant damage.',
+      className: 'Druid',
+      levelRequirement: 6,
+      subclass: 'Circle of the Moon',
+      modifies: [
+        {
+          targetType: 'action',
+          targetName: 'species',
+          field: 'alternativeDamageTypes',
+          operation: 'addToArray',
+          value: 'Radiant',
+          onlyWhileWildshaped: true,
+        },
+      ],
+    };
+
+    it('Moon Druid level 6+: species actions with damageType gain alternativeDamageTypes: [Radiant]', () => {
+      const druid = createMockDruid({
+        edition: '2024',
+        druidLevel: 6,
+        totalCharacterLevel: 6,
+        druidCircle: 'Circle of the Moon',
+        traits: [lunarRadianceTrait],
+      });
+      const beast = createFullMockBeast({
+        edition: '2024',
+        challengeRating: 2,
+        actions: [
+          {
+            name: 'Fist',
+            actionType: 'Action',
+            description: 'Melee attack',
+            source: 'species',
+            damage: '1d6+3',
+            damageType: 'Bludgeoning',
+          },
+        ],
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+      const fistAction = wildshaped.actions.find(
+        (a) => a.name === 'Fist' && a.source === 'species'
+      );
+
+      expect(fistAction).toBeDefined();
+      expect(fistAction!.alternativeDamageTypes).toEqual(['Radiant']);
+    });
+
+    it('Moon Druid level 6+: species actions without damageType still get alternativeDamageTypes', () => {
+      const druid = createMockDruid({
+        edition: '2024',
+        druidLevel: 6,
+        totalCharacterLevel: 6,
+        druidCircle: 'Circle of the Moon',
+        traits: [lunarRadianceTrait],
+      });
+      const beast = createFullMockBeast({
+        edition: '2024',
+        challengeRating: 2,
+        actions: [
+          {
+            name: 'Multiattack',
+            actionType: 'Action',
+            description: 'Makes two attacks',
+            source: 'species',
+          },
+        ],
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+      const multiattack = wildshaped.actions.find(
+        (a) => a.name === 'Multiattack' && a.source === 'species'
+      );
+
+      expect(multiattack).toBeDefined();
+      // addToArray still applies; display logic (damageType guard) suppresses the label
+      expect(multiattack!.alternativeDamageTypes).toEqual(['Radiant']);
+    });
+
+    it('Moon Druid level 5: no alternativeDamageTypes (trait not yet active)', () => {
+      const druid = createMockDruid({
+        edition: '2024',
+        druidLevel: 5,
+        totalCharacterLevel: 5,
+        druidCircle: 'Circle of the Moon',
+        traits: [], // level 5 — Lunar Radiance not active
+      });
+      const beast = createFullMockBeast({
+        edition: '2024',
+        challengeRating: 1,
+        actions: [
+          {
+            name: 'Bite',
+            actionType: 'Action',
+            description: 'Melee attack',
+            source: 'species',
+            damage: '1d6+2',
+            damageType: 'Piercing',
+          },
+        ],
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+      const biteAction = wildshaped.actions.find(
+        (a) => a.name === 'Bite' && a.source === 'species'
+      );
+
+      expect(biteAction).toBeDefined();
+      expect(biteAction!.alternativeDamageTypes).toBeUndefined();
+    });
+
+    it('Non-Moon circle druid: no alternativeDamageTypes', () => {
+      const druid = createMockDruid({
+        edition: '2024',
+        druidLevel: 6,
+        totalCharacterLevel: 6,
+        druidCircle: null,
+        traits: [], // No circle — no Lunar Radiance
+      });
+      const beast = createFullMockBeast({
+        edition: '2024',
+        challengeRating: 0.5,
+        actions: [
+          {
+            name: 'Claw',
+            actionType: 'Action',
+            description: 'Melee attack',
+            source: 'species',
+            damage: '1d4+2',
+            damageType: 'Slashing',
+          },
+        ],
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+      const clawAction = wildshaped.actions.find(
+        (a) => a.name === 'Claw' && a.source === 'species'
+      );
+
+      expect(clawAction).toBeDefined();
+      expect(clawAction!.alternativeDamageTypes).toBeUndefined();
+    });
+
+    it('Class actions are not modified by Lunar Radiance (targetName: species filter)', () => {
+      const druid = createMockDruid({
+        edition: '2024',
+        druidLevel: 6,
+        totalCharacterLevel: 6,
+        druidCircle: 'Circle of the Moon',
+        traits: [lunarRadianceTrait],
+        actions: [
+          {
+            name: 'Quarterstaff',
+            actionType: 'Action',
+            description: 'Melee weapon attack',
+            source: 'class',
+            className: 'Druid',
+            levelRequirement: 1,
+            damage: '1d6',
+            damageType: 'Bludgeoning',
+          },
+        ],
+      });
+      const beast = createFullMockBeast({
+        edition: '2024',
+        challengeRating: 2,
+        actions: [],
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+      const classAction = wildshaped.actions.find(
+        (a) => a.name === 'Quarterstaff' && a.source === 'class'
+      );
+
+      expect(classAction).toBeDefined();
+      expect(classAction!.alternativeDamageTypes).toBeUndefined();
+    });
+
+    it('Radiant is not duplicated if already present', () => {
+      const druid = createMockDruid({
+        edition: '2024',
+        druidLevel: 6,
+        totalCharacterLevel: 6,
+        druidCircle: 'Circle of the Moon',
+        traits: [lunarRadianceTrait, lunarRadianceTrait], // duplicate trait
+      });
+      const beast = createFullMockBeast({
+        edition: '2024',
+        challengeRating: 2,
+        actions: [
+          {
+            name: 'Slam',
+            actionType: 'Action',
+            description: 'Melee attack',
+            source: 'species',
+            damage: '2d6+4',
+            damageType: 'Bludgeoning',
+          },
+        ],
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+      const slamAction = wildshaped.actions.find(
+        (a) => a.name === 'Slam' && a.source === 'species'
+      );
+
+      expect(slamAction).toBeDefined();
+      expect(slamAction!.alternativeDamageTypes).toEqual(['Radiant']);
+    });
+  });
 });

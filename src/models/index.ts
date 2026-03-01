@@ -119,11 +119,18 @@ export interface SpeciesTrait {
   description: string;
 }
 
+export interface DynamicValue {
+  type: 'abilityModifier';
+  ability: AbilityName;
+}
+
 export interface TraitModification {
-  targetType: 'druid' | 'action' | 'trait';
+  targetType: 'druid' | 'action' | 'trait' | 'savingThrow';
   targetName?: string;
   field: string;
-  value: string | number | boolean;
+  operation?: 'replace' | 'add' | 'addToArray';
+  value: string | number | boolean | DynamicValue;
+  onlyWhileWildshaped?: boolean;
 }
 
 export interface ClassTrait {
@@ -165,6 +172,7 @@ interface BaseAction {
   targets?: number;
   damage?: string;
   damageType?: string;
+  alternativeDamageTypes?: string[];
   additionalEffects?: string;
 }
 

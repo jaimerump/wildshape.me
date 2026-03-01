@@ -81,7 +81,17 @@
     "subclass": "Circle of the Moon",
     "levelRequirement": 6,
     "name": "Improved Circle Forms: Lunar Radiance",
-    "description": "Each time you attack while in a Wild Shape form, you can choose to deal either the normal damage type or Radiant damage."
+    "description": "Each time you attack while in a Wild Shape form, you can choose to deal either the normal damage type or Radiant damage.",
+    "modifies": [
+      {
+        "targetType": "action",
+        "targetName": "species",
+        "field": "alternativeDamageTypes",
+        "operation": "addToArray",
+        "value": "Radiant",
+        "onlyWhileWildshaped": true
+      }
+    ]
   },
   {
     "source": "class",
@@ -89,7 +99,17 @@
     "subclass": "Circle of the Moon",
     "levelRequirement": 6,
     "name": "Improved Circle Forms: Increased Toughness",
-    "description": "While in a Wild Shape form, you can add your Wisdom modifier to your Constitution saving throws"
+    "description": "While in a Wild Shape form, you can add your Wisdom modifier to your Constitution saving throws",
+    "modifies": [
+      {
+        "targetType": "savingThrow",
+        "targetName": "constitution",
+        "field": "bonus",
+        "operation": "add",
+        "value": { "type": "abilityModifier", "ability": "wisdom" },
+        "onlyWhileWildshaped": true
+      }
+    ]
   },
   {
     "source": "class",

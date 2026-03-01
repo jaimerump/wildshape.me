@@ -14,7 +14,17 @@ const FIELD_LABELS: Record<string, string> = {
   swimSpeed: 'Swim Speed',
   flySpeed: 'Fly Speed',
   language: 'Language',
+  bonus: 'Bonus',
 };
+
+function formatModValue(value: TraitModification['value']): string {
+  if (typeof value === 'object' && value !== null) {
+    const dv = value;
+    const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+    return `${cap(dv.ability)} modifier`;
+  }
+  return String(value);
+}
 
 const CLASS_DEFS: Record<Edition, DnDClass> = {
   '2014': {
@@ -80,8 +90,15 @@ export function PassiveTraitsSection() {
               <Text className="text-xs text-gray-400 italic">Modifies:</Text>
               {trait.modifies.map((mod: TraitModification, i: number) => (
                 <Text key={i} className="text-xs text-gray-500 italic">
-                  {mod.targetName ? `${mod.targetName} — ` : ''}
-                  {FIELD_LABELS[mod.field] ?? mod.field}: {String(mod.value)}
+                  {mod.targetType === 'savingThrow'
+                    ? `${mod.targetName ?? ''} Saving Throw`
+                    : mod.targetName
+                      ? `${mod.targetName}`
+                      : ''}
+                  {' — '}
+                  {FIELD_LABELS[mod.field] ?? mod.field}:{' '}
+                  {formatModValue(mod.value)}
+                  {mod.onlyWhileWildshaped ? ' (while wildshaped)' : ''}
                 </Text>
               ))}
             </View>

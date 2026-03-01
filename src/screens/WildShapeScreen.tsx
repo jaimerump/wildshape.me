@@ -5,15 +5,21 @@ import { BeastSelect } from '../components/BeastSelect';
 import { ClassActionsSection } from '../components/ClassActionsSection';
 import { PassiveTraitsSection } from '../components/PassiveTraitsSection';
 import beasts2014 from '../data/beasts_2014.json';
+import traits2014 from '../data/class_traits_2014.json';
+import traits2024 from '../data/class_traits_2024.json';
 import type {
   AbilityName,
   Beast,
+  ClassTrait,
+  DnDClass,
   Druid,
+  Edition,
   SpeciesAction,
   WildshapedDruid,
 } from '../models';
 import { useDruidStore } from '../store/useDruidStore';
 import { getAbilityModifier } from '../utils/calculations/abilityScores';
+import { getActiveClassTraits } from '../utils/calculations/classFeatures';
 import { getProficiencyBonusFromCR } from '../utils/calculations/proficiencyBonus';
 import {
   calculateWildshapedDruid,
@@ -22,6 +28,23 @@ import {
   canWildShapeSwimming,
   getMaxWildShapeCR,
 } from '../utils/calculations/wildShape';
+
+const CLASS_DEFS: Record<Edition, DnDClass> = {
+  '2014': {
+    name: 'Druid',
+    edition: '2014',
+    subclassUnlockLevel: 2,
+    traits: traits2014 as ClassTrait[],
+    actions: [],
+  },
+  '2024': {
+    name: 'Druid',
+    edition: '2024',
+    subclassUnlockLevel: 3,
+    traits: traits2024 as ClassTrait[],
+    actions: [],
+  },
+};
 
 const ABILITY_NAMES: AbilityName[] = [
   'strength',
@@ -107,6 +130,12 @@ export function WildShapeScreen() {
 
   let wildshaped: WildshapedDruid | null = null;
   if (effectiveSelectedBeast) {
+    const activeTraits = getActiveClassTraits(
+      CLASS_DEFS[edition],
+      druidLevel,
+      druidCircle
+    );
+
     const druidObj: Druid = {
       name: 'Druid',
       edition,
@@ -126,7 +155,7 @@ export function WildShapeScreen() {
       languages: [],
       savingThrowProficiencies,
       skillProficiencies,
-      traits: [],
+      traits: activeTraits,
       actions: [],
       equipment: [],
       totalCharacterLevel: druidLevel,
@@ -270,18 +299,26 @@ export function WildShapeScreen() {
           {/* Horizontal rule below ability scores */}
           <View className="border-t border-gray-200 my-3" />
 
-          {/* Saving Throws */}
-          {wildshaped.savingThrowProficiencies.length > 0 && (
-            <Text className="text-sm text-gray-700 mb-1">
-              <Text className="font-semibold">Saving Throws: </Text>
-              {wildshaped.savingThrowProficiencies
-                .map(
-                  (ab) =>
-                    `${ABILITY_ABBREV[ab]} ${formatModifier(wildshaped.savingThrowBonuses[ab])}`
-                )
-                .join(', ')}
-            </Text>
-          )}
+          {/* Saving Throws — show proficient saves and any trait-boosted saves */}
+          {(() => {
+            const notableAbilities = ABILITY_NAMES.filter(
+              (ab) =>
+                wildshaped.savingThrowProficiencies.includes(ab) ||
+                wildshaped.savingThrowBonuses[ab] >
+                  getAbilityModifier(wildshaped[ab])
+            );
+            return notableAbilities.length > 0 ? (
+              <Text className="text-sm text-gray-700 mb-1">
+                <Text className="font-semibold">Saving Throws: </Text>
+                {notableAbilities
+                  .map(
+                    (ab) =>
+                      `${ABILITY_ABBREV[ab]} ${formatModifier(wildshaped.savingThrowBonuses[ab])}`
+                  )
+                  .join(', ')}
+              </Text>
+            ) : null;
+          })()}
 
           {/* Skills */}
           {wildshaped.skillProficiencies.length > 0 && (
@@ -336,7 +373,9 @@ export function WildShapeScreen() {
           <PassiveTraitsSection />
 
           <ClassActionsSection
-            beastActions={wildshaped.sourceBeast.actions as SpeciesAction[]}
+            beastActions={wildshaped.actions.filter(
+              (a): a is SpeciesAction => a.source === 'species'
+            )}
             beastName={wildshaped.sourceBeast.name}
           />
         </View>
