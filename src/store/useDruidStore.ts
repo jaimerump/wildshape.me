@@ -24,9 +24,11 @@ interface DruidState {
   savingThrowOverrides: Partial<Record<AbilityName, number>>;
   skillProficiencies: SkillProficiency[];
   skillOverrides: Partial<Record<string, number>>;
+  traitChoices: Record<string, string>;
   setEdition: (edition: Edition) => void;
   setDruidLevel: (level: number) => void;
   setDruidCircle: (circle: DruidCircle) => void;
+  setTraitChoice: (groupKey: string, choiceLabel: string) => void;
   setAbilityScore: (ability: AbilityName, score: number) => void;
   toggleSavingThrowProficiency: (ability: AbilityName) => void;
   setSavingThrowOverride: (ability: AbilityName, value: number | null) => void;
@@ -50,6 +52,7 @@ export const useDruidStore = create<DruidState>()(
       savingThrowOverrides: {},
       skillProficiencies: [],
       skillOverrides: {},
+      traitChoices: {},
       setEdition: (edition) => set({ edition, druidCircle: null }),
       setDruidLevel: (level) =>
         set({ druidLevel: Math.min(20, Math.max(2, level)) }),
@@ -110,6 +113,10 @@ export const useDruidStore = create<DruidState>()(
           }
           return { skillOverrides: overrides };
         }),
+      setTraitChoice: (groupKey, choiceLabel) =>
+        set((state) => ({
+          traitChoices: { ...state.traitChoices, [groupKey]: choiceLabel },
+        })),
     }),
     {
       name: 'druid-storage',
