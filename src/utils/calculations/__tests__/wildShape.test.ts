@@ -2275,4 +2275,86 @@ describe('calculateWildshapedDruid', () => {
       });
     });
   });
+
+  describe('Increased Toughness trait modification', () => {
+    it('should add Wisdom modifier to Constitution saving throw for level 6+ 2024 Moon druid', () => {
+      // Druid: level 6, Circle of the Moon, Wisdom 16 (+3 mod)
+      // Beast: Con 12 (+1 mod), not proficient in Con saves
+      // Druid: not proficient in Con saves
+      // PB at level 6: +3
+      // Base merged Con save: max(druid Con save, beast Con save)
+      //   druid Con (hybrid uses beast's Con 12, not proficient): +1
+      //   beast Con (original Con 12, not proficient): +1
+      //   merged: +1
+      // After Increased Toughness: +1 + 3 (Wisdom mod) = +4
+      const increasedToughnessTrait = {
+        source: 'class' as const,
+        name: 'Improved Circle Forms: Increased Toughness',
+        description:
+          'While in a Wild Shape form, you can add your Wisdom modifier to your Constitution saving throws',
+        className: 'Druid',
+        subclass: 'Circle of the Moon',
+        levelRequirement: 6,
+        modifies: [
+          {
+            targetType: 'savingThrow' as const,
+            targetName: 'constitution',
+            field: 'bonus',
+            operation: 'add' as const,
+            value: {
+              type: 'abilityModifier' as const,
+              ability: 'wisdom' as const,
+            },
+            onlyWhileWildshaped: true,
+          },
+        ],
+      };
+
+      const druid = createMockDruid({
+        edition: '2024',
+        druidLevel: 6,
+        totalCharacterLevel: 6,
+        druidCircle: 'Circle of the Moon',
+        wisdom: 16, // +3 modifier
+        savingThrowProficiencies: ['intelligence', 'wisdom'], // not constitution
+        traits: [increasedToughnessTrait],
+      });
+
+      const beast = createFullMockBeast({
+        edition: '2024',
+        challengeRating: 2,
+        constitution: 12, // +1 modifier
+        savingThrowProficiencies: [], // not proficient in Con saves
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      // Base Con save (not proficient, Con 12 → +1), plus Wisdom mod (+3) = +4
+      expect(wildshaped.savingThrowBonuses['constitution']).toBe(4);
+    });
+
+    it('should not apply Increased Toughness modification when trait is absent', () => {
+      const druid = createMockDruid({
+        edition: '2024',
+        druidLevel: 6,
+        totalCharacterLevel: 6,
+        druidCircle: 'Circle of the Moon',
+        wisdom: 16, // +3 modifier
+        savingThrowProficiencies: ['intelligence', 'wisdom'],
+        traits: [], // no Increased Toughness
+      });
+
+      const beast = createFullMockBeast({
+        edition: '2024',
+        challengeRating: 2,
+        constitution: 12,
+        savingThrowProficiencies: [],
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      // Base Con save only: +1 (no Wisdom modifier added)
+      expect(wildshaped.savingThrowBonuses['constitution']).toBe(1);
+    });
+  });
 });
