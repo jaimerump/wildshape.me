@@ -1113,6 +1113,69 @@ describe('calculateWildshapedDruid', () => {
       expect(wildshaped.skillBonuses['Stealth']).toBe(8);
     });
 
+    it('should honor lowercase beast skill data (regression: skill-name case mismatch)', () => {
+      // Mirrors real beast JSON, which stores skills lowercase.
+      const druid = createMockDruid({
+        druidLevel: 5,
+        totalCharacterLevel: 5,
+        wisdom: 10, // +0, not proficient in Perception
+        skillProficiencies: [],
+      });
+      const beast = createFullMockBeast({
+        challengeRating: 0.25, // PB +2
+        dexterity: 18, // +4
+        wisdom: 12, // +1
+        skillProficiencies: [
+          { skill: 'stealth', proficiencyLevel: 'expertise' }, // +4 + 2*2 = +8
+          { skill: 'perception', proficiencyLevel: 'proficient' }, // +1 + 2 = +3
+        ],
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      // Beast proficiency/expertise is applied, keyed by canonical title-case.
+      expect(wildshaped.skillBonuses['Stealth']).toBe(8);
+      expect(wildshaped.skillBonuses['Perception']).toBe(3);
+
+      // Merged proficiencies use canonical names so the UI lookup resolves.
+      const stealthEntry = wildshaped.skillProficiencies.find(
+        (p) => p.skill === 'Stealth'
+      );
+      expect(stealthEntry).toBeDefined();
+      expect(stealthEntry?.proficiencyLevel).toBe('expertise');
+      expect(wildshaped.skillBonuses[stealthEntry!.skill]).toBe(8);
+      // No lowercase entry should leak through.
+      expect(
+        wildshaped.skillProficiencies.some((p) => p.skill === 'stealth')
+      ).toBe(false);
+    });
+
+    it('should not duplicate a skill when druid and beast cased differently', () => {
+      const druid = createMockDruid({
+        druidLevel: 5,
+        totalCharacterLevel: 5,
+        skillProficiencies: [
+          { skill: 'Stealth', proficiencyLevel: 'proficient' },
+        ],
+      });
+      const beast = createFullMockBeast({
+        challengeRating: 0.25,
+        dexterity: 18,
+        skillProficiencies: [
+          { skill: 'stealth', proficiencyLevel: 'expertise' },
+        ],
+      });
+
+      const wildshaped = calculateWildshapedDruid(druid, beast);
+
+      const stealthEntries = wildshaped.skillProficiencies.filter(
+        (p) => p.skill.toLowerCase() === 'stealth'
+      );
+      expect(stealthEntries).toHaveLength(1);
+      expect(stealthEntries[0].skill).toBe('Stealth');
+      expect(stealthEntries[0].proficiencyLevel).toBe('expertise');
+    });
+
     it('should calculate all 18 skills', () => {
       const druid = createMockDruid({ druidLevel: 5 });
       const beast = createFullMockBeast({ challengeRating: 0.25 });

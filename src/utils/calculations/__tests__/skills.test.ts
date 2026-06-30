@@ -1,5 +1,10 @@
 import { describe, it, expect } from '@jest/globals';
-import { getSkillAbility, getSkillBonus, getAllSkillBonuses } from '../skills';
+import {
+  getSkillAbility,
+  getSkillBonus,
+  getAllSkillBonuses,
+  normalizeSkillName,
+} from '../skills';
 import type { AbilityName, SkillProficiency } from '../../../models';
 
 describe('getSkillAbility', () => {
@@ -250,5 +255,27 @@ describe('getAllSkillBonuses', () => {
       expect(result).toHaveProperty(skill);
       expect(typeof result[skill]).toBe('number');
     }
+  });
+});
+
+describe('normalizeSkillName', () => {
+  it('normalizes lowercase beast skill names to canonical title-case', () => {
+    expect(normalizeSkillName('stealth')).toBe('Stealth');
+    expect(normalizeSkillName('perception')).toBe('Perception');
+  });
+
+  it('normalizes multi-word skill names', () => {
+    expect(normalizeSkillName('sleight of hand')).toBe('Sleight of Hand');
+    expect(normalizeSkillName('animal handling')).toBe('Animal Handling');
+  });
+
+  it('leaves already-canonical names unchanged', () => {
+    expect(normalizeSkillName('Stealth')).toBe('Stealth');
+  });
+
+  it('falls back to the input for unrecognized skills', () => {
+    expect(normalizeSkillName('Underwater Basket Weaving')).toBe(
+      'Underwater Basket Weaving'
+    );
   });
 });
