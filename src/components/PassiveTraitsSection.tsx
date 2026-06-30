@@ -6,6 +6,7 @@ import traits2024 from '../data/class_traits_2024.json';
 import { ClassTrait, DnDClass, Edition, TraitModification } from '../models';
 import { useDruidStore } from '../store/useDruidStore';
 import { getActiveClassTraits } from '../utils/calculations/classFeatures';
+import { ChoiceDropdown } from './ChoiceDropdown';
 
 const FIELD_LABELS: Record<string, string> = {
   damage: 'Damage',
@@ -224,22 +225,13 @@ export function PassiveTraitsSection() {
                       {trait.subclass ?? trait.className}
                     </Text>
                     {i === 0 && (
-                      <TouchableOpacity
-                        onPress={() => {
-                          // Cycle to next option
-                          const labels = group.options.map(
-                            (o) => o.choiceLabel ?? o.name
-                          );
-                          const currentIndex = labels.indexOf(chosenLabel);
-                          const nextLabel =
-                            labels[(currentIndex + 1) % labels.length];
-                          setTraitChoice(group.key, nextLabel);
-                        }}
-                      >
-                        <Text className="text-xs text-blue-600 underline ml-1">
-                          Change
-                        </Text>
-                      </TouchableOpacity>
+                      <ChoiceDropdown
+                        options={group.options.map(
+                          (o) => o.choiceLabel ?? o.name
+                        )}
+                        value={chosenLabel}
+                        onSelect={(label) => setTraitChoice(group.key, label)}
+                      />
                     )}
                   </View>
                   <Text className="text-sm text-gray-600 mt-1">
