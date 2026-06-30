@@ -141,6 +141,8 @@ export interface ClassTrait {
   levelRequirement: number;
   subclass?: string;
   modifies?: TraitModification[];
+  choiceGroupKey?: string;
+  choiceLabel?: string;
 }
 
 export interface FeatTrait {
