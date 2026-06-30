@@ -52,6 +52,32 @@ const SKILL_ABILITY_MAP_LOWER: Record<string, AbilityName> = Object.fromEntries(
   Object.entries(SKILL_ABILITY_MAP).map(([k, v]) => [k.toLowerCase(), v])
 );
 
+/**
+ * Lookup from lowercased skill name to its canonical title-cased form.
+ */
+const CANONICAL_SKILL_BY_LOWER: Record<string, string> = Object.fromEntries(
+  Object.keys(SKILL_ABILITY_MAP).map((name) => [name.toLowerCase(), name])
+);
+
+/**
+ * Normalizes a skill name to its canonical title-cased form.
+ *
+ * Beast data stores skills lowercase (e.g. "stealth") while the calc layer and
+ * druid store use title-cased canonical names (e.g. "Stealth"). Normalizing at
+ * the boundary keeps both sides keyed consistently. Falls back to the input if
+ * the skill is unrecognized.
+ *
+ * @param skillName - The skill name in any casing
+ * @returns The canonical title-cased skill name
+ *
+ * @example
+ * normalizeSkillName('stealth')          // returns 'Stealth'
+ * normalizeSkillName('sleight of hand')  // returns 'Sleight of Hand'
+ */
+export function normalizeSkillName(skillName: string): string {
+  return CANONICAL_SKILL_BY_LOWER[skillName.toLowerCase()] ?? skillName;
+}
+
 export function getSkillAbility(skillName: string): AbilityName {
   const ability =
     SKILL_ABILITY_MAP[skillName] ??

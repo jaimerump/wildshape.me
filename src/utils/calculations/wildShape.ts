@@ -26,7 +26,7 @@ import {
   getProficiencyBonusFromLevel,
   getProficiencyBonusFromCR,
 } from './proficiencyBonus';
-import { getSkillBonus } from './skills';
+import { getSkillBonus, normalizeSkillName } from './skills';
 import { getSavingThrowBonus } from './savingThrows';
 import { getAbilityModifier } from './abilityScores';
 
@@ -373,12 +373,12 @@ function mergeSkillBonuses(
   // Create maps for faster lookup
   const druidProfMap = new Map<string, ProficiencyLevel>();
   for (const prof of druidSkillProfs) {
-    druidProfMap.set(prof.skill, prof.proficiencyLevel);
+    druidProfMap.set(normalizeSkillName(prof.skill), prof.proficiencyLevel);
   }
 
   const beastProfMap = new Map<string, ProficiencyLevel>();
   for (const prof of beastSkillProfs) {
-    beastProfMap.set(prof.skill, prof.proficiencyLevel);
+    beastProfMap.set(normalizeSkillName(prof.skill), prof.proficiencyLevel);
   }
 
   // Calculate for each skill
@@ -505,21 +505,23 @@ function mergeSkillProficiencies(
 ): SkillProficiency[] {
   const profMap = new Map<string, SkillProficiency>();
 
-  // Add druid proficiencies
+  // Add druid proficiencies (keyed and stored with canonical skill names)
   for (const prof of druidSkillProfs) {
-    profMap.set(prof.skill, prof);
+    const skill = normalizeSkillName(prof.skill);
+    profMap.set(skill, { ...prof, skill });
   }
 
   // Add or override with beast proficiencies if beast has higher bonus
   for (const beastProf of beastSkillProfs) {
+    const skill = normalizeSkillName(beastProf.skill);
     const druidBonus = getSkillBonus(
-      beastProf.skill,
+      skill,
       hybridAbilities,
       druidPB,
-      profMap.get(beastProf.skill)?.proficiencyLevel || null
+      profMap.get(skill)?.proficiencyLevel || null
     );
     const beastBonus = getSkillBonus(
-      beastProf.skill,
+      skill,
       beastAbilities,
       beastPB,
       beastProf.proficiencyLevel
@@ -527,7 +529,7 @@ function mergeSkillProficiencies(
 
     // If beast has higher bonus, use beast's proficiency level
     if (beastBonus >= druidBonus) {
-      profMap.set(beastProf.skill, beastProf);
+      profMap.set(skill, { ...beastProf, skill });
     }
   }
 
