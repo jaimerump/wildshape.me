@@ -370,7 +370,7 @@ export function WildShapeScreen() {
           {/* Horizontal rule above passive traits */}
           <View className="border-t border-gray-200 my-3" />
 
-          <PassiveTraitsSection />
+          <PassiveTraitsSection traits={wildshaped.traits} />
 
           <ClassActionsSection
             beastActions={wildshaped.actions.filter(

@@ -42,3 +42,6 @@ yarn-error.*
 
 # coverage reports
 /coverage
+
+# Claude
+~/.claude-personal

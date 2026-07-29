@@ -3,7 +3,13 @@ import { Text, TouchableOpacity, View } from 'react-native';
 
 import traits2014 from '../data/class_traits_2014.json';
 import traits2024 from '../data/class_traits_2024.json';
-import { ClassTrait, DnDClass, Edition, TraitModification } from '../models';
+import {
+  ClassTrait,
+  DnDClass,
+  Edition,
+  Trait,
+  TraitModification,
+} from '../models';
 import { useDruidStore } from '../store/useDruidStore';
 import { getActiveClassTraits } from '../utils/calculations/classFeatures';
 import { ChoiceDropdown } from './ChoiceDropdown';
@@ -44,43 +50,43 @@ const CLASS_DEFS: Record<Edition, DnDClass> = {
   },
 };
 
-function TraitCard({
-  trait,
-  divider,
-}: {
-  trait: ClassTrait;
-  divider: boolean;
-}) {
+function TraitCard({ trait, divider }: { trait: Trait; divider: boolean }) {
   return (
     <View className={divider ? 'border-t border-gray-100 mt-3 pt-3' : ''}>
       <View className="flex-row items-baseline gap-2">
         <Text className="font-semibold text-gray-800">{trait.name}</Text>
-        <Text className="text-xs text-green-700">
-          Level {trait.levelRequirement}
-        </Text>
-        <Text className="text-xs text-gray-500">
-          {trait.subclass ?? trait.className}
-        </Text>
+        {trait.source === 'class' && (
+          <>
+            <Text className="text-xs text-green-700">
+              Level {trait.levelRequirement}
+            </Text>
+            <Text className="text-xs text-gray-500">
+              {trait.subclass ?? trait.className}
+            </Text>
+          </>
+        )}
       </View>
       <Text className="text-sm text-gray-600 mt-1">{trait.description}</Text>
-      {trait.modifies && trait.modifies.length > 0 && (
-        <View className="mt-1">
-          <Text className="text-xs text-gray-400 italic">Modifies:</Text>
-          {trait.modifies.map((mod: TraitModification, i: number) => (
-            <Text key={i} className="text-xs text-gray-500 italic">
-              {mod.targetType === 'savingThrow'
-                ? `${mod.targetName ?? ''} Saving Throw`
-                : mod.targetName
-                  ? `${mod.targetName}`
-                  : ''}
-              {' — '}
-              {FIELD_LABELS[mod.field] ?? mod.field}:{' '}
-              {formatModValue(mod.value)}
-              {mod.onlyWhileWildshaped ? ' (while wildshaped)' : ''}
-            </Text>
-          ))}
-        </View>
-      )}
+      {trait.source === 'class' &&
+        trait.modifies &&
+        trait.modifies.length > 0 && (
+          <View className="mt-1">
+            <Text className="text-xs text-gray-400 italic">Modifies:</Text>
+            {trait.modifies.map((mod: TraitModification, i: number) => (
+              <Text key={i} className="text-xs text-gray-500 italic">
+                {mod.targetType === 'savingThrow'
+                  ? `${mod.targetName ?? ''} Saving Throw`
+                  : mod.targetName
+                    ? `${mod.targetName}`
+                    : ''}
+                {' — '}
+                {FIELD_LABELS[mod.field] ?? mod.field}:{' '}
+                {formatModValue(mod.value)}
+                {mod.onlyWhileWildshaped ? ' (while wildshaped)' : ''}
+              </Text>
+            ))}
+          </View>
+        )}
     </View>
   );
 }
@@ -91,25 +97,27 @@ interface ChoiceGroup {
   options: ClassTrait[];
 }
 
-export function PassiveTraitsSection() {
+interface PassiveTraitsSectionProps {
+  traits?: Trait[];
+}
+
+export function PassiveTraitsSection({ traits }: PassiveTraitsSectionProps) {
   const edition = useDruidStore((s) => s.edition);
   const druidLevel = useDruidStore((s) => s.druidLevel);
   const druidCircle = useDruidStore((s) => s.druidCircle);
   const traitChoices = useDruidStore((s) => s.traitChoices);
   const setTraitChoice = useDruidStore((s) => s.setTraitChoice);
 
-  const activeTraits = getActiveClassTraits(
-    CLASS_DEFS[edition],
-    druidLevel,
-    druidCircle
-  );
+  const activeTraits: Trait[] =
+    traits ??
+    getActiveClassTraits(CLASS_DEFS[edition], druidLevel, druidCircle);
 
   // Partition into ungrouped and grouped
-  const ungrouped: ClassTrait[] = [];
+  const ungrouped: Trait[] = [];
   const groupMap = new Map<string, ClassTrait[]>();
 
   for (const trait of activeTraits) {
-    if (trait.choiceGroupKey) {
+    if (trait.source === 'class' && trait.choiceGroupKey) {
       const existing = groupMap.get(trait.choiceGroupKey) ?? [];
       existing.push(trait);
       groupMap.set(trait.choiceGroupKey, existing);
@@ -137,11 +145,13 @@ export function PassiveTraitsSection() {
     choiceGroups.push({ key, minLevel, options });
   }
 
-  // Sort ungrouped traits
+  // Sort ungrouped traits (non-class traits, e.g. a beast's species traits,
+  // have no level requirement and sort first)
+  const levelOf = (trait: Trait) =>
+    trait.source === 'class' ? trait.levelRequirement : 0;
   const sortedUngrouped = [...ungrouped].sort((a, b) => {
-    if (a.levelRequirement !== b.levelRequirement) {
-      return a.levelRequirement - b.levelRequirement;
-    }
+    const levelDiff = levelOf(a) - levelOf(b);
+    if (levelDiff !== 0) return levelDiff;
     return a.name.localeCompare(b.name);
   });
 
@@ -150,7 +160,7 @@ export function PassiveTraitsSection() {
 
   // Build the final render list: interleave ungrouped and groups by level order
   type RenderItem =
-    | { kind: 'trait'; trait: ClassTrait }
+    | { kind: 'trait'; trait: Trait }
     | { kind: 'group'; group: ChoiceGroup };
 
   const renderItems: RenderItem[] = [];
@@ -160,9 +170,7 @@ export function PassiveTraitsSection() {
 
   while (ui < sortedUngrouped.length || gi < choiceGroups.length) {
     const nextUngroupedLevel =
-      ui < sortedUngrouped.length
-        ? sortedUngrouped[ui].levelRequirement
-        : Infinity;
+      ui < sortedUngrouped.length ? levelOf(sortedUngrouped[ui]) : Infinity;
     const nextGroupLevel =
       gi < choiceGroups.length ? choiceGroups[gi].minLevel : Infinity;
 

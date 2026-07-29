@@ -14,7 +14,7 @@
     "subclass": "Circle of the Moon",
     "levelRequirement": 2,
     "name": "Combat Wild Shape: Heal",
-    "description": "While in Wild Shape you can expend one spell slot to regain 1d8 hip points per level of the spell slot expended.",
+    "description": "While in Wild Shape you can expend one spell slot to regain 1d8 hit points per level of the spell slot expended.",
     "actionType": "Bonus Action"
   },
   {
