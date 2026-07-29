@@ -711,6 +711,7 @@ function createMockDruid(options: {
   otherClassLevels?: Record<string, number>;
 }): Druid {
   return {
+    id: 'test-druid',
     name: 'Test Druid',
     edition: options.edition || '2024',
     size: 'Medium',
