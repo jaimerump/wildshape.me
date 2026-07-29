@@ -9,6 +9,7 @@ import { SkillsSection } from '../components/SkillsSection';
 import { DruidCircleSelect } from '../components/DruidCircleSelect';
 import { EditionSelector } from '../components/EditionSelector';
 import { LevelInput } from '../components/LevelInput';
+import { NameInput } from '../components/NameInput';
 import { AbilityName } from '../models';
 
 const ABILITY_NAMES: AbilityName[] = [
@@ -26,6 +27,13 @@ export function CharacterSetupScreen() {
       className="flex-1 bg-gray-50"
       contentContainerClassName="px-4 py-6"
     >
+      <View className="bg-white rounded-xl p-4 mb-4 shadow-sm">
+        <Text className="text-lg font-semibold mb-2 text-gray-800">
+          Druid Name
+        </Text>
+        <NameInput />
+      </View>
+
       <View className="bg-white rounded-xl p-4 mb-4 shadow-sm">
         <Text className="text-lg font-semibold mb-2 text-gray-800">
           Edition

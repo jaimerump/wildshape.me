@@ -302,6 +302,7 @@ export const DRUID_CIRCLES: Record<Edition, DruidCircle[]> = {
  * Druid character
  */
 export interface Druid extends Creature {
+  id: string;
   totalCharacterLevel: number;
   druidLevel: number;
   druidCircle: DruidCircle;

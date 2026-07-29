@@ -94,6 +94,8 @@ function formatCR(cr: number): string {
 }
 
 export function WildShapeScreen() {
+  const druidId = useDruidStore((s) => s.id);
+  const druidName = useDruidStore((s) => s.name);
   const edition = useDruidStore((s) => s.edition);
   const druidLevel = useDruidStore((s) => s.druidLevel);
   const druidCircle = useDruidStore((s) => s.druidCircle);
@@ -137,7 +139,8 @@ export function WildShapeScreen() {
     );
 
     const druidObj: Druid = {
-      name: 'Druid',
+      id: druidId,
+      name: druidName,
       edition,
       size: 'Medium',
       strength,
