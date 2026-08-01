@@ -30,7 +30,7 @@ interface ApiMonster {
   hit_points: number;
   hit_dice: string;
   hit_points_roll: string;
-  speed: Record<string, string>;
+  speed: Record<string, string | boolean>;
   strength: number;
   dexterity: number;
   constitution: number;
@@ -69,10 +69,11 @@ interface ApiMonsterList {
  * Parse movement speeds from API format
  * Converts {walk: "40 ft.", swim: "30 ft."} to {walking: 40, swimming: 30}
  */
-function parseMovement(speed: Record<string, string>): Movement {
+function parseMovement(speed: Record<string, string | boolean>): Movement {
   const movement: Movement = { walking: 0 };
 
   for (const [key, value] of Object.entries(speed)) {
+    if (typeof value !== 'string') continue;
     const match = value.match(/(\d+)/);
     const speedValue = match ? parseInt(match[1], 10) : 0;
 
@@ -496,6 +497,42 @@ async function downloadBeasts(): Promise<Beast[]> {
 }
 
 /**
+ * The four elemental forms granted by the 2014 Circle of the Moon's
+ * Elemental Wild Shape feature (10th level).
+ */
+const ELEMENTAL_INDICES = [
+  'air-elemental',
+  'earth-elemental',
+  'fire-elemental',
+  'water-elemental',
+];
+
+/**
+ * Download the 2014 elemental forms (air, earth, fire, water) from the API.
+ */
+async function downloadElementals(): Promise<Beast[]> {
+  const baseUrl = 'https://www.dnd5eapi.co';
+  const elementals: Beast[] = [];
+
+  console.log('\nFetching elementals...');
+
+  for (const index of ELEMENTAL_INDICES) {
+    const monsterUrl = `${baseUrl}/api/2014/monsters/${index}`;
+    const response = await fetchWithRetry(monsterUrl);
+    const apiMonster = (await response.json()) as ApiMonster;
+
+    const elemental = transformApiBeastToBeast(apiMonster);
+    elementals.push(elemental);
+    console.log(`✓ ${elemental.name} (CR ${elemental.challengeRating})`);
+
+    // Rate limiting - 100ms delay between requests
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+
+  return elementals;
+}
+
+/**
  * Save beasts to JSON file
  */
 function saveBeasts(beasts: Beast[], outputPath: string): void {
@@ -533,9 +570,16 @@ async function main(): Promise<void> {
   try {
     console.log('Starting beast download from D&D 5e API...\n');
 
-    const outputPath = path.join(__dirname, '../../data/beasts_2014.json');
+    const outputPath = path.join(__dirname, '../data/beasts_2014.json');
     const beasts = await downloadBeasts();
     saveBeasts(beasts, outputPath);
+
+    const elementalsOutputPath = path.join(
+      __dirname,
+      '../data/elementals_2014.json'
+    );
+    const elementals = await downloadElementals();
+    saveBeasts(elementals, elementalsOutputPath);
 
     console.log('\n✓ Beast download completed successfully!');
     process.exit(0);
@@ -563,5 +607,6 @@ export {
   parseHitDice,
   transformApiBeastToBeast,
   downloadBeasts,
+  downloadElementals,
   saveBeasts,
 };
