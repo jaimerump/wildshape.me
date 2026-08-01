@@ -237,6 +237,54 @@ export function canWildShapeSwimming(
 }
 
 /**
+ * The druid level at which 2014 Circle of the Moon druids gain the
+ * Elemental Wild Shape feature (transform into an air, earth, fire, or
+ * water elemental).
+ */
+const ELEMENTAL_WILD_SHAPE_LEVEL = 10;
+
+/**
+ * Names of the four forms grantable by 2014 Elemental Wild Shape.
+ * These are not subject to the normal CR/movement Wild Shape restrictions.
+ */
+const ELEMENTAL_FORM_NAMES = [
+  'Air Elemental',
+  'Earth Elemental',
+  'Fire Elemental',
+  'Water Elemental',
+];
+
+/**
+ * Checks if a druid can use Elemental Wild Shape to transform into an
+ * air, earth, fire, or water elemental.
+ *
+ * D&D 5e Rule (2014 only): Circle of the Moon druids gain Elemental Wild
+ * Shape at 10th level. There is no 2024 equivalent restriction structure
+ * captured here, since elemental forms are not modeled as Beasts.
+ *
+ * @param druidLevel - The druid's level (1-20)
+ * @param edition - The D&D edition ('2024' or '2014')
+ * @param druidCircle - The druid's circle
+ * @returns true if elemental forms are allowed
+ *
+ * @example
+ * canWildShapeIntoElemental(9, '2014', 'Circle of the Moon')   // false
+ * canWildShapeIntoElemental(10, '2014', 'Circle of the Moon')  // true
+ * canWildShapeIntoElemental(10, '2024', 'Circle of the Moon')  // false
+ */
+export function canWildShapeIntoElemental(
+  druidLevel: number,
+  edition: Edition,
+  druidCircle?: DruidCircle | null
+): boolean {
+  return (
+    edition === '2014' &&
+    druidCircle === 'Circle of the Moon' &&
+    druidLevel >= ELEMENTAL_WILD_SHAPE_LEVEL
+  );
+}
+
+/**
  * Determines if a druid can Wild Shape into a specific beast.
  *
  * D&D 5e Rules (base druid):
@@ -791,7 +839,9 @@ export function calculateWildshapedDruid(
     );
   }
 
-  // Validation: Check if transformation is valid
+  // Validation: Check if transformation is valid.
+  // Elemental forms (from Elemental Wild Shape) bypass the normal
+  // CR/movement restrictions entirely, so they're checked separately.
   const eligibility = canWildShapeInto(
     druid.druidLevel,
     beast,
@@ -799,7 +849,15 @@ export function calculateWildshapedDruid(
     druid.druidCircle
   );
 
-  if (!eligibility.canTransform) {
+  const isEligibleElementalForm =
+    ELEMENTAL_FORM_NAMES.includes(beast.name) &&
+    canWildShapeIntoElemental(
+      druid.druidLevel,
+      druid.edition,
+      druid.druidCircle
+    );
+
+  if (!eligibility.canTransform && !isEligibleElementalForm) {
     throw new Error(
       `Cannot Wild Shape into ${beast.name}: ${eligibility.reason}`
     );

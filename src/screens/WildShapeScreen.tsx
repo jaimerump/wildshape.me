@@ -5,6 +5,7 @@ import { BeastSelect } from '../components/BeastSelect';
 import { ClassActionsSection } from '../components/ClassActionsSection';
 import { PassiveTraitsSection } from '../components/PassiveTraitsSection';
 import beasts2014 from '../data/beasts_2014.json';
+import elementals2014 from '../data/elementals_2014.json';
 import traits2014 from '../data/class_traits_2014.json';
 import traits2024 from '../data/class_traits_2024.json';
 import type {
@@ -25,6 +26,7 @@ import {
   calculateWildshapedDruid,
   canWildShapeFlying,
   canWildShapeInto,
+  canWildShapeIntoElemental,
   canWildShapeSwimming,
   getMaxWildShapeCR,
 } from '../utils/calculations/wildShape';
@@ -113,15 +115,19 @@ export function WildShapeScreen() {
   const [selectedBeast, setSelectedBeast] = useState<Beast | null>(null);
 
   const allBeasts = beasts2014 as unknown as Beast[];
-  const eligibleBeasts = allBeasts.filter(
-    (b) => canWildShapeInto(druidLevel, b, edition, druidCircle).canTransform
-  );
+  const allElementals = elementals2014 as unknown as Beast[];
+  const eligibleBeasts = [
+    ...allBeasts.filter(
+      (b) => canWildShapeInto(druidLevel, b, edition, druidCircle).canTransform
+    ),
+    ...(canWildShapeIntoElemental(druidLevel, edition, druidCircle)
+      ? allElementals
+      : []),
+  ];
 
   // When edition/level changes, clear selected beast if it's no longer eligible
   const currentSelectedIsEligible =
-    selectedBeast !== null &&
-    canWildShapeInto(druidLevel, selectedBeast, edition, druidCircle)
-      .canTransform;
+    selectedBeast !== null && eligibleBeasts.includes(selectedBeast);
   const effectiveSelectedBeast = currentSelectedIsEligible
     ? selectedBeast
     : null;
