@@ -20,6 +20,7 @@ import type {
 } from '../models';
 import { useDruidStore } from '../store/useDruidStore';
 import { getAbilityModifier } from '../utils/calculations/abilityScores';
+import { getCarryingCapacity } from '../utils/calculations/carryingCapacity';
 import { getActiveClassTraits } from '../utils/calculations/classFeatures';
 import { getProficiencyBonusFromCR } from '../utils/calculations/proficiencyBonus';
 import {
@@ -375,6 +376,33 @@ export function WildShapeScreen() {
               )}
             </Text>
           </View>
+
+          {/* Carrying Capacity */}
+          {(() => {
+            const capacity = getCarryingCapacity(
+              wildshaped.strength,
+              wildshaped.size
+            );
+            const rows: [string, number][] = [
+              ['Encumbered', capacity.encumbered],
+              ['Heavily Encumbered', capacity.heavilyEncumbered],
+              ['Maximum', capacity.maximum],
+              ['Push/Drag/Lift', capacity.pushDragLift],
+            ];
+            return (
+              <View className="mt-2">
+                <Text className="text-sm font-semibold text-gray-700 mb-1">
+                  Carrying Capacity
+                </Text>
+                {rows.map(([label, pounds]) => (
+                  <View key={label} className="flex-row pl-3">
+                    <Text className="text-sm text-gray-700 w-44">{label}</Text>
+                    <Text className="text-sm text-gray-700">{pounds} lb</Text>
+                  </View>
+                ))}
+              </View>
+            );
+          })()}
 
           {/* Horizontal rule above passive traits */}
           <View className="border-t border-gray-200 my-3" />
