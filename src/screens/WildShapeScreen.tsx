@@ -22,6 +22,7 @@ import { useDruidStore } from '../store/useDruidStore';
 import { getAbilityModifier } from '../utils/calculations/abilityScores';
 import { getCarryingCapacity } from '../utils/calculations/carryingCapacity';
 import { getActiveClassTraits } from '../utils/calculations/classFeatures';
+import { getJumpDistances } from '../utils/calculations/jumping';
 import { getProficiencyBonusFromCR } from '../utils/calculations/proficiencyBonus';
 import {
   calculateWildshapedDruid,
@@ -398,6 +399,30 @@ export function WildShapeScreen() {
                   <View key={label} className="flex-row pl-3">
                     <Text className="text-sm text-gray-700 w-44">{label}</Text>
                     <Text className="text-sm text-gray-700">{pounds} lb</Text>
+                  </View>
+                ))}
+              </View>
+            );
+          })()}
+
+          {/* Jump Distances */}
+          {(() => {
+            const jumps = getJumpDistances(wildshaped.strength);
+            const rows: [string, number][] = [
+              ['Running Long Jump', jumps.runningLongJump],
+              ['Standing Long Jump', jumps.standingLongJump],
+              ['Running High Jump', jumps.runningHighJump],
+              ['Standing High Jump', jumps.standingHighJump],
+            ];
+            return (
+              <View className="mt-2">
+                <Text className="text-sm font-semibold text-gray-700 mb-1">
+                  Jump Distances
+                </Text>
+                {rows.map(([label, feet]) => (
+                  <View key={label} className="flex-row pl-3">
+                    <Text className="text-sm text-gray-700 w-44">{label}</Text>
+                    <Text className="text-sm text-gray-700">{feet} ft</Text>
                   </View>
                 ))}
               </View>
