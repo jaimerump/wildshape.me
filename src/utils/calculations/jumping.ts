@@ -2,18 +2,9 @@
  * Jump distance calculation utilities
  */
 
-import { getAbilityModifier } from './abilityScores';
+import type { JumpDistances } from '../../models';
 
-/**
- * How far a creature can jump, in feet. Running jumps require a running start
- * of at least 10 feet; standing jumps do not.
- */
-export interface JumpDistances {
-  runningLongJump: number;
-  standingLongJump: number;
-  runningHighJump: number;
-  standingHighJump: number;
-}
+import { getAbilityModifier } from './abilityScores';
 
 /**
  * Effects that change a creature's jump distances.

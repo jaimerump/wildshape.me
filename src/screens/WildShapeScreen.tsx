@@ -382,7 +382,7 @@ export function WildShapeScreen() {
           {(() => {
             const capacity = getCarryingCapacity(
               wildshaped.strength,
-              wildshaped.size
+              wildshaped.sourceBeast.carryingCapacitySize ?? wildshaped.size
             );
             const rows: [string, number][] = [
               ['Encumbered', capacity.encumbered],
@@ -407,7 +407,9 @@ export function WildShapeScreen() {
 
           {/* Jump Distances */}
           {(() => {
-            const jumps = getJumpDistances(wildshaped.strength);
+            const jumps = getJumpDistances(wildshaped.strength, {
+              overrides: wildshaped.sourceBeast.jumpOverrides,
+            });
             const rows: [string, number][] = [
               ['Running Long Jump', jumps.runningLongJump],
               ['Standing Long Jump', jumps.standingLongJump],

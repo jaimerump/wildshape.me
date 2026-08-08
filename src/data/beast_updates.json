@@ -85,7 +85,13 @@
   },
   {
     "name": "Frog",
-    "bodyType": "lizard"
+    "bodyType": "lizard",
+    "jumpOverrides": {
+      "runningLongJump": 10,
+      "standingLongJump": 10,
+      "runningHighJump": 5,
+      "standingHighJump": 5
+    }
   },
   {
     "name": "Giant Ape",
@@ -133,7 +139,13 @@
   },
   {
     "name": "Giant Frog",
-    "bodyType": "lizard"
+    "bodyType": "lizard",
+    "jumpOverrides": {
+      "runningLongJump": 20,
+      "standingLongJump": 20,
+      "runningHighJump": 10,
+      "standingHighJump": 10
+    }
   },
   {
     "name": "Giant Goat",
@@ -185,7 +197,13 @@
   },
   {
     "name": "Giant Toad",
-    "bodyType": "lizard"
+    "bodyType": "lizard",
+    "jumpOverrides": {
+      "runningLongJump": 20,
+      "standingLongJump": 20,
+      "runningHighJump": 10,
+      "standingHighJump": 10
+    }
   },
   {
     "name": "Giant Vulture",
@@ -229,7 +247,10 @@
   },
   {
     "name": "Lion",
-    "bodyType": "quadruped"
+    "bodyType": "quadruped",
+    "jumpOverrides": {
+      "runningLongJump": 25
+    }
   },
   {
     "name": "Lizard",
@@ -245,7 +266,8 @@
   },
   {
     "name": "Mule",
-    "bodyType": "quadruped"
+    "bodyType": "quadruped",
+    "carryingCapacitySize": "Large"
   },
   {
     "name": "Octopus",
