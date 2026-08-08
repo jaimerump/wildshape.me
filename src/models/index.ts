@@ -92,6 +92,17 @@ export interface Movement {
 }
 
 /**
+ * How far a creature can jump, in feet. Running jumps require a running start
+ * of at least 10 feet; standing jumps do not.
+ */
+export interface JumpDistances {
+  runningLongJump: number;
+  standingLongJump: number;
+  runningHighJump: number;
+  standingHighJump: number;
+}
+
+/**
  * Skill proficiency
  */
 export interface SkillProficiency {
@@ -249,6 +260,19 @@ export interface Creature {
 export interface Beast extends Creature {
   challengeRating: number;
   bodyType: BodyType;
+
+  /**
+   * Jump distances hard-set by a trait, replacing the calculated value.
+   * The frog's Standing Leap sets all four; the lion's Running Leap sets
+   * only its running long jump.
+   */
+  jumpOverrides?: Partial<JumpDistances>;
+
+  /**
+   * Size used in place of the beast's actual size when calculating carrying
+   * capacity, per traits like the mule's Beast of Burden.
+   */
+  carryingCapacitySize?: Size;
 }
 
 /**
