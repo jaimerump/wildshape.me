@@ -22,6 +22,7 @@ import { useDruidStore } from '../store/useDruidStore';
 import { getAbilityModifier } from '../utils/calculations/abilityScores';
 import { getCarryingCapacity } from '../utils/calculations/carryingCapacity';
 import { getActiveClassTraits } from '../utils/calculations/classFeatures';
+import { getInitiativeBonus } from '../utils/calculations/initiative';
 import { getJumpDistances } from '../utils/calculations/jumping';
 import { getProficiencyBonusFromCR } from '../utils/calculations/proficiencyBonus';
 import {
@@ -260,6 +261,10 @@ export function WildShapeScreen() {
                 {wildshaped.temporaryHitPoints}
               </Text>
             )}
+            <Text className="text-sm text-gray-700">
+              <Text className="font-semibold">Initiative:</Text>{' '}
+              {formatModifier(getInitiativeBonus(wildshaped.dexterity))}
+            </Text>
           </View>
 
           {/* Movement speeds */}
